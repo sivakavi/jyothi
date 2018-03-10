@@ -57,7 +57,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('leaves', 'LeaveController');
     Route::resource('statuses', 'StatusController');
     Route::resource('work_types', 'WorkTypeController');
-    Route::get('shift', 'UserController@index')->name('shift');
+    Route::resource('shifts', 'ShiftController');
+    Route::resource('locations', 'LocationController');
     Route::get('employee', 'UserController@index')->name('employee');
 });
 

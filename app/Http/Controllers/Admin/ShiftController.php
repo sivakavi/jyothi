@@ -4,6 +4,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Shift;
+use App\Department;
 use App\Http\Requests\StoreShift;
 
 class ShiftController extends Controller {
@@ -27,7 +28,8 @@ class ShiftController extends Controller {
 	 */
 	public function create()
 	{
-		return view('admin.shifts.create');
+		$departments = Department::all(['id', 'name']);
+		return view('admin.shifts.create', compact('departments'));
 	}
 
 	/**
@@ -72,8 +74,9 @@ class ShiftController extends Controller {
 	public function edit($id)
 	{
 		$shift = Shift::findOrFail($id);
+		$departments = Department::all(['id', 'name']);
 
-		return view('admin.shifts.edit', compact('shift'));
+		return view('admin.shifts.edit', compact('shift', 'departments'));
 	}
 
 	/**

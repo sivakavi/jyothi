@@ -16,9 +16,9 @@ class WorkTypeController extends Controller {
 	 */
 	public function index()
 	{
-		$worktypes = WorkType::orderBy('id', 'asc')->paginate(10);
-
-		return view('admin.worktypes.index', compact('worktypes'));
+		$work_types = WorkType::orderBy('id', 'asc')->paginate(10);
+		
+		return view('admin.work_types.index', compact('work_types'));
 	}
 
 	/**
@@ -29,7 +29,7 @@ class WorkTypeController extends Controller {
 	public function create()
 	{
 		$departments = Department::all(['id', 'name']);
-		return view('admin.worktypes.create', compact('departments'));
+		return view('admin.work_types.create', compact('departments'));
 	}
 
 	/**
@@ -40,13 +40,13 @@ class WorkTypeController extends Controller {
 	 */
 	public function store(StoreWorkType $request)
 	{
-		$worktype = new WorkType();
+		$work_type = new WorkType();
 
-		$worktype->name = $request->input("name");
-		$worktype->department_id = $request->input("department_id");
-		$worktype->save();
+		$work_type->name = $request->input("name");
+		$work_type->department_id = $request->input("department_id");
+		$work_type->save();
 
-		return redirect()->route('admin.worktypes.index')->with('message', 'Item created successfully.');
+		return redirect()->route('admin.work_types.index')->with('message', 'Item created successfully.');
 	}
 
 	/**
@@ -57,9 +57,9 @@ class WorkTypeController extends Controller {
 	 */
 	public function show($id)
 	{
-		$worktype = WorkType::findOrFail($id);
+		$work_type = WorkType::findOrFail($id);
 
-		return view('admin.worktypes.show', compact('worktype'));
+		return view('admin.work_types.show', compact('work_type'));
 	}
 
 	/**
@@ -70,10 +70,10 @@ class WorkTypeController extends Controller {
 	 */
 	public function edit($id)
 	{
-		$worktype = WorkType::findOrFail($id);
+		$work_type = WorkType::findOrFail($id);
 		$departments = Department::all(['id', 'name']);
 
-		return view('admin.worktypes.edit', compact('worktype', 'departments'));
+		return view('admin.work_types.edit', compact('work_type', 'departments'));
 	}
 
 	/**
@@ -85,13 +85,13 @@ class WorkTypeController extends Controller {
 	 */
 	public function update(StoreWorkType $request, $id)
 	{
-		$worktype = WorkType::findOrFail($id);
+		$work_type = WorkType::findOrFail($id);
 
-		$worktype->name = $request->input("name");
-		$worktype->department_id = $request->input("department_id");
-		$worktype->save();
+		$work_type->name = $request->input("name");
+		$work_type->department_id = $request->input("department_id");
+		$work_type->save();
 
-		return redirect()->route('admin.worktypes.index')->with('message', 'Item updated successfully.');
+		return redirect()->route('admin.work_types.index')->with('message', 'Item updated successfully.');
 	}
 
 	/**
@@ -102,10 +102,10 @@ class WorkTypeController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		$worktype = WorkType::findOrFail($id);
-		$worktype->delete();
+		$work_type = WorkType::findOrFail($id);
+		$work_type->delete();
 
-		return redirect()->route('admin.worktypes.index')->with('message', 'Item deleted successfully.');
+		return redirect()->route('admin.work_types.index')->with('message', 'Item deleted successfully.');
 	}
 
 }

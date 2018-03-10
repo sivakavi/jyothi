@@ -65,9 +65,15 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.shift') }}">
+                        <a href="{{ route('admin.shifts.index') }}">
                             <i class="fa fa-institution" aria-hidden="true"></i>
                             Shift
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.locations.index') }}">
+                            <i class="fa fa-institution" aria-hidden="true"></i>
+                            Location
                         </a>
                     </li>
                     <li>
@@ -77,7 +83,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.employee') }}">
+                        <a href="{{ route('admin.work_types.index') }}">
                             <i class="fa fa-institution" aria-hidden="true"></i>
                             Work Type
                         </a>

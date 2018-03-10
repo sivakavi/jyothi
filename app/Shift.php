@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Shift extends Model
 {
-    //
+    public function department()
+    {
+    	return $this->belongsTo('App\Department');
+    }
 }

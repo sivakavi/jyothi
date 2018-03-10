@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreWorkType extends FormRequest
+class StoreShift extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,11 @@ class StoreWorkType extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required'
+            'name' => 'required',
+            'department_id' => 'required',
+            'allias' => 'required',
+            'in' => 'required',
+            'out' => 'required|'
         ];
     }
 }
