@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
-class Staff
+class Hr
 {
     use AuthorizesRequests;
 
@@ -19,7 +19,7 @@ class Staff
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::user() &&  Auth::user()->hasRole('staff')) {
+        if (Auth::user() &&  Auth::user()->hasRole('hr')) {
             return $next($request);
         }
 

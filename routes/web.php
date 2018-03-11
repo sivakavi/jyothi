@@ -91,11 +91,17 @@ Route::group(['prefix' => 'student', 'as' => 'student.', 'namespace' => 'Student
     Route::get('/test/{id}', 'DashboardController@test')->name('test');
 });
 
-Route::group(['prefix' => 'staff', 'as' => 'staff.', 'namespace' => 'Staff', 'middleware' => 'staff'], function () {
+Route::group(['prefix' => 'dept', 'as' => 'dept.', 'namespace' => 'Dept', 'middleware' => 'dept'], function () {
     Route::get('/', 'DashboardController@index')->name('dashboard');
-    Route::get('/student-list', 'DashboardController@studentList')->name('studentLists');
-    Route::get('/student/{id}', 'DashboardController@student')->name('studentShow');
+    Route::get('/shift', 'DashboardController@shift')->name('shift');
+    Route::get('/shiftStatus', 'DashboardController@shiftBatch')->name('shiftBatch');
+    Route::post('/assignShift', 'DashboardController@assignShift')->name('assignShift');
+    Route::get('/assignShiftCheck', 'DashboardController@assignShiftCheck')->name('assignShiftCheck');
 });
 
-Route::get('/hr-dashboard', 'DashboardController@testHr')->name('testHr');
-Route::get('/dept-dashboard', 'DashboardController@testDept')->name('testDept');
+Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware' => 'hr'], function () {
+    Route::get('/', 'DashboardController@index')->name('dashboard');
+    Route::get('/shift', 'DashboardController@shift')->name('shift');
+    Route::get('/shiftStatus', 'DashboardController@shiftBatch')->name('shiftBatch');
+    Route::post('/assignShift', 'DashboardController@assignShift')->name('assignShift');
+});

@@ -111,10 +111,10 @@ class LoginController extends Controller
             return redirect('admin');
         }
         else if($user->hasRole('hr')){
-            return redirect(route('testHr'));
+            return redirect(route('hr.dashboard'));
         }
         else if($user->hasRole('dept')){
-            return redirect(route('testDept'));
+            return redirect(route('dept.dashboard'));
         }
         return redirect()->intended($this->redirectPath());
     }

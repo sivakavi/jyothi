@@ -6,8 +6,8 @@
     <div class="container body">
         <div class="main_container">
             @section('header')
-                @include('staff.sections.navigation')
-                @include('staff.sections.header')
+                @include('dept.sections.navigation')
+                @include('dept.sections.header')
             @show
 
             @yield('left-sidebar')
@@ -29,7 +29,7 @@
             </div>
 
             <footer>
-                @include('staff.sections.footer')
+                @include('dept.sections.footer')
             </footer>
         </div>
     </div>

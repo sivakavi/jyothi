@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
-class Student
+class Dept
 {
     use AuthorizesRequests;
 
@@ -19,7 +19,7 @@ class Student
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::user() &&  Auth::user()->hasRole('student')) {
+        if (Auth::user() &&  Auth::user()->hasRole('dept')) {
             return $next($request);
         }
 

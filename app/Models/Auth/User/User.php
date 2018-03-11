@@ -90,18 +90,9 @@ class User extends Authenticatable
      */
     protected $dates = ['deleted_at'];
 
-    public function contact()
+    public function department()
     {
-        return $this->belongsTo('App\Contact');
+        return $this->belongsTo('App\Department');
     }
 
-    public function group()
-    {
-        return $this->belongsTo('App\Group');
-    }
-
-    public function college()
-    {
-        return $this->belongsTo('App\College');
-    }
 }

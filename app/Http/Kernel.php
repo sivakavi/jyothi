@@ -64,8 +64,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'authorize' => \App\Http\Middleware\Authorize::class,
         'protection' => \App\Http\Middleware\Protection::class,
-        'student' => \App\Http\Middleware\Student::class, // this line right here
-        'staff' => \App\Http\Middleware\Staff::class, // this line right here
+        'hr' => \App\Http\Middleware\Hr::class, // this line right here
+        'dept' => \App\Http\Middleware\Dept::class, // this line right here
         'revalidate' => \App\Http\Middleware\RevalidateBackHistory::class,
     ];
 }
