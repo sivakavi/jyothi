@@ -89,7 +89,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.employee') }}">
+                        <a href="{{ route('admin.employees.index') }}">
                             <i class="fa fa-institution" aria-hidden="true"></i>
                             Employee
                         </a>

@@ -59,7 +59,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('work_types', 'WorkTypeController');
     Route::resource('shifts', 'ShiftController');
     Route::resource('locations', 'LocationController');
-    Route::get('employee', 'UserController@index')->name('employee');
+    Route::resource('employees', 'EmployeeController');
 });
 
 

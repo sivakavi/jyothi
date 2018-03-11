@@ -19,14 +19,18 @@ class CreateEmployeesTable extends Migration
             $table->string('gender');
             $table->integer('department_id')->unsigned();
             $table->integer('category_id')->unsigned();
-            $table->string('location');
+            $table->integer('location_id')->unsigned();
             $table->string('cost_centre');
             $table->string('cost_centre_desc');
-            $table->bigInteger('gl_accounts');
-            $table->bigInteger('gl_description');
+            $table->string('gl_accounts');
+            $table->string('gl_description');
             $table->foreign('department_id', 'foreign_user')
                 ->references('id')
                 ->on('departments')
+                ->onDelete('cascade');
+            $table->foreign('location_id', 'foreign_user_location')
+                ->references('id')
+                ->on('locations')
                 ->onDelete('cascade');
             $table->foreign('category_id', 'foreign_user_category')
                 ->references('id')
