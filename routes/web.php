@@ -97,6 +97,9 @@ Route::group(['prefix' => 'dept', 'as' => 'dept.', 'namespace' => 'Dept', 'middl
     Route::get('/shiftStatus', 'DashboardController@shiftBatch')->name('shiftBatch');
     Route::post('/assignShift', 'DashboardController@assignShift')->name('assignShift');
     Route::get('/assignShiftCheck', 'DashboardController@assignShiftCheck')->name('assignShiftCheck');
+    Route::get('/assignEmpShiftCheck', 'DashboardController@assignEmpShiftCheck')->name('assignEmpShiftCheck');
+    Route::get('/assignEmpShiftIndividual', 'DashboardController@assignEmpShiftIndividual')->name('assignEmpShiftIndividual');
+    Route::get('/bulkSelect', 'DashboardController@bulkSelect')->name('bulkSelect');
 });
 
 Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware' => 'hr'], function () {
@@ -104,4 +107,5 @@ Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware'
     Route::get('/shift', 'DashboardController@shift')->name('shift');
     Route::get('/shiftStatus', 'DashboardController@shiftBatch')->name('shiftBatch');
     Route::post('/assignShift', 'DashboardController@assignShift')->name('assignShift');
+    Route::get('/assignEmpShiftCheck', 'DashboardController@assignEmpShiftCheck')->name('assignEmpShiftCheck');
 });
