@@ -13,7 +13,9 @@ use App\Status;
 use App\WorkType;
 use App\AssignShift;
 use App\Batch;
+use App\Leave;
 use Auth;
+use Illuminate\Support\Facades\Input;
 
 class DashboardController extends Controller
 {
@@ -146,6 +148,82 @@ class DashboardController extends Controller
         return 'true';
     }
 
+    public function shiftList()
+    {
+        // dd($this->isWeekend(date('Y-m-d')));
+        $department_id = $this->user->department->id;
+        // dd($department_id);
+        $shifts = Shift::where('intime', '<', '02:00:00')->where('department_id', $department_id)->orderBy('intime', 'desc')->take(3)->get()->toArray();
+        foreach ($shifts as $key => $value) {
+            $shiftDetails[] = $this->shiftdetailsformat($value, date('Y-m-d'));
+        }
+        if(count($shifts)<3){
+            $take = 3 - count($shifts);
+            $previous_shifts = Shift::where('department_id', $department_id)->orderBy('outtime', 'desc')->take($take)->get()->toArray();
+            foreach ($previous_shifts as $key => $value) {
+                $shiftDetails[] = $this->shiftdetailsformat($value, date('Y-m-d',strtotime("-1 days")));
+            } 
+        }
+        // dd($shiftDetails);
+        return view('dept.shiftList', compact('shiftDetails'));
+    }
+
+    public function shiftDetails(Request $request)
+    {
+        $statuses = Status::where('department_id', $this->user->department->id)->get();
+        $leaves = Leave::all();
+        $date = $request->get('date');
+        $shift_id = $request->get('shift_id');
+        $employees = AssignShift::where('nowdate', $date)
+                                ->where('shift_id', $shift_id)
+                                ->where(function ($q) {
+                                    $q->where('department_id', $this->user->department->id)
+                                    ->orWhere('changed_department_id', $this->user->department->id);
+                                })->paginate(10)
+                                ;
+        $variables = ['employees' => $employees->appends(Input::except('page')),
+                        'statuses' => $statuses,
+                        'leaves' => $leaves,
+                     ];
+        return view('dept.shiftDetails', $variables);
+    }
+
+    public function employeeSearch(Request $request)
+    {
+        $emp_name = $request->get('name');
+        $employees = [];
+        $employeeDetails = Employee::where('department_id', '!=', $this->user->department->id)->where('name', 'LIKE', strtolower($emp_name) . '%')->get();
+        foreach ($employeeDetails as $employeeDetail) {
+            $employee['id'] = $employeeDetail->id;
+            $employee['name'] = $employeeDetail->name;
+            $employee['department_name'] = $employeeDetail->department->name;
+            $employees[] = $employee;
+        }
+        return \Response::json($employees);
+    }
+    public function shiftDetailsChange(Request $request)
+    {
+
+        $status_id = $request->get('status');
+        $leave_id =  $request->get('leave');
+        $id  = $request->get('assignShiftId');
+        $othours = $request->get('othours');
+        $assignshift = AssignShift::find($id);
+
+        $assignshift->status_id = $status_id;
+        $assignshift->leave_id = NULL;
+        $assignshift->otHours = NULL;
+        if($leave_id != 'false'){
+            $assignshift->leave_id = $leave_id; 
+        }
+        if($othours != 'false'){
+            $assignshift->otHours = $othours; 
+        }
+        $assignshift->save();
+        return 'true';
+
+    }
+
     private function employeeShiftCount($employee_id, $date){
         return AssignShift::where('employee_id', $employee_id)->where('nowdate',$date)->count();
     }
@@ -174,6 +252,36 @@ class DashboardController extends Controller
         }
         AssignShift::insert($employeeRecords);
         return 'true';
+    }
+
+    public function employeeAdd(Request $request)
+    {
+        $empId = $request->get('empId');
+        $empDate = new \DateTime($request->get('empDate'));
+        $emp = AssignShift::where('employee_id', $empId)->where('nowdate', $empDate)->first();
+        if($emp){
+            $emp->changed_department_id = $this->user->department->id;
+            $emp->save();
+            return 'true';
+        }
+        else{
+            return 'false';
+        }
+    }
+
+    private function shiftdetailsformat($value, $date)
+    {
+        $shiftDetail['id']     = $value['id'];
+        $shiftDetail['name']   = $value['name'];
+        $shiftDetail['allias'] = $value['allias'];
+        $shiftDetail['intime'] = $value['intime'];
+        $shiftDetail['outtime'] = $value['outtime'];
+        $shiftDetail['date'] = $date;
+        return $shiftDetail;
+    }
+
+    public function isWeekend($date) {
+        return (date('N', strtotime($date)) >= 6);
     }
    
 }

@@ -100,6 +100,12 @@ Route::group(['prefix' => 'dept', 'as' => 'dept.', 'namespace' => 'Dept', 'middl
     Route::get('/assignEmpShiftCheck', 'DashboardController@assignEmpShiftCheck')->name('assignEmpShiftCheck');
     Route::get('/assignEmpShiftIndividual', 'DashboardController@assignEmpShiftIndividual')->name('assignEmpShiftIndividual');
     Route::get('/bulkSelect', 'DashboardController@bulkSelect')->name('bulkSelect');
+    Route::get('/shiftList', 'DashboardController@shiftList')->name('shiftList');
+    Route::get('/shiftDetails', 'DashboardController@shiftDetails')->name('shiftDetails');
+    Route::get('/shiftDetailsChange', 'DashboardController@shiftDetailsChange')->name('shiftDetailsChange');
+    Route::get('/employeeSearch', 'DashboardController@employeeSearch')->name('employeeSearch');
+    Route::get('/employeeAdd', 'DashboardController@employeeAdd')->name('employeeAdd');
+
 });
 
 Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware' => 'hr'], function () {

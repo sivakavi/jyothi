@@ -26,4 +26,14 @@ class AssignShift extends Model
     {
     	return $this->belongsTo('App\WorkType');
     }
+
+    public function leave()
+    {
+        return $this->belongsTo('App\Leave');
+    }
+
+    public function changed_department()
+    {
+        return $this->belongsTo('App\Department', 'changed_department_id');
+    }
 }
