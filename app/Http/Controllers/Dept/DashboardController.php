@@ -150,10 +150,9 @@ class DashboardController extends Controller
 
     public function shiftList()
     {
-        // dd($this->isWeekend(date('Y-m-d')));
         $department_id = $this->user->department->id;
         // dd($department_id);
-        $shifts = Shift::where('intime', '<', '02:00:00')->where('department_id', $department_id)->orderBy('intime', 'desc')->take(3)->get()->toArray();
+        $shifts = Shift::where('intime', '<', date('H:i:s'))->where('department_id', $department_id)->orderBy('intime', 'desc')->take(3)->get()->toArray();
         foreach ($shifts as $key => $value) {
             $shiftDetails[] = $this->shiftdetailsformat($value, date('Y-m-d'));
         }
@@ -161,7 +160,11 @@ class DashboardController extends Controller
             $take = 3 - count($shifts);
             $previous_shifts = Shift::where('department_id', $department_id)->orderBy('outtime', 'desc')->take($take)->get()->toArray();
             foreach ($previous_shifts as $key => $value) {
-                $shiftDetails[] = $this->shiftdetailsformat($value, date('Y-m-d',strtotime("-1 days")));
+                $date_yesterday = date('Y-m-d',strtotime("-1 days"));
+            if($this->isWeekend($date_yesterday)){
+                $date_yesterday = date('Y-m-d',strtotime("-2 days"));
+            }
+                $shiftDetails[] = $this->shiftdetailsformat($value, $date_yesterday);
             } 
         }
         // dd($shiftDetails);
