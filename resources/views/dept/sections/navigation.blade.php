@@ -46,12 +46,6 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('dept.shiftList') }}">
-                            <i class="fa fa-home" aria-hidden="true"></i>
-                            Last 3 Shift
-                        </a>
-                    </li>
-                    <li>
                         <a href="{{ route('logout') }}">
                             <i class="fa fa-sign-out" aria-hidden="true"></i>
                             {{ __('views.backend.section.header.menu_0') }}

@@ -10,4 +10,9 @@ class Batch extends Model
     {
     	return $this->belongsTo('App\Department');
     }
+
+    public function employee()
+    {
+    	return $this->belongsTo('App\Employee');
+    }
 }

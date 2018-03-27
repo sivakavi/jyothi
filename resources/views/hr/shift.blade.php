@@ -71,7 +71,7 @@
                 </td>
                 <td class="batch_id hide">{{ $assignShift['id'] }}</td>
                 <td class="">
-                    <button type="submit" class="empShiftAssign" class="btn btn-primary btn-round btn-sm">Assign</button>
+                    <button type="submit" class="btn btn-primary btn-round btn-sm empShiftAssign">Assign</button>
                 </td>
 
             </tr>

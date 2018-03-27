@@ -40,6 +40,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('hr.assignEmpShiftAttendance') }}">
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                            Shift Attendance
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('logout') }}">
                             <i class="fa fa-sign-out" aria-hidden="true"></i>
                             {{ __('views.backend.section.header.menu_0') }}

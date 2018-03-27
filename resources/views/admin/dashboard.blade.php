@@ -5,7 +5,7 @@
 @section('content')
     <div class="page-header clearfix"></div>
     <div class="margin-top-30">
-        <h1>Page Under Construction</h1>
+        
     </div>
 
 @endsection

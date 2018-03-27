@@ -60,6 +60,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('shifts', 'ShiftController');
     Route::resource('locations', 'LocationController');
     Route::resource('employees', 'EmployeeController');
+
+    Route::get('/assignEmpShiftAttendance', 'DashboardController@assignEmpShiftAttendance')->name('assignEmpShiftAttendance');
+    Route::get('/getShift', 'DashboardController@getShift')->name('getShift');
+    
+    Route::get('/shiftDetails', 'DashboardController@shiftDetails')->name('shiftDetails');
+    Route::get('/shiftDetailsChange', 'DashboardController@shiftDetailsChange')->name('shiftDetailsChange');
+    Route::get('/employeeSearch', 'DashboardController@employeeSearch')->name('employeeSearch');
+    Route::get('/employeeAdd', 'DashboardController@employeeAdd')->name('employeeAdd');
 });
 
 
@@ -114,4 +122,11 @@ Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware'
     Route::get('/shiftStatus', 'DashboardController@shiftBatch')->name('shiftBatch');
     Route::post('/assignShift', 'DashboardController@assignShift')->name('assignShift');
     Route::get('/assignEmpShiftCheck', 'DashboardController@assignEmpShiftCheck')->name('assignEmpShiftCheck');
+    Route::get('/assignEmpShiftAttendance', 'DashboardController@assignEmpShiftAttendance')->name('assignEmpShiftAttendance');
+    Route::get('/getShift', 'DashboardController@getShift')->name('getShift');
+
+    Route::get('/shiftDetails', 'DashboardController@shiftDetails')->name('shiftDetails');
+    Route::get('/shiftDetailsChange', 'DashboardController@shiftDetailsChange')->name('shiftDetailsChange');
+    Route::get('/employeeSearch', 'DashboardController@employeeSearch')->name('employeeSearch');
+    Route::get('/employeeAdd', 'DashboardController@employeeAdd')->name('employeeAdd');
 });

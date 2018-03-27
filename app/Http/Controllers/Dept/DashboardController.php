@@ -41,12 +41,29 @@ class DashboardController extends Controller
 
     public function index()
     {
-        return view('dept.dashboard');
+        $department_id = $this->user->department->id;
+        $shiftDetails = [];
+        $shifts = Shift::where('intime', '<', date('H:i:s'))->where('department_id', $department_id)->orderBy('intime', 'desc')->take(3)->get()->toArray();
+        foreach ($shifts as $key => $value) {
+            $shiftDetails[] = $this->shiftdetailsformat($value, date('Y-m-d'));
+        }
+        if(count($shifts)<3){
+            $take = 3 - count($shifts);
+            $previous_shifts = Shift::where('department_id', $department_id)->orderBy('outtime', 'desc')->take($take)->get()->toArray();
+            foreach ($previous_shifts as $key => $value) {
+                $date_yesterday = date('Y-m-d',strtotime("-1 days"));
+            if($this->isWeekend($date_yesterday)){
+                $date_yesterday = date('Y-m-d',strtotime("-2 days"));
+            }
+                $shiftDetails[] = $this->shiftdetailsformat($value, $date_yesterday);
+            } 
+        }
+        return view('dept.dashboard', compact('shiftDetails'));
     }
 
     public function shiftBatch()
     {
-        $batches = Batch::orderBy('id', 'asc')->paginate(10);
+        $batches = Batch::where('status', 'pending')->where('department_id', $this->user->department->id)->orderBy('id', 'asc')->paginate(10);
         return view('dept.batch', compact('batches'));
     }
 
