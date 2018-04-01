@@ -62,11 +62,19 @@ class DashboardController extends Controller
             if($check != 'true'){
                 $rejectedEmployees[]=$check;
             }
+            else{
+                $empDatepickerFrom      = new \DateTime($employeeDetail['empDatepickerFrom']);
+                $empDatepickerTo        = new \DateTime($employeeDetail['empDatepickerTo']);
+                $this->employeeShiftInsert($employeeDetail['emp_id'], $employeeDetail['work_types'], $employeeDetail['shifts'], $employeeDetail['emp_status'], $empDatepickerFrom, $empDatepickerTo, $employeeDetail['batch_id']);
+            }
         }
-        dd($rejectedEmployees);
+        if(count($rejectedEmployees)){
+            return $rejectedEmployees;
+        }
+        return 'true';
     }
 
-    private function bulkCheck($employee_id, $batch_id, $empDatepickerFrom, $empDatepickerTo){
+    private function bulkCheck($batch_id, $employee_id, $empDatepickerFrom, $empDatepickerTo){
         $empDatepickerFrom      = new \DateTime($empDatepickerFrom);
         $empDatepickerTo        = new \DateTime($empDatepickerTo);
         $empDatepickerFromCount = Batch::whereBetween('fromDate', [$empDatepickerFrom, $empDatepickerTo])->where('id', '!=', $batch_id)->where('employee_id', $employee_id)->get()->count();
