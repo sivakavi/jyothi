@@ -338,5 +338,89 @@ class DashboardController extends Controller
     public function isWeekend($date) {
         return (date('N', strtotime($date)) >= 6);
     }
+
+    public function employeeReassignList()
+    {
+        return view('dept.reassignlist');
+    }
+
+    public function employeeReassign(Request $request)
+    {
+        $department_id = $this->user->department->id;
+        $shifts = Shift::where('department_id', $department_id)->get();
+        $statuses = Status::where('department_id', $department_id)->get();
+        $work_types = WorkType::where('department_id', $department_id)->get();
+
+        $batchId = $request->get('batch_id');
+        $batchDetails = Batch::find($batchId);
+        $employeeShift = AssignShift::where('batch_id', $batchId)->where('employee_id', $batchDetails->employee_id)->first();
+        $batches['shift_id'] = $employeeShift->shift_id;
+        $batches['employee_name'] = $employeeShift->employee->name;
+        $batches['category_name'] = $employeeShift->employee->category->name;
+        $batches['work_type_id'] = $employeeShift->work_type_id;
+        $batches['status_id'] = $employeeShift->status_id;
+        $batches['fromDate'] = $batchDetails->fromDate;
+        $batches['toDate'] = $batchDetails->toDate;
+        $batches['check'] = true;
+        if(new \DateTime($batches['fromDate']) > new \DateTime()){
+            $batches['check'] = false;
+        }
+        // dd($batches);
+        return view('dept.reassign', compact('batches', 'shifts', 'statuses', 'work_types'));
+            ;
+    }
+
+    public function employeeReassignStore(Request $request)
+    {
+        $batch_id = $request->get('batch_id');
+        $fromDate = $request->get('fromDate');
+        $toDate = $request->get('toDate');
+        $status_id = $request->get('status_id');
+        $shift_id = $request->get('shift_id');
+        $work_type_id = $request->get('work_type_id');
+        $batchDetails = Batch::find($batch_id);
+        $fromDate = new \DateTime($fromDate);
+        $toDate = new \DateTime($toDate);
+        
+        $employee_id = $batchDetails->employee_id;
+        if(new \DateTime($batchDetails->fromDate) > new \DateTime()){
+            $this->employeeShiftInsert($employee_id, $work_type_id, $shift_id, $status_id, $fromDate, $toDate);
+            $batchDetails->delete();
+            AssignShift::where('batch_id', $batch_id)->delete();
+        }
+        else{
+            $previous_day = $fromDate->modify('-1 day');
+            $batchDetails->toDate = $previous_day;
+            $batchDetails->save();
+            $fromDate->modify('+1 day');
+            $this->employeeShiftInsert($employee_id, $work_type_id, $shift_id, $status_id, $fromDate, $toDate);
+            $fromDate = $request->get('fromDate');
+            $toDate = $request->get('toDate');
+            $fromDate = new \DateTime($fromDate);
+            $toDate = new \DateTime($toDate);
+            $deleteShifts = AssignShift::where('batch_id', $batch_id)->whereBetween('nowdate', [$fromDate, $toDate]);     
+            $deleteShifts->delete();
+        }
+        return redirect()->route('dept.employeeReassignList');
+        
+    }
+
+    public function employeeBatchSearch(Request $request)
+    {
+        $emp_name = $request->get('name');
+        $employee = $batches = [];
+        $employee = Employee::where('department_id', $this->user->department->id)->where('name', strtolower($emp_name))->pluck('id')->toArray();
+        if(count($employee)){
+            $batches = Batch::where('employee_id', $employee[0])->where('toDate','>', new \DateTime())->orderBy('created_at', 'DESC')->take(3)->get()->toArray();
+        }
+        else{
+            return '';
+        }
+        if(count($batches))
+            return \Response::json($batches);
+        return '';
+    }
+
+    
    
 }
