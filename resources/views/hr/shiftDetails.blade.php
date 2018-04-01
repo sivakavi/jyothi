@@ -7,6 +7,7 @@
     </div>
     <input type="hidden" value="{{ app('request')->input('date') }}" id="shiftDate">
     <input type="hidden" value="{{ app('request')->input('department_id') }}" id="department_id">
+    <input type="hidden" value="{{ app('request')->input('shift_id') }}" id="shiftID">
     <div class="modal fade" id="myModal" role="dialog">
 	    <div class="modal-dialog">
 	    
@@ -15,9 +16,17 @@
 	        <div class="modal-header">
 	          <button type="button" class="close" data-dismiss="modal">&times;</button>
 	          <h4 class="modal-title"></h4>
+              <input type="hidden" id="emp_id" value="">
 	        </div>
 	        <div class="modal-body">
 	        	<input type="hidden" id="assignShift">
+                <select class="form-control emp_work_type">
+                    <option value=""> Please Select Work Type</option>
+                    @foreach($work_types as $work_type)
+                        <option value="{{$work_type->id}}">{{$work_type->name}}</option>
+                    @endforeach
+                </select>
+                <br>
 	          	<select class="form-control emp_status">
 	          		<option value=""> Please Select Status</option>
 	                @foreach($statuses as $status)
@@ -122,9 +131,11 @@
     			var tr = $(this).closest("tr");
     			empId = tr.find('.empSearchId').text();
                 empDate = $('#shiftDate').val();
+                shift_id = $('#shiftID').val();
     			department_id = $('#department_id').val();
     			console.log(empDate);
-    			var datas = 'empId='+ empId + '&empDate='+ empDate + '&department_id='+ department_id;
+                 + '&department_id='+ department_id
+                var datas = 'empId='+ empId + '&empDate='+ empDate + '&shift_id='+ shift_id + '&department_id='+ department_id;
     	   		// console.log(datas);
 	            jQuery.ajax({
 	              url: "{{route('hr.employeeAdd')}}",
@@ -143,37 +154,54 @@
     		});
     	$(function () {
     	   	$('.saveModal').click(function(){
-    	   		status = $('.emp_status').find("option:selected").text();
-    	   		leave = false;
-    	   		othours = false;
-    	   		assignShiftId = $('#assignShift').val();
-    	   		if(status == 'Leave'){
-    	   			leave = $('.emp_leave').val();
-    	   		}
-    	   		else if(status == 'OT'){
-    	   			othours = $('#othours').val();
-    	   		}
-    	   		status = $('.emp_status').val();
-    	   		var datas = 'status='+ status + '&leave='+ leave + '&assignShiftId='+ assignShiftId + '&othours='+ othours;
-    	   		// console.log(datas);
-	            jQuery.ajax({
-	              url: "{{route('hr.shiftDetailsChange')}}",
-	              type: 'GET',
-	              data: datas,
-	              success:function(data) {
-	                  if(data==='true'){
-	                    alert('Record Changed Successfully');
-	                    $('#myModal').modal('toggle');
-	                    location.reload();
-	                  }
-	              },
-                });
+                if($('.emp_status').val() !="" && $('.emp_work_type').val() !="")
+                {
+                    department_id = $('#department_id').val();
+                    status = $('.emp_status').find("option:selected").text();
+                    leave = false;
+                    othours = false;
+                    assignShiftId = $('#assignShift').val();
+                    ajaxURL = "{{route('hr.shiftDetailsChange')}}";
+                    if(assignShiftId == ""){
+                        assignShiftId = 0;
+                        ajaxURL = "{{route('hr.employeeAdd')}}";
+                    }
+                    empDate = $('#shiftDate').val();
+                    empId = $('#emp_id').val();
+                    shift_id = $('#shiftID').val();
+                    if(status == 'Leave'){
+                        leave = $('.emp_leave').val();
+                    }
+                    else if(status == 'OT'){
+                        othours = $('#othours').val();
+                    }
+                    status = $('.emp_status').val();
+                    emp_work_type = $('.emp_work_type').val();
+                    var datas = 'status='+ status + '&leave='+ leave + '&assignShiftId='+ assignShiftId + '&othours='+ othours + '&emp_work_type='+ emp_work_type + '&empDate='+ empDate + '&emp_id='+ empId + '&shift_id='+ shift_id + '&department_id='+ department_id;
+                    // console.log(datas);
+                    jQuery.ajax({
+                      url: ajaxURL,
+                      type: 'GET',
+                      data: datas,
+                      success:function(data) {
+                          if(data==='true'){
+                            alert('Record Changed Successfully');
+                            $('#myModal').modal('toggle');
+                            location.reload();
+                          }
+                      },
+                    });
+                } else{
+                    alert("Please select status and worktype");
+                }
     	   	});
-    	   	$('.empassign').click(function(){
+    	   	 $(document).on('click', '.empassign', function(e) {
     	   		var tr = $(this).closest("tr");
-    	   		$('#assignShift').val(tr.find('.assign_shift_id').text());
-    	   		$('.modal-title').text(tr.find('.emp_name').text()+' - '+ tr.find('.empStatus').text());
-    	   		$('#myModal').modal('toggle');
+                $('#assignShift').val(tr.find('.assign_shift_id').text());
+                $('.modal-title').text(tr.find('.emp_name').text()+' - '+ tr.find('.empStatus').text());
+                empId = tr.find('.empSearchId').text();
+                $('#emp_id').val(empId);
+                $('#myModal').modal('toggle');
     	   	});
     	   	$('.emp_status').on('change', function() {
     	   		var status = $(this).find("option:selected").text();
@@ -206,7 +234,7 @@
 								var trHTML = '<tr><th>Employee Id</th><th>Employee Name</th>  <th>Employee Department</th><th></th></tr>';
 						        $.each(data, function (i, item) {
 						        	trHTML += '';
-						            trHTML += '<tr><td class="empSearchId">' + item.id + '</td><td>' + item.name + '</td><td>' + item.department_name + '</td><td class=""><button type="button" class="btn btn-primary btn-round btn-sm empadd">Add Employee</button></td></tr>';
+						            trHTML += '<tr><td class="empSearchId">' + item.id + '</td><td class="emp_name">' + item.name + '</td><td>' + item.department_name + '</td><td class=""><button type="button" class="btn btn-primary btn-round btn-sm empassign">Add Employee</button></td></tr>';
 						        });
 
 						        $('#records_table').append(trHTML);

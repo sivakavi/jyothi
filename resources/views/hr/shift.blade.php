@@ -22,9 +22,13 @@
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
     <input type="hidden" name="department_id" id="department_id" value="{{ $_GET['department_id']}}">
     <div class="margin-top-40">
+    <div class="col-md-3">
+            <div>Bulk Select: <input type="checkbox" id="isEmpBulkSelected"/></div>
+        </div>
     <table class="table table-bordered" id="employeeShift">
     <thead>
       <tr>
+        <th></th>
         <th>Employee Id</th>
         <th>Employee Name</th>
         <th>Category</th>
@@ -39,6 +43,7 @@
     <tbody>
         @foreach ($assignShifts as $assignShift)
             <tr>
+                <td><input type="checkbox" class="isEmpSelected"/></td>
                 <td class="emp_id">{{ $assignShift['employee_id'] }}</td>
                 <td class="emp_name">{{ $assignShift['employee_name'] }}</td>
                 <td class="category">{{ $assignShift['category_name'] }}</td>
@@ -71,13 +76,16 @@
                 </td>
                 <td class="batch_id hide">{{ $assignShift['id'] }}</td>
                 <td class="">
-                    <button type="submit" class="btn btn-primary btn-round btn-sm empShiftAssign">Assign</button>
+                    <button type="submit" class="btn btn-primary btn-round btn-sm empShiftAssign">Confirmed</button>
                 </td>
 
             </tr>
         @endforeach
     </tbody>
   </table>
+  <div class="well well-sm margin-top-50 text-center">
+        <button type="submit" id="shiftAssign" class="btn btn-primary btn-round btn-sm">Confirmed</button>
+    </div>
 </div>
 
 @endsection
@@ -154,6 +162,56 @@
             else{
               alert('Please fill From Date and To date');
             }
+        });
+
+        $('#isEmpBulkSelected').click(function(e){
+          if(this.checked){
+            $('#employeeShift > tbody  > tr').each(function() {
+              $(this).find('.isEmpSelected').prop('checked', true);
+            });
+          }
+          else{
+            $('#employeeShift > tbody  > tr').each(function() {
+              $(this).find('.isEmpSelected').prop('checked', false);
+            });
+          }
+        });
+
+        $('#shiftAssign').click(function(e){
+          window.employeeDetails = [];
+          e.preventDefault();
+          var employeeDetails = [];
+          $('#employeeShift > tbody  > tr').each(function() {
+            if($(this).find('.isEmpSelected').is(':checked')){
+              emp_id = parseInt($(this).find('.emp_id').text());
+              batch_id = parseInt($(this).find('.batch_id').text());
+              emp_status = parseInt($(this).find('.emp_status').val());
+              shifts = parseInt($(this).find('.emp_shift').val());
+              work_types = parseInt($(this).find('.work_type').val());
+              empDatepickerFrom = $(this).find('.empDatepickerFrom').val();
+              empDatepickerTo = $(this).find('.empDatepickerTo').val();
+              new_employee = {batch_id: batch_id, emp_id: emp_id, shifts: shifts, emp_status: emp_status, work_types: work_types, empDatepickerFrom: empDatepickerFrom, empDatepickerTo: empDatepickerTo};
+              employeeDetailsArray(new_employee);
+            }
+          });
+          if(window.employeeDetails == ""){
+              alert("Please select any employee");
+              return;
+          }
+          
+          jQuery.ajax({
+                url: "{{route('hr.bulkConfirmedShift')}}",
+                type: 'POST',
+                data: {
+                    'employeeDetails' : window.employeeDetails,
+                    '_token' : $( "#token" ).val()
+                },
+                success:function(data) {
+                    alert('Shift Confirmed Successfully');
+                    location.reload();
+                },
+         });
+          
         });
       });
 
