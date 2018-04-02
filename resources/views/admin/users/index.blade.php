@@ -19,6 +19,7 @@
                 <th>@sortablelink('email', __('views.admin.users.index.table_header_0'),['page' => $users->currentPage()])</th>
                 <th>@sortablelink('name',  __('views.admin.users.index.table_header_1'),['page' => $users->currentPage()])</th>
                 <th>{{ __('views.admin.users.index.table_header_2') }}</th>
+                <th>Dept.</th>
                 <th>@sortablelink('active', __('views.admin.users.index.table_header_3'),['page' => $users->currentPage()])</th>
                 <th>@sortablelink('confirmed', __('views.admin.users.index.table_header_4'),['page' => $users->currentPage()])</th>
                 <th>@sortablelink('created_at', __('views.admin.users.index.table_header_5'),['page' => $users->currentPage()])</th>
@@ -32,6 +33,7 @@
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->name }}</td>
                     <td style="text-transform: uppercase;">{{ $user->roles->pluck('name')->implode(',') }}</td>
+                    <td>{{ $user->department["name"]}}</td>
                     <td>
                         @if($user->active)
                             <span class="label label-primary">{{ __('views.admin.users.index.active') }}</span>
