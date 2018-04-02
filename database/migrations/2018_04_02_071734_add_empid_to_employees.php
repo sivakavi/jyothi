@@ -15,7 +15,7 @@ class AddEmpidToEmployees extends Migration
     {
         //
         Schema::table('employees', function($table) {
-            $table->string('empolyee_id')->after('gender');;
+            $table->string('employee_id')->after('gender');;
         });
     }
 
@@ -28,7 +28,7 @@ class AddEmpidToEmployees extends Migration
     {
         //
         Schema::table('employees', function($table) {
-            $table->dropColumn('empolyee_id');
+            $table->dropColumn('employee_id');
         });
     }
 }

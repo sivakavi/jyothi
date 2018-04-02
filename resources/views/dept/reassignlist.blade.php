@@ -4,8 +4,10 @@
 
 @section('content')
     <div class="page-header clearfix"></div>
-    <div class="pull-right">
-        <input type="text" name="empName" id="empName"><button type="button" class="btn btn-primary btn-round btn-sm empSearch"><i class="fa fa-search" aria-hidden="true"></i></button>
+    <br/>
+    <br/>
+    <div>
+        <center>Search by Emp Code : <input type="text" name="empName" id="empName">&nbsp;&nbsp;<button type="button" class="btn btn-primary btn-round btn-sm empSearch"><i class="fa fa-search" aria-hidden="true"></i></button></center>
     </div>
     <table id ="records_table" class="table table-bordered"></table>
 @endsection

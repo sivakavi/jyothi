@@ -89,7 +89,8 @@ class DashboardController extends Controller
         $department_id = $request->get('department_id');
         $emp_name = $request->get('name');
         $employees = [];
-        $employeeDetails = Employee::where('department_id', '!=', $department_id)->where('name', 'LIKE', strtolower($emp_name) . '%')->get();
+        //$employeeDetails = Employee::where('department_id', '!=', $department_id)->where('name', 'LIKE', strtolower($emp_name) . '%')->get();
+        $employeeDetails = Employee::where('employee_id', $emp_name)->get();
         foreach ($employeeDetails as $employeeDetail) {
             $employee['id'] = $employeeDetail->id;
             $employee['name'] = $employeeDetail->name;

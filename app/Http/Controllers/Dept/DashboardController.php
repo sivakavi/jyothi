@@ -137,7 +137,7 @@ class DashboardController extends Controller
         $employee_id            = $request->get('employee_id');
         $empDatepickerFrom      = new \DateTime( $request->get('empDatepickerFrom'));
         $empDatepickerTo        = new \DateTime( $request->get('empDatepickerTo'));
-        $empDatepickerCount     = AssignShift::whereBetween('nowdate', [$empDatepickerFrom, $empDatepickerTo])->get()->count();
+        $empDatepickerCount     = AssignShift::whereBetween('nowdate', [$empDatepickerFrom, $empDatepickerTo])->where('employee_id', $employee_id)->get()->count();
         if($empDatepickerCount)
             return 'false';
         else{
@@ -214,7 +214,8 @@ class DashboardController extends Controller
     {
         $emp_name = $request->get('name');
         $employees = [];
-        $employeeDetails = Employee::where('department_id', '!=', $this->user->department->id)->where('name', 'LIKE', strtolower($emp_name) . '%')->get();
+        //$employeeDetails = Employee::where('department_id', '!=', $this->user->department->id)->where('name', 'LIKE', strtolower($emp_name) . '%')->get();
+        $employeeDetails = Employee::where('employee_id', $emp_name)->get();
         foreach ($employeeDetails as $employeeDetail) {
             $employee['id'] = $employeeDetail->id;
             $employee['name'] = $employeeDetail->name;
@@ -409,7 +410,8 @@ class DashboardController extends Controller
     {
         $emp_name = $request->get('name');
         $employee = $batches = [];
-        $employee = Employee::where('department_id', $this->user->department->id)->where('name', strtolower($emp_name))->pluck('id')->toArray();
+        //$employee = Employee::where('department_id', $this->user->department->id)->where('name', strtolower($emp_name))->pluck('id')->toArray();
+        $employee = Employee::where('department_id', $this->user->department->id)->where('employee_id', $emp_name)->pluck('id')->toArray();
         if(count($employee)){
             $batches = Batch::where('employee_id', $employee[0])->where('toDate','>', new \DateTime())->orderBy('created_at', 'DESC')->take(3)->get()->toArray();
         }
