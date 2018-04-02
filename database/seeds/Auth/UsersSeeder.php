@@ -24,7 +24,7 @@ class UsersSeeder extends Seeder
         $users = [
             [
                 'name' => 'Admin',
-                'email' => 'admin@jyothi.com',
+                'email' => 'admin@jyothy.com',
                 'password' => bcrypt('admin'),
                 'active' => true,
                 'confirmed' => true,

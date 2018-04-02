@@ -1,17 +1,19 @@
 @extends('admin.layouts.admin')
 
 @section('title', 'Shift Attendance')
-<style>
+<!-- <style>
     .box-style{
         border: 1px solid;
         padding: 20px;
         text-align: center;
         margin-bottom: 15px;
     }
-</style>
+</style> -->
 @section('content')
     <div class="page-header clearfix">
     </div>
+    <div class="row margin-top-30">
+    <div class="col-md-8 center-margin">
     <div class="form-group">
     <label for="department_id">Department</label>
     <select id="department_id" name="department_id" class="form-control" required>
@@ -20,6 +22,7 @@
             <option value="{{$department->id}}">{{$department->name}}</option>
         @endforeach
     </select>
+    </div>
     <div class="form-group">
         <label for="shift_id">Shift</label>
         <select id = "shift_id" class="form-control" name="shift_id" required>
@@ -32,7 +35,8 @@
     </div>
     
     <div style="text-align: center;"><button type="submit" class="btn btn-primary btn-round btn-sm empShiftAttendance">Submit</button></div>
-
+</div>
+</div>
 @endsection
 
 @section('scripts')

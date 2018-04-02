@@ -27,7 +27,7 @@
         <!-- sidebar menu -->
         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
             <div class="menu_section">
-                <h3>{{ __('views.backend.section.navigation.sub_header_0') }}</h3>
+                <!-- <h3>{{ __('views.backend.section.navigation.sub_header_0') }}</h3> -->
                 <ul class="nav side-menu">
                     <li>
                         <a href="{{ route('admin.dashboard') }}">
@@ -35,11 +35,11 @@
                             {{ __('views.backend.section.navigation.menu_0_1') }}
                         </a>
                     </li>
-                </ul>
+                <!-- </ul>
             </div>
             <div class="menu_section">
-                <h3>{{ __('views.backend.section.navigation.sub_header_1') }}</h3>
-                <ul class="nav side-menu">
+                 <h3>{{ __('views.backend.section.navigation.sub_header_1') }}</h3> 
+                <ul class="nav side-menu"> -->
                     <li>
                         <a href="{{ route('admin.departments.index') }}">
                             <i class="fa fa-institution" aria-hidden="true"></i>

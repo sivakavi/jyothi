@@ -33,11 +33,11 @@
                                     @endif
                                     </div>
 
-                                    <div class="form-group @if($errors->has('deppartment_code')) has-error @endif">
-                                    <label for="deppartment_code">Code</label>
-                                    <input type="text" id="nadeppartment_code" name="deppartment_code" class="form-control" value="{{ old("deppartment_code") }}"/>
-                                    @if($errors->has("deppartment_code"))
-                                        <span class="help-block">{{ $errors->first("deppartment_code") }}</span>
+                                    <div class="form-group @if($errors->has('department_code')) has-error @endif">
+                                    <label for="department_code">Code</label>
+                                    <input type="text" id="department_code" name="department_code" class="form-control" value="{{ old("department_code") }}"/>
+                                    @if($errors->has("department_code"))
+                                        <span class="help-block">{{ $errors->first("department_code") }}</span>
                                     @endif
                                     </div>
 

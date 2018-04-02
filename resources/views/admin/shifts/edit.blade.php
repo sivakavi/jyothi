@@ -52,16 +52,16 @@
                                 </div>
 
                                 <div class="form-group @if($errors->has('in')) has-error @endif">
-                                    <label for="in">Allias</label>
-                                    <input type="time" id="in" name="in" class="form-control" value="{{ is_null(old("in")) ? $shift->in : old("in") }}"/>
+                                    <label for="in">In Time</label>
+                                    <input type="time" id="in" name="in" class="form-control" value="{{ is_null(old("in")) ? $shift->intime : old("in") }}"/>
                                     @if($errors->has("in"))
                                         <span class="help-block">{{ $errors->first("in") }}</span>
                                     @endif
                                 </div>
 
                                 <div class="form-group @if($errors->has('out')) has-error @endif">
-                                    <label for="out">Allias</label>
-                                    <input type="time" id="out" name="out" class="form-control" value="{{ is_null(old("out")) ? $shift->out : old("out") }}"/>
+                                    <label for="out">Out Time</label>
+                                    <input type="time" id="out" name="out" class="form-control" value="{{ is_null(old("out")) ? $shift->outtime : old("out") }}"/>
                                     @if($errors->has("out"))
                                         <span class="help-block">{{ $errors->first("out") }}</span>
                                     @endif
