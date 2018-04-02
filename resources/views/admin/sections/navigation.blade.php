@@ -54,49 +54,49 @@
                     </li>
                     <li>
                         <a href="{{ route('admin.categories.index') }}">
-                            <i class="fa fa-institution" aria-hidden="true"></i>
+                            <i class="fa fa-code-fork" aria-hidden="true"></i>
                             Categories
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('admin.leaves.index') }}">
-                            <i class="fa fa-institution" aria-hidden="true"></i>
+                            <i class="fa fa-question-circle" aria-hidden="true"></i>
                             Leave
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('admin.shifts.index') }}">
-                            <i class="fa fa-institution" aria-hidden="true"></i>
+                            <i class="fa fa-cubes" aria-hidden="true"></i>
                             Shift
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('admin.locations.index') }}">
-                            <i class="fa fa-institution" aria-hidden="true"></i>
+                            <i class="fa fa-dot-circle-o" aria-hidden="true"></i>
                             Location
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('admin.statuses.index') }}">
-                            <i class="fa fa-institution" aria-hidden="true"></i>
+                            <i class="fa fa-comment" aria-hidden="true"></i>
                             Status
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('admin.work_types.index') }}">
-                            <i class="fa fa-institution" aria-hidden="true"></i>
+                            <i class="fa fa-bolt" aria-hidden="true"></i>
                             Work Type
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('admin.employees.index') }}">
-                            <i class="fa fa-institution" aria-hidden="true"></i>
+                            <i class="fa fa-child" aria-hidden="true"></i>
                             Employee
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('admin.assignEmpShiftAttendance') }}">
-                            <i class="fa fa-home" aria-hidden="true"></i>
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
                             Shift Attendance
                         </a>
                     </li>

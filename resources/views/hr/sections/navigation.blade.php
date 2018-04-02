@@ -35,13 +35,13 @@
                     </li>
                     <li>
                         <a href="{{ route('hr.shiftBatch') }}">
-                            <i class="fa fa-home" aria-hidden="true"></i>
+                            <i class="fa fa-flag" aria-hidden="true"></i>
                             Shift Status
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('hr.assignEmpShiftAttendance') }}">
-                            <i class="fa fa-home" aria-hidden="true"></i>
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
                             Shift Attendance
                         </a>
                     </li>

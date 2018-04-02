@@ -26,6 +26,7 @@ class StoreEmployee extends FormRequest
         return [
             'name' => 'required',
             'gender' => 'required',
+            'employee_id' => 'required',
             'department_id' => 'required',
             'category_id' => 'required',
             'location_id' => 'required',

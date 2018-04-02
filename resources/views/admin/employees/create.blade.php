@@ -33,6 +33,14 @@
                                 @endif
                             </div>
 
+                            <div class="form-group @if($errors->has('employee_id')) has-error @endif">
+                                <label for="employee_id">Code</label>
+                                <input type="text" id="employee_id" name="employee_id" class="form-control" value="{{ old("employee_id") }}"/>
+                                @if($errors->has("employee_id"))
+                                    <span class="help-block">{{ $errors->first("employee_id") }}</span>
+                                @endif
+                            </div>
+
                             <div class="form-group">
                                 <label for="manager">Gender:</label>
                                 <div class="">

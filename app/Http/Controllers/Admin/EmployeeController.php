@@ -49,6 +49,7 @@ class EmployeeController extends Controller {
 
 		$employee->name = $request->input("name");
 		$employee->gender = $request->input("gender");
+		$employee->employee_id = $request->input("employee_id");
 		$employee->department_id = $request->input("department_id");
 		$employee->category_id = $request->input("category_id");
 		$employee->location_id = $request->input("location_id");
@@ -103,6 +104,7 @@ class EmployeeController extends Controller {
 
 		$employee->name = $request->input("name");
 		$employee->gender = $request->input("gender");
+		$employee->employee_id = $request->input("employee_id");
 		$employee->department_id = $request->input("department_id");
 		$employee->category_id = $request->input("category_id");
 		$employee->location_id = $request->input("location_id");

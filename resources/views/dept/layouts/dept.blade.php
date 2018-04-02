@@ -18,13 +18,16 @@
                     <div>
                         <h1 class="h3">@yield('title')</h1>
                     </div>
-                    @if(Breadcrumbs::exists())
-                        <div class="title_right">
-                            <div class="pull-right">
-                                {!! Breadcrumbs::render() !!}
+                    
+                </div>
+                <div>
+                        @if(Breadcrumbs::exists())
+                            <div class="title_right">
+                                <div class="pull-right">
+                                    {!! Breadcrumbs::render() !!}
+                                </div>
                             </div>
-                        </div>
-                    @endif
+                        @endif
                 </div>
                 @yield('content')
             </div>

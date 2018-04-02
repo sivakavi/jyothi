@@ -35,20 +35,20 @@
                     </li>
                     <li>
                         <a href="{{ route('dept.shiftBatch') }}">
-                            <i class="fa fa-home" aria-hidden="true"></i>
+                            <i class="fa fa-flag" aria-hidden="true"></i>
                             Shift Status
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('dept.shift') }}">
-                            <i class="fa fa-home" aria-hidden="true"></i>
+                            <i class="fa fa-external-link" aria-hidden="true"></i>
                             Assign Shift
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('dept.employeeReassignList') }}">
-                            <i class="fa fa-home" aria-hidden="true"></i>
-                            ReAssign Shift
+                            <i class="fa fa-exchange" aria-hidden="true"></i>
+                            Re-Assign Shift
                         </a>
                     </li>
                     <li>

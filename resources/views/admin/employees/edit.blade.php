@@ -25,12 +25,20 @@
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content margin-top-40">
-                                <div class="x_content margin-top-40">
+                                
                             <div class="form-group @if($errors->has('name')) has-error @endif">
                                 <label for="name-field">Name</label>
                                 <input type="text" id="name-field" name="name" class="form-control" value="{{$employee->name}}"/>
                                 @if($errors->has("name"))
                                     <span class="help-block">{{ $errors->first("name") }}</span>
+                                @endif
+                            </div>
+
+                            <div class="form-group @if($errors->has('employee_id')) has-error @endif">
+                                <label for="employee_id">Code</label>
+                                <input type="text" id="employee_id" name="employee_id" class="form-control" value="{{$employee->employee_id}}"/>
+                                @if($errors->has("employee_id"))
+                                    <span class="help-block">{{ $errors->first("employee_id") }}</span>
                                 @endif
                             </div>
 

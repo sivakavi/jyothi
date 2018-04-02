@@ -18,6 +18,8 @@
                     <div>
                         <h1 class="h3">@yield('title')</h1>
                     </div>
+                </div>
+                <div>
                     @if(Breadcrumbs::exists())
                         <div class="title_right">
                             <div class="pull-right">
