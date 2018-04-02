@@ -114,6 +114,14 @@ Route::group(['prefix' => 'dept', 'as' => 'dept.', 'namespace' => 'Dept', 'middl
     Route::get('/employeeSearch', 'DashboardController@employeeSearch')->name('employeeSearch');
     Route::get('/employeeAdd', 'DashboardController@employeeAdd')->name('employeeAdd');
 
+    Route::get('/employeeReassignList', 'DashboardController@employeeReassignList')->name('employeeReassignList');
+
+    Route::get('/employeeReassign', 'DashboardController@employeeReassign')->name('employeeReassign');
+
+    Route::post('/employeeReassignStore', 'DashboardController@employeeReassignStore')->name('employeeReassignStore');
+
+    Route::get('/employeeBatchSearch', 'DashboardController@employeeBatchSearch')->name('employeeBatchSearch');
+
 });
 
 Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware' => 'hr'], function () {

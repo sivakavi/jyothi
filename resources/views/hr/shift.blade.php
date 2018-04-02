@@ -207,8 +207,14 @@
                     '_token' : $( "#token" ).val()
                 },
                 success:function(data) {
-                    alert('Shift Confirmed Successfully');
-                    location.reload();
+                    if(data === 'true'){
+                        alert('All Shift Confirmed Successfully');
+                        location.reload();
+                    }
+                    else{
+                        alert('Some shifts are not confirmed successfully. Please select different');
+                        location.reload();
+                    }
                 },
          });
           
