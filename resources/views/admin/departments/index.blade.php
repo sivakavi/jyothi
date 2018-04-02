@@ -19,7 +19,8 @@
                         <tr>
                         <th>ID</th>
                         <th>NAME</th>
-                            <th class="text-right">OPTIONS</th>
+                        <th>CODE</th>
+                        <th class="text-right">OPTIONS</th>
                         </tr>
                     </thead>
 
@@ -28,6 +29,7 @@
                             <tr>
                                 <td>{{$department->id}}</td>
                                 <td>{{$department->name}}</td>
+                                <td>{{$department->department_code}}</td>
                                 <td class="text-right">
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.departments.show', $department->id) }}"><i class="glyphicon glyphicon-eye-open"></i> View</a>
                                     <a class="btn btn-xs btn-warning" href="{{ route('admin.departments.edit', $department->id) }}"><i class="glyphicon glyphicon-edit"></i> Edit</a>

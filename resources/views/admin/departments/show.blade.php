@@ -28,6 +28,9 @@
                             <td>{{$department->name}}</td>
                             </tr>
                             <tr>
+                            <th scope="row">CODE</th>
+                            <td>{{$department->department_code}}</td>
+                            </tr>
                         </tbody>
                         </table>
                     </div>

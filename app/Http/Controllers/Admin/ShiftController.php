@@ -45,8 +45,8 @@ class ShiftController extends Controller {
 		$shift->name = $request->input("name");
 		$shift->department_id = $request->input("department_id");
 		$shift->allias = $request->input("allias");
-		$shift->in = $request->input("in");
-		$shift->out = $request->input("out");
+		$shift->intime = $request->input("in");
+		$shift->outtime = $request->input("out");
 		$shift->save();
 
 		return redirect()->route('admin.shifts.index')->with('message', 'Item created successfully.');
@@ -93,8 +93,8 @@ class ShiftController extends Controller {
 		$shift->name = $request->input("name");
 		$shift->department_id = $request->input("department_id");
 		$shift->allias = $request->input("allias");
-		$shift->in = $request->input("in");
-		$shift->out = $request->input("out");
+		$shift->intime = $request->input("in");
+		$shift->outtime = $request->input("out");
 
 		$shift->save();
 

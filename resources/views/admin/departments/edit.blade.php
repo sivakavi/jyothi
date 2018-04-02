@@ -32,6 +32,14 @@
                                         <span class="help-block">{{ $errors->first("name") }}</span>
                                     @endif
                                 </div>
+
+                                <div class="form-group @if($errors->has('department_code')) has-error @endif">
+                                    <label for="department_code">Code</label>
+                                    <input type="text" id="department_code" name="department_code" class="form-control" value="{{ is_null(old("department_code")) ? $department->department_code : old("department_code") }}"/>
+                                    @if($errors->has("department_code"))
+                                        <span class="help-block">{{ $errors->first("department_code") }}</span>
+                                    @endif
+                                </div>
                                 
                                 <div class="well well-sm margin-top-50">
                                     <button type="submit" class="btn btn-primary btn-round btn-sm">Update department</button>

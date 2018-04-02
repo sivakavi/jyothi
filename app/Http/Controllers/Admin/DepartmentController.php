@@ -41,6 +41,7 @@ class DepartmentController extends Controller {
 		$department = new Department();
 
 		$department->name = $request->input("name");
+		$department->department_code = $request->input("department_code");
 		$department->save();
 
 		return redirect()->route('admin.departments.index')->with('message', 'Item created successfully.');
@@ -84,6 +85,7 @@ class DepartmentController extends Controller {
 		$department = Department::findOrFail($id);
 
 		$department->name = $request->input("name");
+		$department->department_code = $request->input("department_code");
 
 		$department->save();
 

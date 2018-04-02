@@ -32,6 +32,7 @@
 
 .page-header{
     border-bottom: 2px solid #000 !important;
+    margin:0 !important;
 }
 
 .margin-top-10{
@@ -1204,3 +1205,4 @@
   color: #fff;
   background-color: #000;
 }
+

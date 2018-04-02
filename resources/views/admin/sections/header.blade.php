@@ -5,7 +5,7 @@
                 <a id="menu_toggle"><i class="fa fa-bars"></i></a>
             </div> -->
 
-            <div class="nav toggle">
+            <!-- <div class="nav toggle">
                 
             </div>
 
@@ -24,7 +24,7 @@
                         </li>
                     </ul>
                 </li>
-            </ul>
+            </ul> -->
         </nav>
     </div>
 </div>
