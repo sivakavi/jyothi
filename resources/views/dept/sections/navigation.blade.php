@@ -1,7 +1,7 @@
 <div class="col-md-3 left_col">
     <div class="left_col scroll-view">
         <div class="logo-div">
-            
+        <img src="{{ asset('logo.png') }}" class="logo-img"/>
         </div>
         <div class="navbar nav_title" style="border: 0;">
             <a href="{{ route('dept.dashboard') }}" class="site_title">
