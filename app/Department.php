@@ -8,4 +8,8 @@ class Department extends Model
 {
     //
     
+    public function shifts()
+    {
+        return $this->hasMany('App\Shift');
+    }
 }
