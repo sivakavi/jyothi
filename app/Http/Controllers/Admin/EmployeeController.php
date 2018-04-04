@@ -8,6 +8,9 @@ use App\Category;
 use App\Location;
 use App\Department;
 use App\Http\Requests\StoreEmployee;
+use Illuminate\Http\Request;
+use Validator;
+
 
 class EmployeeController extends Controller {
 
@@ -130,6 +133,51 @@ class EmployeeController extends Controller {
 		$employee->delete();
 
 		return redirect()->route('admin.employees.index')->with('message', 'Item deleted successfully.');
+	}
+
+	public function importExcel(Request $request)
+	{
+        $validator = Validator::make($request->all(), [
+            'import_file' => 'required|mimes:xlsx'
+        ]);
+        
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+		if ($request->hasFile('import_file')) {
+			$departments = $this->formatData(Department::all(['id', 'name']));
+			$categories = $this->formatData(Category::all(['id', 'name']));
+			$locations = $this->formatData(Location::all(['id', 'name']));
+			
+			$path = $request->file('import_file')->getRealPath();
+			$rows = \Excel::load($path, function($reader) {
+			})->toArray();
+			$employees = [];
+			foreach($rows as $row){
+				if($row['emp._no.'] != ''){
+					$employee['name'] = $row['name'];
+					$employee['gender'] = $row['gender'];
+					$employee['employee_id'] = $row['emp._no.'];
+					$employee['department_id'] = $departments[strtolower($row['department'])];
+					$employee['category_id'] = $categories[strtolower($row['category'])];
+					$employee['location_id'] = $locations[strtolower($row['location'])];
+					$employee['cost_centre'] = $row['cost_centre'];
+					$employee['cost_centre_desc'] = $row['cost_centre_desc'];
+					$employee['gl_accounts'] = $row['gl_accounts'];
+					$employee['gl_description'] = $row['gl_discription'];	
+					$employees[] = $employee;
+				}
+			}
+			Employee::insert($employees);
+			return redirect()->route('admin.employees.index');
+		}
+	}
+
+	private function formatData($model_details)
+	{
+		$model_data = [];
+		foreach ($model_details as $model_detail) {
+			$model_data[strtolower($model_detail->name)] = $model_detail->id;
+		}
+		return $model_data;
 	}
 
 }

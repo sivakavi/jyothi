@@ -43,6 +43,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Dashboard
     Route::get('/', 'DashboardController@index')->name('dashboard');
 
+    
+
     //Users
     Route::get('users', 'UserController@index')->name('users');
     Route::get('users/create', 'UserController@create')->name('users.create');
@@ -59,6 +61,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('work_types', 'WorkTypeController');
     Route::resource('shifts', 'ShiftController');
     Route::resource('locations', 'LocationController');
+    Route::post('employeesImport', 'EmployeeController@importExcel')->name('employees.importExcel');
     Route::resource('employees', 'EmployeeController');
 
     Route::get('/assignEmpShiftAttendance', 'DashboardController@assignEmpShiftAttendance')->name('assignEmpShiftAttendance');
