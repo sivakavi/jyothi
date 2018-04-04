@@ -125,6 +125,9 @@ Route::group(['prefix' => 'dept', 'as' => 'dept.', 'namespace' => 'Dept', 'middl
 
     Route::get('/employeeBatchSearch', 'DashboardController@employeeBatchSearch')->name('employeeBatchSearch');
 
+    Route::get('/otherDept', 'DashboardController@otherDept')->name('otherDept');
+    
+
 });
 
 Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware' => 'hr'], function () {

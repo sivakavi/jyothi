@@ -430,6 +430,19 @@ class DashboardController extends Controller
         return '';
     }
 
+    public function otherDept()
+    {
+        $statuses = Status::where('department_id', $this->user->department->id)->get();
+        $work_types = WorkType::where('department_id', $this->user->department->id)->get();
+        $shifts = Shift::where('department_id', $this->user->department->id)->get();
+
+        $variables = ['statuses' => $statuses,
+                        'shifts' => $shifts,
+                        'work_types' => $work_types,
+                     ];
+        return view('dept.otherShift', $variables);
+    }
+
     
    
 }
