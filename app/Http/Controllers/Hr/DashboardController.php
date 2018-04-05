@@ -289,5 +289,11 @@ class DashboardController extends Controller
         $shiftDetail['date'] = $date;
         return $shiftDetail;
     }
+
+    public function reportPage()
+    {
+        $departments = Department::all(['id', 'name']);
+        return view('hr.report', $departments);
+    }
    
 }
