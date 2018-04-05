@@ -14,6 +14,7 @@ class CreateLeavesTable extends Migration
     public function up()
     {
         Schema::create('leaves', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('name');
             $table->timestamps();

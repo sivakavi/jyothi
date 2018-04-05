@@ -14,10 +14,11 @@ class CreateStatusesTable extends Migration
     public function up()
     {
         Schema::create('statuses', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('department_id')->unsigned();
             $table->string('name');
-            $table->foreign('department_id', 'foreign_user')
+            $table->foreign('department_id', 'foreign_user_department_id1')
                 ->references('id')
                 ->on('departments')
                 ->onDelete('cascade');

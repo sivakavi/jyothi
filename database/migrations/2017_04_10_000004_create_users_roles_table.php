@@ -17,18 +17,19 @@ class CreateUsersRolesTable extends Migration
          * User and roles relation table
          */
         Schema::create('users_roles', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->integer('user_id')->unsigned();
             $table->integer('role_id')->unsigned();
 
             /*
              * Add Foreign/Unique/Index
              */
-            $table->foreign('user_id', 'foreign_user')
+            $table->foreign('user_id', 'foreign_user1')
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
 
-            $table->foreign('role_id', 'foreign_role')
+            $table->foreign('role_id', 'foreign_role1')
                 ->references('id')
                 ->on('roles')
                 ->onDelete('cascade');

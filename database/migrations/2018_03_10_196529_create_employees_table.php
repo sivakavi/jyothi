@@ -14,6 +14,7 @@ class CreateEmployeesTable extends Migration
     public function up()
     {
         Schema::create('employees', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('name');
             $table->string('gender');
@@ -24,7 +25,7 @@ class CreateEmployeesTable extends Migration
             $table->string('cost_centre_desc');
             $table->string('gl_accounts');
             $table->string('gl_description');
-            $table->foreign('department_id', 'foreign_user')
+            $table->foreign('department_id', 'foreign_user_department_id4')
                 ->references('id')
                 ->on('departments')
                 ->onDelete('cascade');

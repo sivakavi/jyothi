@@ -14,6 +14,7 @@ class CreateAssignShiftsTable extends Migration
     public function up()
     {
         Schema::create('assign_shifts', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('department_id')->unsigned();
             $table->integer('batch_id')->unsigned()->nullable();
@@ -24,7 +25,7 @@ class CreateAssignShiftsTable extends Migration
             $table->integer('leave_id')->unsigned()->nullable();
             $table->float('otHours')->nullable();
             $table->date('nowdate');
-            $table->foreign('department_id', 'foreign_user_department')
+            $table->foreign('department_id', 'foreign_user_department_id6')
                 ->references('id')
                 ->on('departments')
                 ->onDelete('cascade');

@@ -151,23 +151,34 @@ class EmployeeController extends Controller {
 			$rows = \Excel::load($path, function($reader) {
 			})->toArray();
 			$employees = [];
+			$existEmployees = [];
 			foreach($rows as $row){
 				if($row['emp._no.'] != ''){
-					$employee['name'] = $row['name'];
-					$employee['gender'] = $row['gender'];
-					$employee['employee_id'] = $row['emp._no.'];
-					$employee['department_id'] = $departments[strtolower($row['department'])];
-					$employee['category_id'] = $categories[strtolower($row['category'])];
-					$employee['location_id'] = $locations[strtolower($row['location'])];
-					$employee['cost_centre'] = $row['cost_centre'];
-					$employee['cost_centre_desc'] = $row['cost_centre_desc'];
-					$employee['gl_accounts'] = $row['gl_accounts'];
-					$employee['gl_description'] = $row['gl_discription'];	
-					$employees[] = $employee;
+					$exist = $this->checkEmployeeID($row['emp._no.']);
+					if(!$exist){
+						$employee['name'] = $row['name'];
+						$employee['gender'] = $row['gender'];
+						$employee['employee_id'] = $row['emp._no.'];
+						$employee['department_id'] = $departments[strtolower($row['department'])];
+						$employee['category_id'] = $categories[strtolower($row['category'])];
+						$employee['location_id'] = $locations[strtolower($row['location'])];
+						$employee['cost_centre'] = $row['cost_centre'];
+						$employee['cost_centre_desc'] = $row['cost_centre_desc'];
+						$employee['gl_accounts'] = $row['gl_accounts'];
+						$employee['gl_description'] = $row['gl_discription'];	
+						$employees[] = $employee;
+					}
+					else{
+						$existEmployees[] = $row['emp._no.'];
+					}
 				}
 			}
+			$message = "All Employees created successfully";
+			if(count($existEmployees)){
+				$message = "These employee id ".implode(", ", $existEmployees)." are not inserted. Please check";
+			}
 			Employee::insert($employees);
-			return redirect()->route('admin.employees.index');
+			return redirect()->route('admin.employees.index')->with('message', $message);
 		}
 	}
 
@@ -178,6 +189,13 @@ class EmployeeController extends Controller {
 			$model_data[strtolower($model_detail->name)] = $model_detail->id;
 		}
 		return $model_data;
+	}
+	private function checkEmployeeID($employee_id)
+	{
+		$count = Employee::where('employee_id', $employee_id)->get()->count();
+		if($count>0)
+			return true;
+		return false;
 	}
 
 }

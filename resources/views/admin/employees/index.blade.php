@@ -5,6 +5,12 @@
 @section('content')
     <div class="page-header clearfix">
     </div>
+    @if (session('message'))
+        <div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <p>{{{ session('message') }}}</p>
+        </div>
+    @endif
     <h1>
         <a class="btn btn-success pull-right" href="{{ route('admin.employees.create') }}">
             <i class="glyphicon glyphicon-plus"></i> Create

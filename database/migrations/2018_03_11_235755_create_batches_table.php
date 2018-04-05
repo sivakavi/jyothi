@@ -14,12 +14,13 @@ class CreateBatchesTable extends Migration
     public function up()
     {
         Schema::create('batches', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->date('fromDate');
             $table->date('toDate');
             $table->integer('department_id')->unsigned();
             $table->string('status');
-            $table->foreign('department_id', 'foreign_user')
+            $table->foreign('department_id', 'foreign_user_department_id5')
                 ->references('id')
                 ->on('departments')
                 ->onDelete('cascade');
