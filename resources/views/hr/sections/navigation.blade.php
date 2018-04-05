@@ -45,6 +45,14 @@
                             Shift Attendance
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('hr.reportPage') }}">
+                            <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                            Report
+                        </a>
+                    </li>
+
                     <li>
                         <a href="{{ route('logout') }}">
                             <i class="fa fa-sign-out" aria-hidden="true"></i>

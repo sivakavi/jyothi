@@ -16,7 +16,7 @@
                 <div class="page-title">
                     <!-- <div class="title_left"> -->
                     <div>
-                        <h1 class="h3">@yield('title')</h1>
+                        <center><h1 class="h3">@yield('title')</h1></center>
                     </div>
                     
                 </div>
