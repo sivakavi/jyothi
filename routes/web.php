@@ -146,4 +146,5 @@ Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware'
     Route::post('/bulkConfirmedShift', 'DashboardController@bulkConfirmedShift')->name('bulkConfirmedShift');
 
     Route::get('/report', 'DashboardController@reportPage')->name('reportPage');
+    Route::get('/getReport', 'DashboardController@getReport')->name('getReport');
 });

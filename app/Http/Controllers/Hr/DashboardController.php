@@ -295,5 +295,10 @@ class DashboardController extends Controller
         $departments = Department::all(['id', 'name']);
         return view('hr.report', $departments);
     }
+
+    public function getReport(Request $request)
+    {
+        return $request->get('fieldArray');
+    }
    
 }
