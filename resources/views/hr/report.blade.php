@@ -146,6 +146,8 @@
     <script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
     <script type="text/javascript">
 
+        var xlfilename = "sample";
+
         function dateConversion(dateObj){
           var day1 = dateObj.datepicker('getDate').getDate();
           var month1 = dateObj.datepicker('getDate').getMonth() + 1;
@@ -211,6 +213,20 @@
             var fromDate = $("#datepickerFrom").val();
             var toDate = $("#datepickerTo").val();
 
+            var fromDate1 = new Date(fromDate);
+            var day = fromDate1.getDate();
+            var month = fromDate1.getMonth() + 1;
+            var year = fromDate1.getFullYear();
+            var fd = day + "-" + month + "-" + year;
+
+            var toDate1 = new Date(toDate);
+            var day1 = toDate1.getDate();
+            var month1 = toDate1.getMonth() + 1;
+            var year1 = toDate1.getFullYear();
+            var td = day1 + "-" + month1 + "-" + year1;
+
+            xlfilename = fd + "__" + td + "__full__report";
+
             var headerData = [];
             field_array.forEach(function(item, index){
                 headerData.push(item.toUpperCase());
@@ -252,7 +268,7 @@
 
         $("#exportBtn").click(function () {
             $("#repotTable").table2excel({
-                filename: "Table.xls"
+                filename: xlfilename +".xls"
             });
         });
 
