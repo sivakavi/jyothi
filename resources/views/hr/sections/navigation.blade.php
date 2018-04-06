@@ -54,6 +54,13 @@
                     </li>
 
                     <li>
+                        <a href="{{ route('hr.reportEmployeePage') }}">
+                            <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                            Report - Employee Based
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="{{ route('logout') }}">
                             <i class="fa fa-sign-out" aria-hidden="true"></i>
                             {{ __('views.backend.section.header.menu_0') }}

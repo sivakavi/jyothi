@@ -290,10 +290,26 @@ class DashboardController extends Controller
         return $shiftDetail;
     }
 
+    public function getDepartmentEmployee(Request $request)
+    {
+        $department_id = $request->input('department_id');
+        $employees = Employee::where('department_id',$department_id)->get();
+        $data = [];
+        foreach($employees as $employee){
+            $data[$employee->id] = $employee->name.' - '. $employee->employee_id;
+        }
+        return response()->json($data);
+    }
+
     public function reportPage()
     {
+        return view('hr.report');
+    }
+
+    public function reportEmployeePage()
+    {
         $departments = Department::all(['id', 'name']);
-        return view('hr.report', $departments);
+        return view('hr.reportEmployee', compact('departments'));
     }
 
     public function getReport(Request $request)
@@ -303,7 +319,14 @@ class DashboardController extends Controller
         $fieldArray = $request->get('fieldArray');
         $fieldArray = explode(',', $fieldArray);
         $upperCaseFieldArray = array_map('strtoupper', $fieldArray);
-        $report = AssignShift::whereBetween('nowdate', [$fromDate, $toDate])->get();
+
+        if($request->has('employee_id')){
+            $emp_id = $request->get('employee_id');
+            $report = AssignShift::where('employee_id',$emp_id)->whereBetween('nowdate', [$fromDate, $toDate])->get();
+        }else{
+            $report = AssignShift::whereBetween('nowdate', [$fromDate, $toDate])->get();
+        }
+        
         
         $finalArray = [];
         //$finalArray[] = $upperCaseFieldArray;
