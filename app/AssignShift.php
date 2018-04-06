@@ -17,6 +17,11 @@ class AssignShift extends Model
     	return $this->belongsTo('App\Shift');
     }
 
+    public function changed_shift()
+    {
+    	return $this->belongsTo('App\Shift', 'changed_shift_id');
+    }
+
     public function status()
     {
     	return $this->belongsTo('App\Status');
@@ -30,6 +35,11 @@ class AssignShift extends Model
     public function leave()
     {
         return $this->belongsTo('App\Leave');
+    }
+
+    public function department()
+    {
+        return $this->belongsTo('App\Department');
     }
 
     public function changed_department()

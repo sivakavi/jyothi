@@ -17,6 +17,36 @@
         width: 100%;
         z-index: 1000
     } */
+
+    /* #repotTable th td {
+        border: 1px solid black;
+        padding:10px !important;
+    }
+
+    #repotTable tr td {
+        border: 1px solid black;
+        padding:10px !important;
+    } */
+
+    .reaport-area{
+        display: none;
+    }
+
+    .table-area{
+        height:500px;
+        width:100%;
+        overflow-x:scroll;
+        overflow-y:scroll;
+    }
+
+    .flip, .flip #repotTable{
+        transform:rotateX(180deg);
+        -ms-transform:rotateX(180deg); /* IE 9 */
+        -webkit-transform:rotateX(180deg); /* Safari and Chrome */
+    }
+
+    
+
 </style>
 
 @section('content')
@@ -85,6 +115,26 @@
             <center>
             </div>
         </div>
+        <br/>
+        <div class="row reaport-area">
+            <div class="col-md-12 table-area">
+                <table id="repotTable" class="table table-bordered" >
+                    <thead id="reportTableHead">
+                    </thead>
+                    <tbody id="reportTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br/>
+        <div class="row reaport-area">
+            <div class="col-md-12">
+            <center>
+            <button id="exportBtn" class="btn btn-primary btn-round btn-sm">Export Report</button>
+            <center>
+            </div>
+        </div>
+        <br/>
     </div>
 
 @endsection
@@ -93,6 +143,7 @@
     @parent
     {{ Html::script(mix('assets/admin/js/dashboard.js')) }}
 	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
     <script type="text/javascript">
 
         function dateConversion(dateObj){
@@ -160,19 +211,35 @@
             var fromDate = $("#datepickerFrom").val();
             var toDate = $("#datepickerTo").val();
 
+            var headerData = [];
+            field_array.forEach(function(item, index){
+                headerData.push(item.toUpperCase());
+            });
+            
             if(fromDate && toDate){
                 if(field_array.length){
-                    //console.log(fromDate);
-                    //console.log(toDate);
-                    //console.log(field_array);
                     var datas = 'fromDate='+ fromDate + '&toDate='+ toDate + '&fieldArray='+ field_array;
                     jQuery.ajax({
                         url: "{{route('hr.getReport')}}",
                         type: 'GET',
                         data: datas,
                         success:function(data) {
-                            console.log("success....");
-                            console.log(data);
+                            $("#reportTableHead").empty();
+                            $("#reportTableBody").empty();
+                            var theadContent = '';
+                            headerData.forEach(function(item, index){
+                                theadContent = theadContent+'<th>'+item+'</th>';
+                            });
+                            $("#repotTable #reportTableHead").append('<tr>'+theadContent+'</tr>'); 
+                            for(var i=0;i<data.length;i++){
+                                var tbodyContent = '';
+                                field_array.forEach(function(item, index){
+                                    tbodyContent = tbodyContent+'<td>'+data[i][item]+'</td>';
+                                });
+                                $("#repotTable #reportTableBody").append('<tr>'+tbodyContent+'</tr>'); 
+                            }
+
+                            $(".reaport-area").show();
                         },
                     });
                 }else{
@@ -181,6 +248,12 @@
             }else{
                 alert("Please choose date...");
             }
+        });
+
+        $("#exportBtn").click(function () {
+            $("#repotTable").table2excel({
+                filename: "Table.xls"
+            });
         });
 
     </script>
