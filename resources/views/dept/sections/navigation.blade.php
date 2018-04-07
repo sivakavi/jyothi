@@ -51,12 +51,12 @@
                             Re-Assign Shift
                         </a>
                     </li>
-                    <!-- <li>
+                    <li>
                         <a href="{{ route('dept.otherDept') }}">
                             <i class="fa fa-exchange" aria-hidden="true"></i>
                             Other Shift Assign
                         </a>
-                    </li> -->
+                    </li>
                     <li>
                         <a href="{{ route('logout') }}">
                             <i class="fa fa-sign-out" aria-hidden="true"></i>

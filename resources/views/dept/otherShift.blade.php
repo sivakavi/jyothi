@@ -32,6 +32,8 @@
 		</select>
 	</div>
 	  <div class="pull-right">
+	  	From Date : <input type="text" class="empDatepickerFrom">
+		To Date : <input type="text" class="empDatepickerTo">
 	  	Search by Emp Code : <input type="text" name="empName" id="empName">&nbsp;&nbsp;<button type="button" class="btn btn-primary btn-round btn-sm empSearch"><i class="fa fa-search" aria-hidden="true"></i></button>
 	  </div>
 	  <br>
@@ -44,6 +46,13 @@
     {{ Html::script(mix('assets/admin/js/dashboard.js')) }}
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
+		function dateConversion(dateObj){
+          var day1 = dateObj.datepicker('getDate').getDate();
+          var month1 = dateObj.datepicker('getDate').getMonth() + 1;
+          month1 = ("0" + month1).slice(-2);            
+          var year1 = dateObj.datepicker('getDate').getFullYear();
+          return parseInt(""+day1+month1+year1);
+        }
     	$(document).on('click', '.empadd', function(e) {
     			e.preventDefault();
     			var tr = $(this).closest("tr");
@@ -71,81 +80,69 @@
     	$(function () {
     	   	$( ".empDatepickerFrom" ).datepicker({
 				onSelect: function(dateText, inst) {
-				$(this).closest("tr").css({"background-color": "", "color": ""});
-				var date = $(this).val();
-				var tr = $(this).closest("tr");
-				var emp_id = tr.find('.emp_id').text();
-				var datas = 'empDatepicker='+ date + '&emp_id='+ emp_id;
-				jQuery.ajax({
-					url: "{{route('dept.assignEmpShiftIndividual')}}",
-					type: 'GET',
-					data: datas,
-					success:function(data) {
-						if(data==='false'){
-							alert('Already Shift Assigned');
-							tr.find('.empDatepickerFrom').val('');
-							tr.find('.empDatepickerTo').val('');
-						}
-					},
-					});
+					$('.empDatepickerTo').val('');
 				}
 			});
 			
 			$( ".empDatepickerTo" ).datepicker({
 				onSelect: function(dateText, inst) {
-				$(this).closest("tr").css({"background-color": "", "color": ""});
 				var date = $(this).val();
-				var tr = $(this).closest("tr");
-				var fromDate = tr.find('.empDatepickerFrom').val();
+				
+				var fromDate = $('.empDatepickerFrom').val();
 				if(fromDate == ""){
 					alert('Choose From Date First');
-					tr.find('.empDatepickerTo').val('');
+					$('.empDatepickerTo').val('');
 					return;
 				}
-				fromDates = dateConversion(tr.find('.empDatepickerFrom'));
+				fromDates = dateConversion($('.empDatepickerFrom'));
 				toDates = dateConversion($(this));
 				if(fromDates>toDates){
 					alert('From Date must less than To date');
 					$(this).val('');
 					return;
 				}
-				var emp_id = tr.find('.emp_id').text();
-				var datas = 'empDatepicker='+ date + '&emp_id='+ emp_id + '&fromDate='+ fromDate;
-				jQuery.ajax({
-					url: "{{route('dept.assignEmpShiftIndividual')}}",
-					type: 'GET',
-					data: datas,
-					success:function(data) {
-						if(data==='false'){
-							alert('Already Shift Assigned');
-							tr.find('.empDatepickerTo').val('');
-							tr.find('.empDatepickerFrom').val('');
-						}
-					},
-					});
 				}
 			});
             $(document).on('click', '.empassign', function(e) {
+				var fromDate = $('.empDatepickerFrom').val();
+				var toDate = $('.empDatepickerTo').val();
+				if(fromDate == "" && toDate == ""){
+					alert('Choose Date First');
+					$('.empDatepickerTo').val('');
+					return;
+				}
     	   		var tr = $(this).closest("tr");
-    	   		$('#assignShift').val(tr.find('.assign_shift_id').text());
-    	   		$('.modal-title').text(tr.find('.emp_name').text()+' - '+ tr.find('.empStatus').text());
-                empId = tr.find('.empSearchId').text();
-                $('#emp_id').val(empId);
-    	   		$('#myModal').modal('toggle');
+				var fromDate = $('.empDatepickerFrom').val();
+				var toDate = $('.empDatepickerTo').val();
+    	   		employee_id = tr.find('.empSearchId').text();
+    	   		shift_id = tr.find('.emp_shift').val();
+    	   		work_type_id = tr.find('.emp_worktype').val();
+    	   		status_id = tr.find('.emp_status').val();
+				var datas = 'employee_id='+ employee_id + '&fromDate=' + fromDate + '&toDate=' + toDate + '&employee_id=' + employee_id + '&shift_id=' + shift_id + '&work_type_id=' + work_type_id + '&status_id=' + status_id;
+				jQuery.ajax({
+						url: "{{route('dept.assignOtherDep')}}",
+						type: 'GET',
+						data: datas,
+						success:function(data) {
+							if(data == 'true'){
+								alert("Shift Added Successfully");
+								location.reload();
+							}
+							else{
+								alert("Already Shift assigned. So Please select different date");
+							}
+						}
+				});
     	   	});
-    	   	$('.emp_status').on('change', function() {
-    	   		var status = $(this).find("option:selected").text();
-    	   		$('.othours').addClass('hide');
-    	   		$('.emp_leave').addClass('hide');
-    	   		if(status == 'Leave'){
-    	   			$('.emp_leave').removeClass('hide');
-    	   		}
-    	   		if(status == 'OT'){
-    	   			$('.othours').removeClass('hide');
-    	   		}
-    	   	})
     	   	$('.empSearch').click(function(e){
     	   		e.preventDefault();
+				var fromDate = $('.empDatepickerFrom').val();
+				var toDate = $('.empDatepickerTo').val();
+				if(fromDate == "" && toDate == ""){
+					alert('Choose Date First');
+					$('.empDatepickerTo').val('');
+					return;
+				}
     	   		var empName = $('#empName').val();
     	   		var datas = 'name='+ empName;
     	   		if(empName != ''){
@@ -160,15 +157,13 @@
 							if(data!=""){
 								$('#records_table').show();
 								$('#records_table').html('');
-								var trHTML = '<tr><th>Employee Id</th><th>Employee Name</th>  <th>Employee Department</th><th> Shift</th><th> Worktype</th><th> Status</th><th> From Date</th><th>  To Date</th><th></th></tr>';
+								var trHTML = '<tr><th>Employee Id</th><th>Employee Name</th>  <th>Employee Department</th><th> Shift</th><th> Worktype</th><th> Status</th><th></th></tr>';
 						        $.each(data, function (i, item) {
 						        	trHTML += '';
 						            trHTML += '<tr><td class="empSearchId">' + item.id + '</td><td class="emp_name">' + item.name + '</td><td>' + item.department_name + '</td>' +
-									'<td><select class="emp_worktype">' + $('.emp_shift').html() + '</select></td>' + 
+									'<td><select class="emp_shift">' + $('.emp_shift').html() + '</select></td>' + 
 									'<td><select class="emp_worktype">' + $('.emp_work_type').html() + '</select></td>' +
-									'<td><select class="emp_status">' + $('.emp_status').html() + '</select></td>' +
-									'<td class=""><input type="text" class="empDatepickerFrom"></td><td class=""><input type="text" class="empDatepickerTo"></td>' +
-									'<td class=""><button type="button" class="btn btn-primary btn-round btn-sm empassign">Add Employee</button></td></tr>';
+									'<td><select class="emp_status">' + $('.emp_status').html() + '</select></td>' +'<td class=""><button type="button" class="btn btn-primary btn-round btn-sm empassign">Add Employee</button></td></tr>';
 						        });
 
 						        $('#records_table').append(trHTML);
@@ -181,7 +176,7 @@
 	                });
     	   		}
     	   		else{
-    	   			alert('please enter name');
+    	   			alert('please enter employee code');
     	   		}
     	   	});
 		});

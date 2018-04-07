@@ -316,7 +316,7 @@ class DashboardController extends Controller
         else{
             $employee_details = Employee::find($empId);
             $batch = new Batch();
-            $defaultshifts = Employee::find(4)->department->shifts->first->get()->toArray();
+            $defaultshifts = Employee::find($empId)->department->shifts->first->get()->toArray();
             $batch->department_id = $employee_details->department->id;
             $batch->employee_id = $empId;
             $batch->fromDate = $empDate;
@@ -441,6 +441,59 @@ class DashboardController extends Controller
                         'work_types' => $work_types,
                      ];
         return view('dept.otherShift', $variables);
+    }
+
+    public function assignOtherDep(Request $request)
+    {
+        $employee_id            = $request->get('employee_id');
+        $empDatepickerFrom      = new \DateTime( $request->get('fromDate'));
+        $empDatepickerTo        = new \DateTime( $request->get('toDate'));
+        $empDatepickerCount     = AssignShift::whereBetween('nowdate', [$empDatepickerFrom, $empDatepickerTo])->where('employee_id', $employee_id)->get()->count();
+        
+        // dd(AssignShift::whereBetween('nowdate', [$empDatepickerFrom, $empDatepickerTo])->where('employee_id', $employee_id)->toSql());
+        if($empDatepickerCount)
+            return 'false';
+        else{
+            
+            $work_type_id           = $request->get('work_type_id');
+            $shift_id               = $request->get('shift_id');
+            $status_id              = $request->get('status_id');
+            
+            $defaultshifts = Employee::find($employee_id)->department->shifts->first->get()->toArray();
+
+            $department_id = $this->user->department->id;
+            
+            $batch = new Batch();
+            
+            $batch->department_id = $department_id;
+            $batch->employee_id = $employee_id;
+            $batch->fromDate = $empDatepickerFrom;
+            $batch->toDate = $empDatepickerTo;
+            $batch->status = 'pending';
+            $batch->save();
+            
+            $employeeRecords = [];
+            for($i = $empDatepickerFrom; $i <= $empDatepickerTo; $i->modify('+1 day')){
+                $nowdate =  $i->format("Y-m-d");
+                $day_num = $i->format("N");
+                if($day_num < 7) { /* weekday */
+                    $data = array(
+                        'department_id'=>$defaultshifts['department_id'], 'batch_id'=> $batch->id,
+                        'employee_id'=> $employee_id,
+                        'shift_id'=> $defaultshifts['id'],
+                        'work_type_id'=> $work_type_id,
+                        'status_id'=> $status_id,
+                        'nowdate'=> $nowdate,
+                        'changed_department_id' => $department_id, 'changed_shift_id' => $shift_id
+                    );
+                    $employeeRecords[] = $data;
+                }
+            }
+            AssignShift::insert($employeeRecords);
+            return 'true';
+        }
+        
+
     }
 
     

@@ -16,6 +16,8 @@
                         <th>FROM DATE</th>
                         <th>TO DATE</th>
                         <th>EMPLOYEE</th>
+                        <th>EMPLOYEE ID</th>
+                        <th>EMPLOYEE DEPARTMENT</th>
                         <th>STATUS</th>
                         </tr>
                     </thead>
@@ -27,6 +29,8 @@
                                 <td>{{$batch->fromDate}}</td>
                                 <td>{{$batch->toDate}}</td>
                                 <td>{{$batch->employee->name}}</td>
+                                <td>{{$batch->employee->employee_id}}</td>
+                                <td>{{$batch->employee->department->name}}</td>
                                 <td>{{$batch->status}}</td>
                             </tr>
                         @endforeach
