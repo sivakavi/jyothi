@@ -108,11 +108,17 @@
             window.employeeDetails.push(data);
         }
         function dateConversion(dateObj){
+        //   var day1 = dateObj.datepicker('getDate').getDate();
+        //   var month1 = dateObj.datepicker('getDate').getMonth() + 1;
+        //   month1 = ("0" + month1).slice(-2);            
+        //   var year1 = dateObj.datepicker('getDate').getFullYear();
+        //   return parseInt(""+day1+month1+year1);
+
           var day1 = dateObj.datepicker('getDate').getDate();
-          var month1 = dateObj.datepicker('getDate').getMonth() + 1;
-          month1 = ("0" + month1).slice(-2);            
+          var month1 = dateObj.datepicker('getDate').getMonth();
           var year1 = dateObj.datepicker('getDate').getFullYear();
-          return parseInt(""+day1+month1+year1);
+          var fullDate = new Date(year1,month1,day1);
+          return fullDate;
         }
       $( function() {
         $( "#datepickerFrom" ).datepicker({
@@ -127,6 +133,8 @@
                 var date = $(this).val();
                 fromDate = dateConversion($("#datepickerFrom"));
                 toDate = dateConversion($(this));
+                //console.log(fromDate);
+                //console.log(toDate);
                 if(fromDate>toDate){
                   alert('From Date must less than To date');
                   $( "#datepickerTo" ).val('');
