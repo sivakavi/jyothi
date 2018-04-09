@@ -4,6 +4,7 @@
 <style>
     .box-style{
         border: 1px solid;
+        padding: 25px;
         text-align: center;
         margin-bottom: 15px;
     }
