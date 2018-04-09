@@ -42,7 +42,11 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('admin.dashboard');
+        $departments = Department::all()->count();
+        $shifts = Shift::all()->count();
+        $users = User::all()->count();
+        $employees = Employee::all()->count();
+        return view('admin.dashboard',  compact('departments', 'shifts', 'users', 'employees'));
     }
 
     public function assignEmpShiftAttendance()
@@ -148,5 +152,7 @@ class DashboardController extends Controller
         $shiftDetail['date'] = $date;
         return $shiftDetail;
     }
+
+
 
 }

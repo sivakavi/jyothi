@@ -46,7 +46,9 @@ class DashboardController extends Controller
 
     public function index()
     {
-        return view('hr.dashboard');
+        $departments = Department::all()->count();
+        $shifts = Batch::where('status', 'pending')->count();
+        return view('hr.dashboard', compact('departments', 'shifts'));
     }
 
     public function shiftBatch()
