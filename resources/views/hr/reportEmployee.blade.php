@@ -194,6 +194,7 @@
             });
 
         $("#datepickerFrom").datepicker({
+            dateFormat: 'dd/mm/yy',
             maxDate: new Date(),
             onSelect: function(dateText, inst) {
                 var fromdate = $(this).val();
@@ -201,6 +202,7 @@
         });
 
         $("#datepickerTo").datepicker({
+            dateFormat: 'dd/mm/yy',
             maxDate: new Date(),
             onSelect: function(dateText, inst) {
                 var todate = $(this).val();

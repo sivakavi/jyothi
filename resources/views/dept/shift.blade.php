@@ -122,6 +122,7 @@
         }
       $( function() {
         $( "#datepickerFrom" ).datepicker({
+            dateFormat: 'dd/mm/yy',
             onSelect: function(dateText, inst) {
                 var date = $(this).val();
                 
@@ -129,6 +130,7 @@
         });
         
         $( "#datepickerTo" ).datepicker({
+            dateFormat: 'dd/mm/yy',
             onSelect: function(dateText, inst) {
                 var date = $(this).val();
                 fromDate = dateConversion($("#datepickerFrom"));
@@ -144,6 +146,7 @@
         });
 
         $( ".empDatepickerFrom" ).datepicker({
+            dateFormat: 'dd/mm/yy',
             onSelect: function(dateText, inst) {
               $(this).closest("tr").css({"background-color": "", "color": ""});
               var date = $(this).val();
@@ -165,6 +168,7 @@
             }
         });
         $( ".empDatepickerTo" ).datepicker({
+            dateFormat: 'dd/mm/yy',
             onSelect: function(dateText, inst) {
               $(this).closest("tr").css({"background-color": "", "color": ""});
               var date = $(this).val();

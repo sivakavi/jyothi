@@ -113,10 +113,12 @@
         }
       $( function() {
         $( ".empDatepickerFrom" ).datepicker({
+            dateFormat: 'dd/mm/yy',
             onSelect: function(dateText, inst) {
             }
         });
         $( ".empDatepickerTo" ).datepicker({
+            dateFormat: 'dd/mm/yy',
             onSelect: function(dateText, inst) {
               $(this).closest("tr").css({"background-color": "", "color": ""});
               var date = $(this).val();

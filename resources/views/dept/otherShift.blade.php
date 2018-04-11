@@ -79,12 +79,14 @@
     		});
     	$(function () {
     	   	$( ".empDatepickerFrom" ).datepicker({
+				dateFormat: 'dd/mm/yy',
 				onSelect: function(dateText, inst) {
 					$('.empDatepickerTo').val('');
 				}
 			});
 			
 			$( ".empDatepickerTo" ).datepicker({
+				dateFormat: 'dd/mm/yy',
 				onSelect: function(dateText, inst) {
 				var date = $(this).val();
 				
