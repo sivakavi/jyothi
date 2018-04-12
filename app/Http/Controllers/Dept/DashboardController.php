@@ -206,6 +206,7 @@ class DashboardController extends Controller
     {
         $statuses = Status::where('department_id', $this->user->department->id)->get();
         $work_types = WorkType::where('department_id', $this->user->department->id)->get();
+        $pendingBatches = Batch::where('status', 'pending')->pluck('id')->toArray();
         $leaves = Leave::all();
         $date = $request->get('date');
         $this->shift_id = $request->get('shift_id');
@@ -217,7 +218,7 @@ class DashboardController extends Controller
                                 ->where(function ($q) {
                                     $q->where('department_id', $this->user->department->id)
                                     ->orWhere('changed_department_id', $this->user->department->id);
-                                })->paginate(10)
+                                })->whereNotIn('batch_id', $pendingBatches)->paginate(10)
                                 ;
         $variables = ['employees' => $employees->appends(Input::except('page')),
                         'statuses' => $statuses,
