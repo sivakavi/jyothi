@@ -13,6 +13,7 @@ use App\Department;
 use App\Leave;
 use App\Status;
 use App\WorkType;
+use App\Holiday;
 use App\AssignShift;
 use App\Batch;
 use Auth;
@@ -67,8 +68,10 @@ class DashboardController extends Controller
                 $rejectedEmployees[]=$check;
             }
             else{
-                $empDatepickerFrom      = new \DateTime($employeeDetail['empDatepickerFrom']);
-                $empDatepickerTo        = new \DateTime($employeeDetail['empDatepickerTo']);
+                // $empDatepickerFrom      = new \DateTime($employeeDetail['empDatepickerFrom']);
+                // $empDatepickerTo        = new \DateTime($employeeDetail['empDatepickerTo']);
+                $empDatepickerFrom      = Carbon::createFromFormat('d/m/Y', $employeeDetail['empDatepickerFrom']);
+                $empDatepickerTo      = Carbon::createFromFormat('d/m/Y', $employeeDetail['empDatepickerTo']);
                 $this->employeeShiftInsert($employeeDetail['emp_id'], $employeeDetail['work_types'], $employeeDetail['shifts'], $employeeDetail['emp_status'], $empDatepickerFrom, $empDatepickerTo, $employeeDetail['batch_id']);
             }
         }
@@ -79,8 +82,10 @@ class DashboardController extends Controller
     }
 
     private function bulkCheck($batch_id, $employee_id, $empDatepickerFrom, $empDatepickerTo){
-        $empDatepickerFrom      = new \DateTime($empDatepickerFrom);
-        $empDatepickerTo        = new \DateTime($empDatepickerTo);
+        // $empDatepickerFrom      = new \DateTime($empDatepickerFrom);
+        // $empDatepickerTo        = new \DateTime($empDatepickerTo);
+        $empDatepickerFrom      = Carbon::createFromFormat('d/m/Y', $empDatepickerFrom);
+        $empDatepickerTo        = Carbon::createFromFormat('d/m/Y', $empDatepickerTo);
         $empDatepickerFromCount = Batch::whereBetween('fromDate', [$empDatepickerFrom, $empDatepickerTo])->where('id', '!=', $batch_id)->where('employee_id', $employee_id)->get()->count();
         $empDatepickerToCount   = Batch::whereBetween('toDate', [$empDatepickerFrom, $empDatepickerTo])->where('id', '!=', $batch_id)->where('employee_id', $employee_id)->get()->count();
         if($empDatepickerFromCount || $empDatepickerToCount)
@@ -116,8 +121,12 @@ class DashboardController extends Controller
     {
         $employee_id            = $request->get('employee_id');
         $batch_id               = $request->get('batch_id');
-        $empDatepickerFrom      = new \DateTime( $request->get('empDatepickerFrom'));
-        $empDatepickerTo        = new \DateTime( $request->get('empDatepickerTo'));
+        // $empDatepickerFrom      = new \DateTime( $request->get('empDatepickerFrom'));
+        // $empDatepickerTo        = new \DateTime( $request->get('empDatepickerTo'));
+
+        $empDatepickerFrom      = Carbon::createFromFormat('d/m/Y', $request->get('empDatepickerFrom'));
+        $empDatepickerTo        = Carbon::createFromFormat('d/m/Y', $request->get('empDatepickerTo'));
+        
         $empDatepickerFromCount = Batch::whereBetween('fromDate', [$empDatepickerFrom, $empDatepickerTo])->where('id', '!=', $batch_id)->where('employee_id', $employee_id)->get()->count();
         $empDatepickerToCount   = Batch::whereBetween('toDate', [$empDatepickerFrom, $empDatepickerTo])->where('id', '!=', $batch_id)->where('employee_id', $employee_id)->get()->count();
         if($empDatepickerFromCount || $empDatepickerToCount)
@@ -142,11 +151,12 @@ class DashboardController extends Controller
         $batch->save();
 
         $employeeRecords = [];
+        $holidays = Holiday::all()->pluck('holiday_at')->toArray();
         AssignShift::where('batch_id', $batch->id)->delete();
         for($i = $empDatepickerFrom; $i <= $empDatepickerTo; $i->modify('+1 day')){
             $nowdate =  $i->format("Y-m-d");
             $day_num = $i->format("N");
-            if($day_num < 7) { /* weekday */
+            if($day_num < 7 && !in_array($nowdate, $holidays)) { /* weekday */
                     $data = array('department_id'=>$department_id, 'batch_id'=> $batch->id, 'employee_id'=> $employee_id, 'shift_id'=> $shift_id, 'work_type_id'=> $work_type_id, 'status_id'=> $status_id, 'leave_id'=> null, 'otHours'=> null, 'nowdate'=> $nowdate);
                     $employeeRecords[] = $data;
             }
@@ -247,7 +257,8 @@ class DashboardController extends Controller
         $leave_id = $request->get('leave');
         $otHours = $request->get('othours');
         $shift_id = $request->get('shift_id');
-        $empDate = new \DateTime($request->get('empDate'));
+        // $empDate = new \DateTime($request->get('empDate'));
+        $empDate      = Carbon::createFromFormat('d/m/Y', $request->get('empDate'));
         if($leave_id == 'false'){
             $leave_id = NULL; 
         }
@@ -316,8 +327,10 @@ class DashboardController extends Controller
 
     public function getReport(Request $request)
     {
-        $fromDate = new \DateTime( $request->get('fromDate'));
-        $toDate = new \DateTime( $request->get('toDate'));
+        // $fromDate = new \DateTime( $request->get('fromDate'));
+        // $toDate = new \DateTime( $request->get('toDate'));
+        $fromDate   = Carbon::createFromFormat('d/m/Y', $request->get('fromDate'));
+        $toDate     = Carbon::createFromFormat('d/m/Y', $request->get('toDate'));
         $fieldArray = $request->get('fieldArray');
         $fieldArray = explode(',', $fieldArray);
         $upperCaseFieldArray = array_map('strtoupper', $fieldArray);
