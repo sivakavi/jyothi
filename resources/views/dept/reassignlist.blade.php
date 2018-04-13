@@ -14,6 +14,7 @@
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/dashboard.js')) }}
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
         $(function () {
             $('.empSearch').click(function(e){
@@ -33,7 +34,7 @@
                                 var trHTML = '<tr><th>Batch Id</th>  <th>From Date</th><th>To Date</th><th></th></tr>';
                                 $.each(data, function (i, item) {
                                     trHTML += '';
-                                    trHTML += '<tr><td class="empSearchId">' + item.id + '</td><td>' + item.fromDate + '</td><td>' + item.toDate + '</td><td class=""><button type="button" class="btn btn-primary btn-round btn-sm empreassign">Reassign  Employee</button></td></tr>';
+                                    trHTML += '<tr><td class="empSearchId">' + item.id + '</td><td>' + $.datepicker.formatDate('dd/mm/yy', new Date(item.fromDate)) + '</td><td>' + $.datepicker.formatDate('dd/mm/yy', new Date(item.toDate)) + '</td><td class=""><button type="button" class="btn btn-primary btn-round btn-sm empreassign">Reassign  Employee</button></td></tr>';
                                 });
 
                                 $('#records_table').append(trHTML);

@@ -69,10 +69,10 @@
                     </select>
                 </td>
                 <td class="">
-                    <input type="text" class="empDatepickerFrom" value="{{ date('m/d/Y', strtotime($assignShift['fromDate'])) }}">
+                    <input type="text" class="empDatepickerFrom" value="{{ date('d/m/Y', strtotime($assignShift['fromDate'])) }}">
                 </td>
                 <td class="">
-                    <input type="text" class="empDatepickerTo" value="{{ date('m/d/Y', strtotime($assignShift['toDate'])) }}">
+                    <input type="text" class="empDatepickerTo" value="{{ date('d/m/Y', strtotime($assignShift['toDate'])) }}">
                 </td>
                 <td class="batch_id hide">{{ $assignShift['id'] }}</td>
                 <td class="">

@@ -17,7 +17,7 @@
                 <a href="{{ URL::route('dept.shiftDetails', array('shift_id'=> $shiftDetail['id'],'date'=> $shiftDetail['date'])) }}">
                     <div class="col-md-6" style="padding:10px !important;">
                         <div class="box-style">
-                            {{ $shiftDetail['date'].'-'.$shiftDetail['allias'].'-'.$shiftDetail['name'] }}
+                            {{ date('d/m/Y', strtotime($shiftDetail['date'])).'-'.$shiftDetail['allias'].'-'.$shiftDetail['name'] }}
                         </div>
                     </div>
                 </a>
