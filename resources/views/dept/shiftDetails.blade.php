@@ -16,6 +16,7 @@
 	          <button type="button" class="close" data-dismiss="modal">&times;</button>
 	          <h4 class="modal-title"></h4>
               <input type="hidden" id="emp_id" value="">
+              <input type="hidden" id="bulk_change" value="0">
 	        </div>
 	        <div class="modal-body">
 	        	<input type="hidden" id="assignShift">
@@ -47,7 +48,7 @@
 	        </div>
 	        <div class="modal-footer">
 	          <button type="button" class="btn btn-default saveModal">Save and Close</button>
-	          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	          <button type="button" class="btn btn-default closeModal" data-dismiss="modal">Close</button>
 	        </div>
 	      </div>
 	      
@@ -119,6 +120,9 @@
 <div class="pull-right">
     {{ $employees->links() }}
 </div>
+<div class="text-center">
+	<button type="button" id="empbulkassign" class="btn btn-primary btn-round btn-sm">Bulk Change</button>
+</div>
 @endsection
 
 @section('scripts')
@@ -158,9 +162,12 @@
                     othours = false;
                     assignShiftId = $('#assignShift').val();
                     ajaxURL = "{{route('dept.shiftDetailsChange')}}";
-                    if(assignShiftId == ""){
+                    if(assignShiftId == "" && $('#bulk_change').val() == 0){
                         assignShiftId = 0;
                         ajaxURL = "{{route('dept.employeeAdd')}}";
+                    }
+					else if($('#bulk_change').val() == 1){
+                        ajaxURL = "{{route('dept.shiftBulkDetailsChange')}}";
                     }
                     empDate = $('#shiftDate').val();
                     empId = $('#emp_id').val();
@@ -200,6 +207,14 @@
                 $('#emp_id').val(empId);
     	   		$('#myModal').modal('toggle');
     	   	});
+			$(document).on('click', '.close, .closeModal', function(e) {
+				$('#bulk_change').val('0');
+			});
+			$(document).on('click', '#empbulkassign', function(e) {
+				$('#bulk_change').val('1');
+				$('.modal-title').text('Bulk Changes')
+				$('#myModal').modal('toggle');
+			});
     	   	$('.emp_status').on('change', function() {
     	   		var status = $(this).find("option:selected").text();
     	   		$('.othours').addClass('hide');

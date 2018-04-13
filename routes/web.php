@@ -129,6 +129,7 @@ Route::group(['prefix' => 'dept', 'as' => 'dept.', 'namespace' => 'Dept', 'middl
 
     Route::get('/assignOtherDep', 'DashboardController@assignOtherDep')->name('assignOtherDep');
     
+    Route::get('/shiftBulkDetailsChange', 'DashboardController@shiftBulkDetailsChange')->name('shiftBulkDetailsChange');
 
 });
 
@@ -152,4 +153,6 @@ Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware'
     Route::get('/getReport', 'DashboardController@getReport')->name('getReport');
 
     Route::get('/getDepartmentEmployee', 'DashboardController@getDepartmentEmployee')->name('getDepartmentEmployee');
+
+    Route::get('/shiftBulkDetailsChange', 'DashboardController@shiftBulkDetailsChange')->name('shiftBulkDetailsChange');
 });

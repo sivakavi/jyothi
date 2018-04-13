@@ -249,6 +249,45 @@ class DashboardController extends Controller
 
     }
 
+    public function shiftBulkDetailsChange(Request $request)
+    {
+        $department_id = $request->get('department_id');
+        $this->department_id = $department_id;
+        $this->shift_id = $request->get('shift_id');
+        $date      = $request->get('empDate');
+        $pendingBatches = Batch::where('status', 'pending')->pluck('id')->toArray();
+        $employees = AssignShift::where('nowdate', $date)
+                                ->where(function ($q) {
+                                    $q->where('shift_id', $this->shift_id)
+                                    ->orWhere('changed_shift_id', $this->shift_id);
+                                })
+                                ->where(function ($q) {
+                                    $q->where('department_id', $this->department_id)
+                                    ->orWhere('changed_department_id', $this->department_id);
+                                })->whereNotIn('batch_id', $pendingBatches)->pluck('id')->toArray()
+                                ;
+        $status_id = $request->get('status');
+        $leave_id =  $request->get('leave');
+        $id  = $request->get('assignShiftId');
+        $othours = $request->get('othours');
+        $work_type_id = $request->get('emp_work_type');
+        foreach ($employees as $key => $id) {
+            $assignshift = AssignShift::find($id);
+            $assignshift->status_id = $status_id;
+            $assignshift->work_type_id = $work_type_id;
+            $assignshift->leave_id = NULL;
+            $assignshift->otHours = NULL;
+            if($leave_id != 'false'){
+                $assignshift->leave_id = $leave_id; 
+            }
+            if($othours != 'false'){
+                $assignshift->otHours = $othours; 
+            }
+            $assignshift->save();   
+        }
+        return 'true';
+    }
+
     public function employeeAdd(Request $request)
     {
         $department_id = $request->get('department_id');
@@ -259,7 +298,7 @@ class DashboardController extends Controller
         $otHours = $request->get('othours');
         $shift_id = $request->get('shift_id');
         // $empDate = new \DateTime($request->get('empDate'));
-        $empDate      = Carbon::createFromFormat('d/m/Y', $request->get('empDate'));
+        $empDate      = $request->get('empDate');
         if($leave_id == 'false'){
             $leave_id = NULL; 
         }
