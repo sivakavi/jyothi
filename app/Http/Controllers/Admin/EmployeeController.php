@@ -152,8 +152,10 @@ class EmployeeController extends Controller {
 			})->toArray();
 			$employees = [];
 			$existEmployees = [];
+			
 			foreach($rows as $row){
 				if($row['emp._no.'] != ''){
+					// dd($row);
 					$exist = $this->checkEmployeeID($row['emp._no.']);
 					if(!$exist){
 						$employee['name'] = $row['name'];
@@ -165,7 +167,47 @@ class EmployeeController extends Controller {
 						$employee['cost_centre'] = $row['cost_centre'];
 						$employee['cost_centre_desc'] = $row['cost_centre_desc'];
 						$employee['gl_accounts'] = $row['gl_accounts'];
-						$employee['gl_description'] = $row['gl_discription'];	
+						$employee['gl_description'] = $row['gl_discription'];
+						$employee['title'] = $row['title'];
+						$employee['marital_status'] = $row['marital_status'];
+						$employee['position_desc'] = $row['position_desc.'];
+						$employee['perm_address'] = $row['perm._address'];
+						$employee['perm_city'] = $row['perm._city'];
+						$employee['perm_district'] = $row['perm._district'];
+						$employee['perm_state'] = $row['perm._state'];
+						$employee['perm_country'] = $row['perm._country'];
+						$employee['perm_pincode'] = $row['perm._pin_code'];
+						$employee['present_address'] = $row['prsnt._address'];
+						$employee['present_city'] = $row['prsnt._city'];
+						$employee['present_district'] = $row['prsnt._district'];
+						$employee['present_state'] = $row['prsnt._state'];
+						$employee['present_country'] = $row['prsnt._country'];
+						$employee['present_pincode'] = $row['prsnt._pin_code'];
+						$employee['official_email'] = $row['official_email_id'];
+						$employee['personal_mobile_no'] = $row['personal_mobile_no'];
+						$employee['personal_email_id'] = $row['personal_email_id'];
+						$employee['dob'] = $row['dob'];
+						$employee['doj'] = $row['doj'];
+						$employee['doc'] = $row['confirmation_date'];
+						$employee['pan_no'] = $row['pan_no.'];
+						$employee['aadhar_no'] = $row['aadhar_no.'];
+						$employee['pf_no'] = $row['pf_no.'];
+						$employee['uan_no'] = $row['uan_no.'];
+						$employee['esic_no'] = $row['esic_no.'];
+						$employee['qualification'] = $row['qualification'];
+						$employee['spouse_name'] = $row['spouse_name'];
+						$employee['spouse_dob'] = $row['spouse_dob'];
+						$employee['father_name'] = $row['father_name'];
+						$employee['father_dob'] = $row['father_dob'];
+						$employee['mother_name'] = $row['mother_name'];
+						$employee['mother_dob'] = $row['mother_dob'];
+						$employee['child1_name'] = $row['child_name_1'];
+						$employee['child1_dob'] = $row['child_dob_1'];
+						$employee['child2_name'] = $row['child_name_2'];
+						$employee['child2_dob'] = $row['child_dob_2'];
+						$employee['blood_group'] = $row['blood_group'];
+						$employee['reporting_manager'] = $row['reporting_manager'];
+						$employee['remark'] = $row['remarks'];	
 						$employees[] = $employee;
 					}
 					else{
