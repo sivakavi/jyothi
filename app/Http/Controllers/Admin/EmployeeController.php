@@ -162,7 +162,7 @@ class EmployeeController extends Controller {
 					$exist = $this->checkEmployeeID($row['emp._no.']);
 					if(!$exist){
 						$employee['name'] = $row['name'];
-						$employee['gender'] = $row['gender'];
+						$employee['gender'] = strtolower($row['gender']);
 						$employee['employee_id'] = $row['emp._no.'];
 						$employeeIds[] = $employee['employee_id'];
 						$employee['department_id'] = $departments[strtolower($row['department'])];
@@ -211,7 +211,9 @@ class EmployeeController extends Controller {
 						$employee['child2_dob'] = $row['child_dob_2'];
 						$employee['blood_group'] = $row['blood_group'];
 						$employee['reporting_manager'] = $row['reporting_manager'];
-						$employee['remark'] = $row['remarks'];	
+						$employee['remark'] = 'active';
+						if(strtolower($row['remarks']))
+							$employee['remark'] = strtolower($row['remarks']);	
 						$employees[] = $employee;
 					}
 					else{
