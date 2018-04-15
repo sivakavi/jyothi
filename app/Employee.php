@@ -27,4 +27,15 @@ class Employee extends Model
     {
     	return $this->belongsTo('App\Location');
     }
+
+    public function employeeLogs()
+    {
+    	return $this->hasMany('App\EmployeeLog');
+    }
+
+    public function employeeLogsLatestUpdate($nowdate)
+    {
+        $instance = $this->employeeLogs();
+        return $instance->where('created_at', '<', $nowdate)->orderBy('created_at', 'DESC')->first();
+    }
 }

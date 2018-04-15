@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Routing\Route;
 use App\Employee;
+use App\EmployeeLog;
 use App\Shift;
 use App\Department;
 use App\Leave;
@@ -369,7 +370,7 @@ class DashboardController extends Controller
     {
         // $fromDate = new \DateTime( $request->get('fromDate'));
         // $toDate = new \DateTime( $request->get('toDate'));
-        $fromDate   = Carbon::createFromFormat('d/m/Y', $request->get('fromDate'));
+        $fromDate   = Carbon::createFromFormat('d/m/Y', $request->get('fromDate'))->subDay();
         $toDate     = Carbon::createFromFormat('d/m/Y', $request->get('toDate'));
         $fieldArray = $request->get('fieldArray');
         $fieldArray = explode(',', $fieldArray);
@@ -388,7 +389,8 @@ class DashboardController extends Controller
 
         foreach($report as $singleRow){
             $singleItem = [];
-            
+            $nowdate = $singleRow->nowdate.' 23:59:59';
+            $log = $singleRow->employee->employeeLogsLatestUpdate($nowdate);
             if (in_array("work_dept_name", $fieldArray)) {
                 if($singleRow->changed_department_id){
                     $singleItem["work_dept_name"] = $singleRow->changed_department->name;
@@ -451,11 +453,11 @@ class DashboardController extends Controller
             }
 
             if (in_array("emp_dept_name", $fieldArray)) {
-                $singleItem["emp_dept_name"] = $singleRow->employee->department->name;
+                $singleItem["emp_dept_name"] = $log->department->name;
             }
 
             if (in_array("emp_dep_code", $fieldArray)) {
-                $singleItem["emp_dep_code"] = $singleRow->employee->department->department_code;
+                $singleItem["emp_dep_code"] = $log->department->department_code;
             }
 
             if (in_array("emp_code", $fieldArray)) {
@@ -463,7 +465,7 @@ class DashboardController extends Controller
             }
 
             if (in_array("cost_centre", $fieldArray)) {
-                $singleItem["cost_centre"] = $singleRow->employee->cost_centre;
+                $singleItem["cost_centre"] = $log->cost_centre;
             }
 
             if (in_array("cost_centre_desc", $fieldArray)) {
@@ -471,7 +473,7 @@ class DashboardController extends Controller
             }
 
             if (in_array("gl_account", $fieldArray)) {
-                $singleItem["gl_account"] = $singleRow->employee->gl_accounts;
+                $singleItem["gl_account"] = $log->gl_accounts;
             }
 
             if (in_array("gl_account_desc", $fieldArray)) {
@@ -479,11 +481,11 @@ class DashboardController extends Controller
             }
 
             if (in_array("location", $fieldArray)) {
-                $singleItem["location"] = $singleRow->employee->location->name;
+                $singleItem["location"] = $log->location->name;
             }
 
             if (in_array("category", $fieldArray)) {
-                $singleItem["category"] = $singleRow->employee->category->name;
+                $singleItem["category"] = $log->category->name;
             }
 
             if (in_array("gender", $fieldArray)) {
