@@ -4,12 +4,15 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Employee;
+use App\EmployeeLog;
 use App\Category;
 use App\Location;
 use App\Department;
 use App\Http\Requests\StoreEmployee;
 use Illuminate\Http\Request;
 use Validator;
+use Illuminate\Support\Facades\Auth;
+
 
 
 class EmployeeController extends Controller {
@@ -152,7 +155,7 @@ class EmployeeController extends Controller {
 			})->toArray();
 			$employees = [];
 			$existEmployees = [];
-			
+			$employeeIds = [];
 			foreach($rows as $row){
 				if($row['emp._no.'] != ''){
 					// dd($row);
@@ -161,6 +164,7 @@ class EmployeeController extends Controller {
 						$employee['name'] = $row['name'];
 						$employee['gender'] = $row['gender'];
 						$employee['employee_id'] = $row['emp._no.'];
+						$employeeIds[] = $employee['employee_id'];
 						$employee['department_id'] = $departments[strtolower($row['department'])];
 						$employee['category_id'] = $categories[strtolower($row['category'])];
 						$employee['location_id'] = $locations[strtolower($row['location'])];
@@ -220,6 +224,21 @@ class EmployeeController extends Controller {
 				$message = "These employee id ".implode(", ", $existEmployees)." are not inserted. Please check";
 			}
 			Employee::insert($employees);
+			if(!empty($employeeIds)){
+				$employees = Employee::whereIn('employee_id', $employeeIds)->get()->toArray();
+				foreach ($employees as $employee) {
+					$employeeLog = new EmployeeLog();
+					$employeeLog->employee_id = $employee['id'];
+					$employeeLog->action = 'Insert';    
+					$employeeLog->user_id = Auth::user()->id;
+					$employeeLog->department_id = $employee['department_id'];
+					$employeeLog->category_id = $employee['category_id'];
+					$employeeLog->location_id = $employee['location_id'];
+					$employeeLog->cost_centre = $employee['cost_centre'];
+					$employeeLog->gl_accounts = $employee['gl_accounts'];
+					$employeeLog->save();
+				}
+			}
 			return redirect()->route('admin.employees.index')->with('message', $message);
 		}
 	}

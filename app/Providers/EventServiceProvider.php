@@ -3,10 +3,14 @@
 namespace App\Providers;
 
 use App\Events\Auth\SocialLogin;
+use App\Events\EmployeeCreated;
+use App\Events\EmployeeSaved;
 use App\Listeners\Auth\LoginListener;
 use App\Listeners\Auth\LogoutListener;
 use App\Listeners\Auth\RegisteredListener;
 use App\Listeners\Auth\SocialLoginListener;
+use App\Listeners\EmployeeCreateLogListener;
+use App\Listeners\EmployeeSaveLogListener;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Auth\Events\Registered;
@@ -25,6 +29,8 @@ class EventServiceProvider extends ServiceProvider
         Logout::class => [LogoutListener::class],
         Registered::class => [RegisteredListener::class],
         SocialLogin::class => [SocialLoginListener::class],
+        EmployeeCreated::class => [EmployeeCreateLogListener::class],
+        EmployeeSaved::class => [EmployeeSaveLogListener::class],
     ];
 
     /**

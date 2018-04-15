@@ -3,9 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Events\EmployeeCreated;
+use App\Events\EmployeeSaved;
 
 class Employee extends Model
 {
+    protected $events = [
+        'saved' => EmployeeSaved::class,
+        'created' => EmployeeCreated::class,
+    ];
     //
     public function department()
     {
