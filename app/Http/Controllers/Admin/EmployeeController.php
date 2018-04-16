@@ -63,6 +63,54 @@ class EmployeeController extends Controller {
 		$employee->cost_centre_desc = $request->input("cost_centre_desc");
 		$employee->gl_accounts = $request->input("gl_accounts");
 		$employee->gl_description = $request->input("gl_description");
+		$employee->title = $request->input("title");
+		$employee->marital_status = $request->input("marital_status");
+		$employee->position_desc = $request->input("position_desc");
+
+		$employee->perm_address = $request->input("perm_address");
+		$employee->perm_city = $request->input("perm_city");
+		$employee->perm_district = $request->input("perm_district");
+		$employee->perm_state = $request->input("perm_state");
+		$employee->perm_country = $request->input("perm_country");
+		$employee->perm_pincode = $request->input("perm_pincode");
+
+		$employee->present_address = $request->input("present_address");
+		$employee->present_city = $request->input("present_city");
+		$employee->present_district = $request->input("present_district");
+		$employee->present_state = $request->input("present_state");
+		$employee->present_country = $request->input("present_country");
+		$employee->present_pincode = $request->input("present_pincode");
+
+		$employee->official_email = $request->input("official_email");
+		$employee->personal_mobile_no = $request->input("personal_mobile_no");
+		$employee->personal_email_id = $request->input("personal_email_id");
+		$employee->dob = $request->input("dob");
+		$employee->doj = $request->input("doj");
+		$employee->doc = $request->input("doc");
+
+		$employee->pan_no = $request->input("pan_no");
+		$employee->aadhar_no = $request->input("aadhar_no");
+		$employee->pf_no = $request->input("pf_no");
+		$employee->uan_no = $request->input("uan_no");
+		$employee->esic_no = $request->input("esic_no");
+		$employee->qualification = $request->input("qualification");
+
+		$employee->spouse_name = $request->input("spouse_name");
+		$employee->spouse_dob = $request->input("spouse_dob");
+		$employee->father_name = $request->input("father_name");
+		$employee->father_dob = $request->input("father_dob");
+		$employee->mother_name = $request->input("mother_name");
+		$employee->mother_dob = $request->input("mother_dob");
+
+		$employee->child1_name = $request->input("child1_name");
+		$employee->child1_dob = $request->input("child1_dob");
+		$employee->child2_name = $request->input("child2_name");
+		$employee->child2_dob = $request->input("child2_dob");
+
+		$employee->blood_group = $request->input("blood_group");
+		$employee->reporting_manager = $request->input("reporting_manager");
+		$employee->remark = $request->input("remark");
+
 		$employee->save();
 
 		return redirect()->route('admin.employees.index')->with('message', 'Item created successfully.');
@@ -90,6 +138,7 @@ class EmployeeController extends Controller {
 	public function edit($id)
 	{
 		$employee = Employee::findOrFail($id);
+		// dd($employee);
 		$departments = Department::all(['id', 'name']);
 		$categories = Category::all(['id', 'name']);
 		$locations = Location::all(['id', 'name']);
@@ -118,6 +167,54 @@ class EmployeeController extends Controller {
 		$employee->cost_centre_desc = $request->input("cost_centre_desc");
 		$employee->gl_accounts = $request->input("gl_accounts");
 		$employee->gl_description = $request->input("gl_description");
+		$employee->title = $request->input("title");
+		$employee->marital_status = $request->input("marital_status");
+		$employee->position_desc = $request->input("position_desc");
+
+		$employee->perm_address = $request->input("perm_address");
+		$employee->perm_city = $request->input("perm_city");
+		$employee->perm_district = $request->input("perm_district");
+		$employee->perm_state = $request->input("perm_state");
+		$employee->perm_country = $request->input("perm_country");
+		$employee->perm_pincode = $request->input("perm_pincode");
+
+		$employee->present_address = $request->input("present_address");
+		$employee->present_city = $request->input("present_city");
+		$employee->present_district = $request->input("present_district");
+		$employee->present_state = $request->input("present_state");
+		$employee->present_country = $request->input("present_country");
+		$employee->present_pincode = $request->input("present_pincode");
+
+		$employee->official_email = $request->input("official_email");
+		$employee->personal_mobile_no = $request->input("personal_mobile_no");
+		$employee->personal_email_id = $request->input("personal_email_id");
+		$employee->dob = $request->input("dob");
+		$employee->doj = $request->input("doj");
+		$employee->doc = $request->input("doc");
+
+		$employee->pan_no = $request->input("pan_no");
+		$employee->aadhar_no = $request->input("aadhar_no");
+		$employee->pf_no = $request->input("pf_no");
+		$employee->uan_no = $request->input("uan_no");
+		$employee->esic_no = $request->input("esic_no");
+		$employee->qualification = $request->input("qualification");
+
+		$employee->spouse_name = $request->input("spouse_name");
+		$employee->spouse_dob = $request->input("spouse_dob");
+		$employee->father_name = $request->input("father_name");
+		$employee->father_dob = $request->input("father_dob");
+		$employee->mother_name = $request->input("mother_name");
+		$employee->mother_dob = $request->input("mother_dob");
+
+		$employee->child1_name = $request->input("child1_name");
+		$employee->child1_dob = $request->input("child1_dob");
+		$employee->child2_name = $request->input("child2_name");
+		$employee->child2_dob = $request->input("child2_dob");
+
+		$employee->blood_group = $request->input("blood_group");
+		$employee->reporting_manager = $request->input("reporting_manager");
+		$employee->remark = $request->input("remark");
+
 
 		$employee->save();
 
