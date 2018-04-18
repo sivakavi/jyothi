@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Events\EmployeeCreated;
 use App\Events\EmployeeSaved;
+use Illuminate\Database\Eloquent\Builder;
 
 class Employee extends Model
 {
@@ -13,6 +14,16 @@ class Employee extends Model
         'created' => EmployeeCreated::class,
     ];
     //
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('remark', function (Builder $builder) {
+            $builder->where('remark', 'active');
+        });
+    }
+
     public function department()
     {
     	return $this->belongsTo('App\Department');

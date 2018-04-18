@@ -45,4 +45,5 @@
 
 @section('scripts')
     {{ Html::script(mix('assets/admin/js/admin.js')) }}
+    {{ Html::script(mix('assets/admin/js/dashboard.js')) }}    
 @endsection
