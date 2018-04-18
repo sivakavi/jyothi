@@ -131,6 +131,10 @@ Route::group(['prefix' => 'dept', 'as' => 'dept.', 'namespace' => 'Dept', 'middl
     
     Route::get('/shiftBulkDetailsChange', 'DashboardController@shiftBulkDetailsChange')->name('shiftBulkDetailsChange');
 
+    Route::get('/holidayShift', 'DashboardController@holidayShift')->name('holidayShift');
+
+    Route::get('/holidayShiftAssign', 'DashboardController@holidayShiftAssign')->name('holidayShiftAssign');
+
 });
 
 Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware' => 'hr'], function () {
@@ -155,4 +159,10 @@ Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware'
     Route::get('/getDepartmentEmployee', 'DashboardController@getDepartmentEmployee')->name('getDepartmentEmployee');
 
     Route::get('/shiftBulkDetailsChange', 'DashboardController@shiftBulkDetailsChange')->name('shiftBulkDetailsChange');
+
+    Route::get('/holidayBatch', 'DashboardController@holidayBatch')->name('holidayBatch');
+
+    Route::get('/holidayShift', 'DashboardController@holidayShift')->name('holidayShift');
+
+    Route::get('/holidayShiftAssign', 'DashboardController@holidayShiftAssign')->name('holidayShiftAssign');
 });

@@ -50,7 +50,8 @@ class DashboardController extends Controller
     {
         $departments = Department::all()->count();
         $shifts = Batch::where('status', 'pending')->count();
-        return view('hr.dashboard', compact('departments', 'shifts'));
+        $holidayShifts = Batch::where('status', 'pending_holiday')->count();
+        return view('hr.dashboard', compact('departments', 'shifts', 'holidayShifts'));
     }
 
     public function shiftBatch()
@@ -85,8 +86,8 @@ class DashboardController extends Controller
     private function bulkCheck($batch_id, $employee_id, $empDatepickerFrom, $empDatepickerTo){
         // $empDatepickerFrom      = new \DateTime($empDatepickerFrom);
         // $empDatepickerTo        = new \DateTime($empDatepickerTo);
-        $empDatepickerFrom      = Carbon::createFromFormat('d/m/Y', $empDatepickerFrom);
-        $empDatepickerTo        = Carbon::createFromFormat('d/m/Y', $empDatepickerTo);
+        $empDatepickerFrom      = Carbon::createFromFormat('d/m/Y', $empDatepickerFrom)->format("Y-m-d");
+        $empDatepickerTo        = Carbon::createFromFormat('d/m/Y', $empDatepickerTo)->format("Y-m-d");
         $empDatepickerFromCount = Batch::whereBetween('fromDate', [$empDatepickerFrom, $empDatepickerTo])->where('id', '!=', $batch_id)->where('employee_id', $employee_id)->get()->count();
         $empDatepickerToCount   = Batch::whereBetween('toDate', [$empDatepickerFrom, $empDatepickerTo])->where('id', '!=', $batch_id)->where('employee_id', $employee_id)->get()->count();
         if($empDatepickerFromCount || $empDatepickerToCount)
@@ -125,8 +126,8 @@ class DashboardController extends Controller
         // $empDatepickerFrom      = new \DateTime( $request->get('empDatepickerFrom'));
         // $empDatepickerTo        = new \DateTime( $request->get('empDatepickerTo'));
 
-        $empDatepickerFrom      = Carbon::createFromFormat('d/m/Y', $request->get('empDatepickerFrom'));
-        $empDatepickerTo        = Carbon::createFromFormat('d/m/Y', $request->get('empDatepickerTo'));
+        $empDatepickerFrom      = Carbon::createFromFormat('d/m/Y', $request->get('empDatepickerFrom'))->format("Y-m-d");
+        $empDatepickerTo        = Carbon::createFromFormat('d/m/Y', $request->get('empDatepickerTo'))->format("Y-m-d");
         
         $empDatepickerFromCount = Batch::whereBetween('fromDate', [$empDatepickerFrom, $empDatepickerTo])->where('id', '!=', $batch_id)->where('employee_id', $employee_id)->get()->count();
         $empDatepickerToCount   = Batch::whereBetween('toDate', [$empDatepickerFrom, $empDatepickerTo])->where('id', '!=', $batch_id)->where('employee_id', $employee_id)->get()->count();
@@ -496,6 +497,87 @@ class DashboardController extends Controller
         }
 
         return $finalArray;
+    }
+
+    public function holidayBatch()
+    {
+        $batches = Batch::groupBy('department_id')->paginate(10);
+        return view('hr.holidayBatch', compact('batches'));
+    }
+
+    public function holidayShift(Request $request)
+    {
+        $department_id = $request->department_id;
+        $batches = Batch::where('department_id', $department_id)->where('status', 'pending_holiday')->get()->toArray();
+        
+        foreach ($batches as $key => $batch) {
+            $employeeShift = AssignShift::where('batch_id', $batch['id'])->where('employee_id', $batch['employee_id'])->first();
+
+            $batches[$key]['shift_id'] = $employeeShift->shift_id;
+            $batches[$key]['employee_name'] = $employeeShift->employee->name;
+            $batches[$key]['category_name'] = $employeeShift->employee->category->name;
+            $batches[$key]['work_type_id'] = $employeeShift->work_type_id;
+            $batches[$key]['status_id'] = $employeeShift->status_id;
+            ;
+        }
+        $assignShifts = $batches;
+        
+        $shifts = Shift::where('department_id', $department_id)->get();
+        $statuses = Status::where('department_id', $department_id)->get();
+        $work_types = WorkType::where('department_id', $department_id)->get();
+        return view('hr.holidayShift', compact('assignShifts', 'shifts', 'statuses', 'work_types'));
+    }
+
+    public function holidayShiftAssign(Request $request)
+    {
+        $employee_id            = $request->get('employee_id');
+        $batch_id               = $request->get('batch_id');
+        $empDatepickerFrom      = Carbon::createFromFormat('d/m/Y', $request->get('empDatepickerFrom'))->format("Y-m-d");
+        $empDatepickerTo        = Carbon::createFromFormat('d/m/Y', $request->get('empDatepickerTo'))->format("Y-m-d");
+        $empDatepickerFromCount = Batch::whereBetween('fromDate', [$empDatepickerFrom, $empDatepickerTo])->where('id', '!=', $batch_id)->where('employee_id', $employee_id)->get()->count();
+        $empDatepickerToCount   = Batch::whereBetween('toDate', [$empDatepickerFrom, $empDatepickerTo])->where('id', '!=', $batch_id)->where('employee_id', $employee_id)->get()->count();
+        if($empDatepickerFromCount || $empDatepickerToCount)
+            return 'false';
+
+        $empDatepickerFrom      = Carbon::createFromFormat('d/m/Y', $request->get('empDatepickerFrom'));
+        $empDatepickerTo        = Carbon::createFromFormat('d/m/Y', $request->get('empDatepickerTo'));
+
+        $work_type_id           = $request->get('work_type_id');
+        $shift_id               = $request->get('shift_id');
+        $status_id              = $request->get('status_id');
+
+        $record = 0;
+        $holidays = Holiday::all()->pluck('holiday_at')->toArray();
+        for($i = $empDatepickerFrom; $i <= $empDatepickerTo; $i->modify('+1 day')){
+            $nowdate =  $i->format("Y-m-d");
+            $day_num = $i->format("N");
+            if($day_num < 7 && !in_array($nowdate, $holidays)) {
+                $record = 1;
+            }
+        }
+
+        if($record)
+            return 'false';
+
+        $empDatepickerFrom      = Carbon::createFromFormat('d/m/Y', $request->get('empDatepickerFrom'));
+        $empDatepickerTo        = Carbon::createFromFormat('d/m/Y', $request->get('empDatepickerTo'));
+
+        $department_id  = Employee::find($employee_id)->department_id;
+        $batch  = Batch::find($batch_id);
+        $batch->fromDate = $empDatepickerFrom;
+        $batch->toDate = $empDatepickerTo;
+        $batch->status = 'confirmed';
+        $batch->save();
+
+        $employeeRecords = [];
+        AssignShift::where('batch_id', $batch->id)->delete();
+        for($i = $empDatepickerFrom; $i <= $empDatepickerTo; $i->modify('+1 day')){
+            $nowdate =  $i->format("Y-m-d");
+            $data = array('department_id'=>$department_id, 'batch_id'=> $batch->id, 'employee_id'=> $employee_id, 'shift_id'=> $shift_id, 'work_type_id'=> $work_type_id, 'status_id'=> $status_id, 'leave_id'=> null, 'otHours'=> null, 'nowdate'=> $nowdate);
+            $employeeRecords[] = $data;
+        }
+        AssignShift::insert($employeeRecords);
+        return 'true';
     }
    
 }
