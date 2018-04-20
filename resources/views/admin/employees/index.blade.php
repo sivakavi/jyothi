@@ -30,6 +30,7 @@
                         <th>DEPARTMENT</th>
                         <th>CATEGORY</th>
                         <th>LOCATION</th>
+                        <th>REMARK</th>
                         <!-- <th>COST CENTRE</th>
                         <th>COST CENTRE DESCRIPTION</th>
                         <th>GL ACCOUNTS</th>
@@ -48,6 +49,7 @@
                                 <td>{{$employee->department->name}}</td>
                                 <td>{{$employee->category->name}}</td>
                                 <td>{{$employee->location->name}}</td>
+                                <td>{{ucfirst($employee->remark)}}</td>
                                 <!-- <td>{{$employee->cost_centre}}</td>
                                 <td>{{$employee->cost_centre_desc}}</td>
                                 <td>{{$employee->gl_accounts}}</td>

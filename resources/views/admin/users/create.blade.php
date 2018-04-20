@@ -75,7 +75,6 @@
             <label class="control-label col-sm-3" for="confirmed">Department:</label>
             <div class="col-sm-6">
                 <select class="form-control" name="department_id" id="department_id" required>
-                    <option value="">Select any one Department...</option>
                     @foreach($departments as $department)
                         <option value="{{$department->id}}">{{$department->name}}</option>
                     @endforeach
