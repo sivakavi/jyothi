@@ -51,7 +51,7 @@
             <label class="control-label col-sm-3" for="manager">Role:</label>
             <div class="col-sm-6">
                 <input id="HR" type="radio" name="role" value="hr" required> <label for="HR">HR</label>
-                <input id="Dept" type="radio" name="role" value="dept"> <label for="Dept">Department</label>
+                <input id="Dept" type="radio" name="role" value="dept" checked> <label for="Dept">Department</label>
             </div>
         </div>
 
@@ -71,7 +71,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group department">
             <label class="control-label col-sm-3" for="confirmed">Department:</label>
             <div class="col-sm-6">
                 <select class="form-control" name="department_id" id="department_id" required>
@@ -89,4 +89,21 @@
             </div>
         </div>
     </form>
+@endsection
+
+@section('scripts')
+    @parent
+    <script>
+        $( document ).ready(function() {
+            $("input[name$='role']").click(function() {
+                var test = $(this).val();
+                if(test == "dept"){
+                    $(".department").show();
+                }
+                else{
+                    $(".department").hide();
+                }
+            });     
+        });
+    </script>
 @endsection
