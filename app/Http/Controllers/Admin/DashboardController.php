@@ -46,7 +46,52 @@ class DashboardController extends Controller
         $shifts = Shift::all()->count();
         $users = User::all()->count();
         $employees = Employee::all()->count();
-        return view('admin.dashboard',  compact('departments', 'shifts', 'users', 'employees'));
+        $shift_ids = Shift::where('intime', '<', date('H:i:s'))->pluck('id')->toArray();
+        $assignShifts = AssignShift::whereIn('shift_id', [5,3])->get();
+        $departmentDatas = [];
+        foreach($assignShifts as $assignShift){
+            if($assignShift->changed_department_id == '0'){
+                if($assignShift->status->name != 'Leave'){
+                    $departmentDatas[$assignShift->department_id]['name'] = $assignShift->department->name;
+                    if(!isset($departmentDatas[$assignShift->department_id]['present'])){
+                        $departmentDatas[$assignShift->department_id]['present'] = 0;
+                    }
+                    $departmentDatas[$assignShift->department_id]['present'] = $departmentDatas[$assignShift->department_id]['present'] + 1;
+                    if(!isset($departmentDatas[$assignShift->department_id][$assignShift->work_type->name])){
+                        $departmentDatas[$assignShift->department_id][$assignShift->work_type->name] = 0;
+                    }
+                    $departmentDatas[$assignShift->department_id][$assignShift->work_type->name] = $departmentDatas[$assignShift->department_id][$assignShift->work_type->name] + 1;
+                }
+                else{
+                    $departmentDatas[$assignShift->department_id]['name'] = $assignShift->department->name;
+                    if(!isset($departmentDatas[$assignShift->department_id]['absent'])){
+                        $departmentDatas[$assignShift->department_id]['absent'] = 0;
+                    }
+                    $departmentDatas[$assignShift->department_id]['absent'] = $departmentDatas[$assignShift->department_id]['absent'] + 1;
+                }
+            }
+            else{
+                if($assignShift->status->name != 'Leave'){
+                    $departmentDatas[$assignShift->changed_department_id]['name'] = $assignShift->changed_department->name;
+                    if(!isset($departmentDatas[$assignShift->changed_department_id]['present'])){
+                        $departmentDatas[$assignShift->changed_department_id]['present'] = 0;
+                    }
+                    $departmentDatas[$assignShift->changed_department_id]['present'] = $departmentDatas[$assignShift->changed_department_id]['present'] + 1;
+                    if(!isset($departmentDatas[$assignShift->changed_department_id][$assignShift->work_type->name])){
+                        $departmentDatas[$assignShift->changed_department_id][$assignShift->work_type->name] = 0;
+                    }
+                    $departmentDatas[$assignShift->changed_department_id][$assignShift->work_type->name] = $departmentDatas[$assignShift->changed_department_id][$assignShift->work_type->name] + 1;
+                }
+                else{
+                    $departmentDatas[$assignShift->changed_department_id]['name'] = $assignShift->changed_department->name;
+                    if(!isset($departmentDatas[$assignShift->changed_department_id]['absent'])){
+                        $departmentDatas[$assignShift->changed_department_id]['absent'] = 0;
+                    }
+                    $departmentDatas[$assignShift->changed_department_id]['absent'] = $departmentDatas[$assignShift->changed_department_id]['absent'] + 1;
+                }
+            }
+        }
+        return view('admin.dashboard',  compact('departments', 'shifts', 'users', 'employees', 'departmentDatas'));
     }
 
     public function assignEmpShiftAttendance()

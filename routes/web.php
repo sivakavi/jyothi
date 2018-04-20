@@ -135,6 +135,8 @@ Route::group(['prefix' => 'dept', 'as' => 'dept.', 'namespace' => 'Dept', 'middl
 
     Route::get('/holidayShiftAssign', 'DashboardController@holidayShiftAssign')->name('holidayShiftAssign');
 
+    Route::get('/shiftDetailsShow', 'DashboardController@shiftDetailsShow')->name('shiftDetailsShow');
+
 });
 
 Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware' => 'hr'], function () {
