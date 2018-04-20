@@ -24,7 +24,7 @@ class EmployeeController extends Controller {
 	 */
 	public function index()
 	{
-		$employees = Employee::orderBy('id', 'asc')->paginate(10);
+		$employees = Employee::withoutGlobalScopes()->orderBy('id', 'asc')->paginate(10);
 
 		return view('admin.employees.index', compact('employees'));
 	}
@@ -137,7 +137,7 @@ class EmployeeController extends Controller {
 	 */
 	public function edit($id)
 	{
-		$employee = Employee::findOrFail($id);
+		$employee = Employee::withoutGlobalScopes()->findOrFail($id);
 		// dd($employee);
 		$departments = Department::all(['id', 'name']);
 		$categories = Category::all(['id', 'name']);
@@ -155,7 +155,7 @@ class EmployeeController extends Controller {
 	 */
 	public function update(StoreEmployee $request, $id)
 	{
-		$employee = Employee::findOrFail($id);
+		$employee = Employee::withoutGlobalScopes()->findOrFail($id);
 
 		$employee->name = $request->input("name");
 		$employee->gender = $request->input("gender");
