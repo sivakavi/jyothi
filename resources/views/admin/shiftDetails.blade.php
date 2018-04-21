@@ -219,7 +219,7 @@
 	                });
     	   		}
     	   		else{
-    	   			alert('please enter name');
+					alert('please enter employee code fully...');
     	   		}
     	   	});
 		});
