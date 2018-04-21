@@ -107,6 +107,7 @@
         $( ".empDatepickerFrom" ).datepicker({
             dateFormat: 'dd/mm/yy',
             onSelect: function(dateText, inst) {
+                tr.find('.empDatepickerTo').val('');
             }
         });
         $( ".empDatepickerTo" ).datepicker({

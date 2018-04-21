@@ -124,6 +124,7 @@
         $( "#datepickerFrom" ).datepicker({
             dateFormat: 'dd/mm/yy',
             onSelect: function(dateText, inst) {
+                $( "#datepickerTo" ).val('');
                 var date = $(this).val();
                 
             }
@@ -151,6 +152,7 @@
               $(this).closest("tr").css({"background-color": "", "color": ""});
               var date = $(this).val();
               var tr = $(this).closest("tr");
+              tr.find('.empDatepickerTo').val('');
               var emp_id = tr.find('.emp_id').text();
               var datas = 'empDatepicker='+ date + '&emp_id='+ emp_id;
               jQuery.ajax({

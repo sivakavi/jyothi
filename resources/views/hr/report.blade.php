@@ -171,6 +171,7 @@
             maxDate: new Date(),
             onSelect: function(dateText, inst) {
                 var fromdate = $(this).val();
+                $( "#datepickerTo" ).val('');
             }
         });
 
