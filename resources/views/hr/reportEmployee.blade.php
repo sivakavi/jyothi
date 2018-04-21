@@ -248,13 +248,19 @@
             var fromDate = $("#datepickerFrom").val();
             var toDate = $("#datepickerTo").val();
 
-            var fromDate1 = new Date(fromDate);
+            var fromD = fromDate.split("/");
+            var toD = toDate.split("/");
+            var finalFrom = fromD[2] + "-" + fromD[1] + "-" + fromD[0];
+            var finalTo = toD[2] + "-" + toD[1] + "-" + toD[0];
+            
+
+            var fromDate1 = new Date(finalFrom);
             var day = fromDate1.getDate();
             var month = fromDate1.getMonth() + 1;
             var year = fromDate1.getFullYear();
             var fd = day + "-" + month + "-" + year;
 
-            var toDate1 = new Date(toDate);
+            var toDate1 = new Date(finalTo);
             var day1 = toDate1.getDate();
             var month1 = toDate1.getMonth() + 1;
             var year1 = toDate1.getFullYear();
