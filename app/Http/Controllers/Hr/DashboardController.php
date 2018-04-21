@@ -155,6 +155,8 @@ class DashboardController extends Controller
         $employeeRecords = [];
         $holidays = Holiday::all()->pluck('holiday_at')->toArray();
         AssignShift::where('batch_id', $batch->id)->delete();
+        $empDatepickerFrom =  new \DateTime($empDatepickerFrom);
+        $empDatepickerTo =  new \DateTime($empDatepickerTo);
         for($i = $empDatepickerFrom; $i <= $empDatepickerTo; $i->modify('+1 day')){
             $nowdate =  $i->format("Y-m-d");
             $day_num = $i->format("N");

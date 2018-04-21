@@ -323,6 +323,8 @@ class DashboardController extends Controller
 
         $employeeRecords = [];
         $holidays = Holiday::all()->pluck('holiday_at')->toArray();
+        $empDatepickerFrom =  new \DateTime($empDatepickerFrom);
+        $empDatepickerTo =  new \DateTime($empDatepickerTo);
         for($i = $empDatepickerFrom; $i <= $empDatepickerTo; $i->modify('+1 day')){
             $nowdate =  $i->format("Y-m-d");
             $day_num = $i->format("N");
@@ -438,14 +440,14 @@ class DashboardController extends Controller
         $shift_id = $request->get('shift_id');
         $work_type_id = $request->get('work_type_id');
         $batchDetails = Batch::find($batch_id);
-        $fromDate      = Carbon::createFromFormat('d/m/Y', $fromDate);
-        $toDate      = Carbon::createFromFormat('d/m/Y', $toDate);
-        // $fromDate = new \DateTime($fromDate);
-        // $toDate = new \DateTime($toDate);
+        //$fromDate      = Carbon::createFromFormat('d/m/Y', $fromDate);
+        //$toDate      = Carbon::createFromFormat('d/m/Y', $toDate);
+        $fromDate = new \DateTime($fromDate);
+        $toDate = new \DateTime($toDate);
         
         $employee_id = $batchDetails->employee_id;
         if(new \DateTime($batchDetails->fromDate) > new \DateTime()){
-            $this->employeeShiftInsert($employee_id, $work_type_id, $shift_id, $status_id, $fromDate, $toDate);
+            $this->employeeShiftInsert($employee_id, $work_type_id, $shift_id, $status_id, $request->get('fromDate'), $request->get('toDate'));
             $batchDetails->delete();
             AssignShift::where('batch_id', $batch_id)->delete();
         }
@@ -454,11 +456,13 @@ class DashboardController extends Controller
             $batchDetails->toDate = $previous_day;
             $batchDetails->save();
             $fromDate->modify('+1 day');
-            $this->employeeShiftInsert($employee_id, $work_type_id, $shift_id, $status_id, $fromDate, $toDate);
+            $this->employeeShiftInsert($employee_id, $work_type_id, $shift_id, $status_id, $request->get('fromDate'), $request->get('toDate'));
             $fromDate = $request->get('fromDate');
             $toDate = $request->get('toDate');
-            $fromDate      = Carbon::createFromFormat('d/m/Y', $fromDate)->format("Y-m-d");
-            $toDate      = Carbon::createFromFormat('d/m/Y', $toDate)->format("Y-m-d");
+            //$fromDate      = Carbon::createFromFormat('d/m/Y', $fromDate)->format("Y-m-d");
+            //$toDate      = Carbon::createFromFormat('d/m/Y', $toDate)->format("Y-m-d");
+            $fromDate = new \DateTime($fromDate);
+            $toDate = new \DateTime($toDate);
             $deleteShifts = AssignShift::where('batch_id', $batch_id)->whereBetween('nowdate', [$fromDate, $toDate]);     
             $deleteShifts->delete();
         }
@@ -529,6 +533,8 @@ class DashboardController extends Controller
             
             $employeeRecords = [];
             $holidays = Holiday::all()->pluck('holiday_at')->toArray();
+            $empDatepickerFrom =  new \DateTime($empDatepickerFrom);
+            $empDatepickerTo =  new \DateTime($empDatepickerTo);
             for($i = $empDatepickerFrom; $i <= $empDatepickerTo; $i->modify('+1 day')){
                 $nowdate =  $i->format("Y-m-d");
                 $day_num = $i->format("N");

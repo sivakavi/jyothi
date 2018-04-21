@@ -26,8 +26,8 @@
                         @foreach($batches as $batch)
                             <tr>
                                 <td>{{$batch->id}}</td>
-                                <td>{{$batch->fromDate}}</td>
-                                <td>{{$batch->toDate}}</td>
+                                <td>{{ date('d/m/Y', strtotime($batch->fromDate)) }}</td>
+                                <td>{{ date('d/m/Y', strtotime($batch->toDate)) }}</td>
                                 <td>{{$batch->employee->name}}</td>
                                 <td>{{$batch->employee->employee_id}}</td>
                                 <td>{{$batch->employee->department->name}}</td>
