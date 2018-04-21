@@ -46,7 +46,7 @@
 	    </div>
 	  </div>
 	  <div class="pull-right">
-	  	Search by Emp Code : <input type="text" name="empName" id="empName">&nbsp;&nbsp;<button type="button" class="btn btn-primary btn-round btn-sm empSearch"><i class="fa fa-search" aria-hidden="true"></i></button>
+	  	Search by Emp Code ( Other Dept. Employee ) : <input type="text" name="empName" id="empName">&nbsp;&nbsp;<button type="button" class="btn btn-primary btn-round btn-sm empSearch"><i class="fa fa-search" aria-hidden="true"></i></button>
 	  </div>
 	  <br>
 	  <br>

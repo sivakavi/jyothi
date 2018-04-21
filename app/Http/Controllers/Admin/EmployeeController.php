@@ -113,7 +113,7 @@ class EmployeeController extends Controller {
 
 		$employee->save();
 
-		return redirect()->route('admin.employees.index')->with('message', 'Item created successfully.');
+		return redirect()->route('admin.employees.index')->with('message', 'Employee created successfully.');
 	}
 
 	/**
@@ -218,7 +218,7 @@ class EmployeeController extends Controller {
 
 		$employee->save();
 
-		return redirect()->route('admin.employees.index')->with('message', 'Item updated successfully.');
+		return redirect()->route('admin.employees.index')->with('message', 'Employee updated successfully.');
 	}
 
 	/**
@@ -232,7 +232,7 @@ class EmployeeController extends Controller {
 		$employee = Employee::findOrFail($id);
 		$employee->delete();
 
-		return redirect()->route('admin.employees.index')->with('message', 'Item deleted successfully.');
+		return redirect()->route('admin.employees.index')->with('message', 'Employee deleted successfully.');
 	}
 
 	public function importExcel(Request $request)

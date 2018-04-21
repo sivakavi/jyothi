@@ -54,7 +54,7 @@
                     <li>
                         <a href="{{ route('dept.otherDept') }}">
                             <i class="fa fa-exchange" aria-hidden="true"></i>
-                            Other Shift Assign
+                            Other Dept. Emp. Shift Assign
                         </a>
                     </li>
                     <li>
@@ -64,12 +64,6 @@
                         </a>
                     </li>
 
-                    <li>
-                        <a href="{{ route('dept.holidayShift') }}">
-                            <i class="fa fa-exchange" aria-hidden="true"></i>
-                            Holiday Shift
-                        </a>
-                    </li>
                     <li>
                         <a href="{{ route('logout') }}">
                             <i class="fa fa-sign-out" aria-hidden="true"></i>
