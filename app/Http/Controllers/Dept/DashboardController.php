@@ -609,5 +609,44 @@ class DashboardController extends Controller
         AssignShift::insert($employeeRecords);
         return 'true';
     }
+
+    public function shiftDetailsShow()
+    {
+        return view('dept.shiftDetailsShow'); 
+    }
+
+    public function shiftDetailPrint(Request $request)
+    {
+        $fromDate      = Carbon::createFromFormat('d/m/Y', $request->get('fromDate'))->format('Y-m-d');
+        $toDate        = Carbon::createFromFormat('d/m/Y', $request->get('toDate'))->format('Y-m-d');
+        
+        $completedBatches = Batch::where('status', 'confirmed')->pluck('id')->toArray();    
+        $employees = AssignShift::whereBetween('nowdate', [$fromDate,   $toDate])->where(function ($q) {
+                    $q->where('department_id', $this->user->department->id)
+                    ->orWhere('changed_department_id', $this->user->department->id);
+                })->whereIn('batch_id', $completedBatches)->get()
+                ;
+        $employee_datas = [];
+        foreach ($employees as $employee) {
+            $employee_data['date'] = $employee->nowdate;
+            $employee_data['emp_name'] = $employee->employee->name;
+            $employee_data['emp_code'] = $employee->employee->employee_id;
+            if($employee->changed_department_id == 0){
+                $employee_data['department_code'] = $employee->department->department_code;
+                $employee_data['department_name'] = $employee->department->name;
+                $employee_data['shift_code'] = $employee->shift->allias;
+                $employee_data['shift_name'] = $employee->shift->name;
+            }
+            else{
+                $employee_data['department_code'] = $employee->changed_department->department_code;
+                $employee_data['department_name'] = $employee->changed_department->name;
+                $employee_data['shift_code'] = $employee->changed_shift->allias;
+                $employee_data['shift_name'] = $employee->changed_shift->name;
+            }
+            $employee_datas[] = $employee_data;
+        }
+        // print_r($employee_datas);die;
+        return \Response::json($employee_datas);
+    }
    
 }

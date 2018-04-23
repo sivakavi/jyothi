@@ -65,9 +65,9 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('dept.holidayShift') }}">
+                        <a href="{{ route('dept.shiftDetailsShow') }}">
                             <i class="fa fa-exchange" aria-hidden="true"></i>
-                            Holiday Shift
+                            Print Shift
                         </a>
                     </li>
                     <li>

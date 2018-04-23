@@ -137,6 +137,8 @@ Route::group(['prefix' => 'dept', 'as' => 'dept.', 'namespace' => 'Dept', 'middl
 
     Route::get('/shiftDetailsShow', 'DashboardController@shiftDetailsShow')->name('shiftDetailsShow');
 
+    Route::get('/shiftDetailPrint', 'DashboardController@shiftDetailPrint')->name('shiftDetailPrint');
+
 });
 
 Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware' => 'hr'], function () {
