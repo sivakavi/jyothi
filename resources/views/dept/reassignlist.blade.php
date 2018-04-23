@@ -47,7 +47,7 @@
                     });
                 }
                 else{
-                    alert('please enter name');
+                    alert('please enter employee code fully...');
                 }
             });
              $(document).on('click', '.empreassign', function(e) {

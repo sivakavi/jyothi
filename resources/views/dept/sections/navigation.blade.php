@@ -54,7 +54,7 @@
                     <li>
                         <a href="{{ route('dept.otherDept') }}">
                             <i class="fa fa-exchange" aria-hidden="true"></i>
-                            Other Shift Assign
+                            Other Dept. Emp. Shift Assign
                         </a>
                     </li>
                     <li>
