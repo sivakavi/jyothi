@@ -44,15 +44,20 @@
     <h4> Result </h4>
         @if(count($missingDatas) || count($differDatas))
             @if(count($missingDatas))
+                <br/>
                 <div>
                 Missing Employee Codes are :
+                <br/>
                 <br/>
                  {{implode(', ', $missingDatas)}}  
                 </div>
             @endif
             @if(count($differDatas))
+                <br/>
+                <br/>
                 <div>
                 Differ Serial no are :
+                <br/>
                 <br/>
                  {{implode(', ', $differDatas)}}  
                 </div>
