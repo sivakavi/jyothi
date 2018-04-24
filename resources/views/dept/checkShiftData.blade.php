@@ -40,7 +40,25 @@
     </form>
 
     <div class="margin-top-40">
-    <table id ="records_table" class="table table-bordered"></table>
+    @if(isset($missingDatas) && isset($differDatas))
+    <h4> Result </h4>
+        @if(count($missingDatas) || count($differDatas))
+            @if(count($missingDatas))
+                <div>
+                Missing Employee Codes are {{implode(', ', $missingDatas)}}  
+                </div>
+            @endif
+            @if(count($differDatas))
+                <div>
+                Differ Serial no are {{implode(', ', $differDatas)}}  
+                </div>
+            @endif
+        @else
+            <div>
+                All Rrecords correct  
+            </div>
+        @endif
+    @endif
 </div>
 
 @endsection

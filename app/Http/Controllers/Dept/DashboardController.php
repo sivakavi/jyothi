@@ -682,24 +682,37 @@ class DashboardController extends Controller
             $punchRecords = $databaseRecords = [];
 			foreach($rows as $row){
                 if($row['ecode'] != null){
-                    $punchRecords[$row['ecode']]['date'] =  $row['punchdate']->format('Y-m-d');
+                    $punchRecords[$row['ecode']]['date'] =  strtotime($row['punchdate']->format('Y-m-d'));
                     $punchRecords[$row['ecode']]['shift'] = $row['shift'];
                     $punchRecords[$row['ecode']]['srno'] = $row['srno.'];
+                    $punchRecords[$row['ecode']]['ecode'] = $row['ecode'];
+                    $punchRecords[$row['ecode']][$punchRecords[$row['ecode']]['date']] = $row['shift'];
                 }
             }
         }
         $assignShifts = AssignShift::whereBetween('nowDate', [$fromDate, $toDate])->get();
         foreach ($assignShifts as $assignShift) {
-            $databaseRecords[$assignShift->employee->employee_id]['date'] = $assignShift->nowdate;
+            $databaseRecords[$assignShift->employee->employee_id]['date'] = strtotime($assignShift->nowdate);
             $databaseRecords[$assignShift->employee->employee_id]['shift'] = $assignShift->shift->allias;
+            $databaseRecords[$assignShift->employee->employee_id]['ecode'] = $assignShift->employee->employee_id;
+            $databaseRecords[$assignShift->employee->employee_id][strtotime($assignShift->nowdate)] = $assignShift->shift->allias;
         }
-        dd($databaseRecords);
-        $message = "All Employees created successfully";
-        if(count($existEmployees)){
-            $message = "These employee id ".implode(", ", $existEmployees)." are not inserted. Please check";
-        }
-        return redirect()->route('admin.employees.index')->with('message', $message);
+        // dd($databaseRecords,$punchRecords);
+        $missingDatas = $differDatas = [];
+        foreach ($punchRecords as $punchRecord) {
+            if(isset($databaseRecords[$punchRecord['ecode']])){
+                // dd($databaseRecords[$punchRecord['ecode']][$databaseRecords[$punchRecord['ecode']]['date']]);
+                if($databaseRecords[$punchRecord['ecode']][$databaseRecords[$punchRecord['ecode']]['date']] != $punchRecord[$punchRecord['date']]){
+                    $differDatas[] = (int)$punchRecord['srno'];
+                }
+            }
+            else{
+                $missingDatas[]=(int)$punchRecord['ecode'];
+            }
             
+        }
+        dd($differDatas, $missingDatas);
+        return view('dept.checkShiftData', compact('missingDatas', 'differDatas'));
     }
 
     public function changePassword()
