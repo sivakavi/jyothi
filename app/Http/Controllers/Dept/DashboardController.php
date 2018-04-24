@@ -702,9 +702,15 @@ class DashboardController extends Controller
         foreach ($punchRecords as $punchRecord) {
             if(isset($databaseRecords[$punchRecord['ecode']])){
                 // dd($databaseRecords[$punchRecord['ecode']][$databaseRecords[$punchRecord['ecode']]['date']]);
-                if($databaseRecords[$punchRecord['ecode']][$databaseRecords[$punchRecord['ecode']]['date']] != $punchRecord[$punchRecord['date']]){
+
+                if(isset($databaseRecords[$punchRecord['ecode']][$databaseRecords[$punchRecord['ecode']]['date']])){
+                    if($databaseRecords[$punchRecord['ecode']][$databaseRecords[$punchRecord['ecode']]['date']] != $punchRecord[$punchRecord['date']]){
+                        $differDatas[] = (int)$punchRecord['srno'];
+                    }
+                }else{
                     $differDatas[] = (int)$punchRecord['srno'];
                 }
+                
             }
             else{
                 $missingDatas[]=(int)$punchRecord['ecode'];

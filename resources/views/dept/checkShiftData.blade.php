@@ -21,10 +21,10 @@
     <form style="border: 4px solid #a1a1a1;margin-top: 15px;padding: 30px;" action="{{ route('dept.importExcel') }}" class="form-horizontal" method="post" enctype="multipart/form-data">
         <div class="row top_tiles margin-top-40">
             <div class="col-md-4">
-                <div>Bulk From: <input type="text" id="datepickerFrom" name="fromDate" required></div>
+                <div>Punch From: <input type="text" id="datepickerFrom" name="fromDate" required></div>
             </div>
             <div class="col-md-4">
-                <div>Bulk To: <input type="text" id="datepickerTo" name="toDate" required></div>
+                <div>Punch To: <input type="text" id="datepickerTo" name="toDate" required></div>
             </div>
             <div class="col-md-4">
                 <div><input type="file" name="import_file" required style="display: inline"/></div>
