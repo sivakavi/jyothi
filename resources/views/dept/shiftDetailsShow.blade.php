@@ -1,6 +1,6 @@
 @extends('dept.layouts.dept')
 
-@section('title', ' Shift Assign')
+@section('title', ' Shift Print')
 
 @section('content')
 <style>
@@ -14,6 +14,29 @@
 
 }
 
+#records_table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#records_table td, #records_table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#records_table tr:nth-child(even){background-color: #f2f2f2;}
+
+#records_table tr:hover {background-color: #ddd;}
+
+#records_table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
 
 </style>
 
@@ -21,16 +44,19 @@
 
     <div class="row top_tiles margin-top-40">
         <div class="col-md-3">
-            <div>Bulk From: <input type="text" id="datepickerFrom"></div>
+            <div>Shift From: <input type="text" id="datepickerFrom"></div>
         </div>
         <div class="col-md-3">
-            <div>Bulk To: <input type="text" id="datepickerTo"></div>
+            <div>Shift To: <input type="text" id="datepickerTo"></div>
         </div>
         <button type="button" class="btn btn-primary btn-round btn-sm empSearch"><i class="fa fa-search" aria-hidden="true"></i></button>
     </div>
 
     <div class="margin-top-40">
     <table id ="records_table" class="table table-bordered"></table>
+    <br/>
+    <br/>
+    <center><button id="printtable" type="button" style="display:none" class="btn btn-success">Print</button></center>
 </div>
 
 @endsection
@@ -99,6 +125,7 @@
                         });
 
                         $('#records_table').append(trHTML);
+                        $("#printtable").show();
                     }
                     else{
                         alert('Data Not Found');
@@ -107,6 +134,25 @@
                 },
             });
         });
+
+        $("#printtable").click(function(){
+            var divToPrint=document.getElementById("records_table");
+            newWin= window.open("");
+            newWin.document.write('<html>');
+            newWin.document.write('<head><style>');
+            newWin.document.write('#records_table {font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;border-collapse: collapse;width: 100%;}');
+            newWin.document.write('#records_table td, #records_table th {border: 1px solid #ddd;padding: 8px;}');
+            newWin.document.write('#records_table tr:hover {background-color: #ddd;}');
+            newWin.document.write('#records_table th {padding-top: 12px;padding-bottom: 12px;text-align: left;background-color: #4CAF50;color: white;}');
+            newWin.document.write('</style></head>');
+            newWin.document.write('<body >');
+            newWin.document.write(divToPrint.outerHTML);
+            newWin.document.write('</body>');
+            newWin.document.write('</html>');
+            newWin.print();
+            newWin.close();
+        });
+
       });
     </script>
 @endsection
