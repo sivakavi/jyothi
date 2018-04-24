@@ -2,7 +2,6 @@
 
 @section('title', 'Employee Based Report')
 
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style>
     .box-container {
         height: 250px;
@@ -149,8 +148,6 @@
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/dashboard.js')) }}
-	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-    <script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
     <script type="text/javascript">
 
         var xlfilename = "sample";

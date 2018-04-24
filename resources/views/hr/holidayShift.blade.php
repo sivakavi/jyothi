@@ -3,7 +3,6 @@
 @section('title', ' Shift Assign')
 
 @section('content')
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style>
 .tile-stats
 {
@@ -85,7 +84,6 @@
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/dashboard.js')) }}
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         
         function employeeDetailsArray(data) {

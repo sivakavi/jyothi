@@ -14,7 +14,6 @@
 @section('scripts')
     @parent
     {{ Html::script(mix('assets/admin/js/dashboard.js')) }}
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
         $(function () {
             $('.empSearch').click(function(e){
