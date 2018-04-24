@@ -66,20 +66,15 @@
 
                     <li>
                         <a href="{{ route('dept.shiftDetailsShow') }}">
-                            <i class="fa fa-exchange" aria-hidden="true"></i>
+                            <i class="fa fa-print" aria-hidden="true"></i>
                             Print Shift
                         </a>
                     </li>
 
-                    <li>
-                        <a href="{{ route('dept.checkShiftData') }}">
-                            <i class="fa fa-exchange" aria-hidden="true"></i>
-                            Check Shift
-                        </a>
-                    </li>
+                    
                     <li>
                         <a href="{{ route('dept.changePassword') }}">
-                            <i class="fa fa-exchange" aria-hidden="true"></i>
+                            <i class="fa fa-retweet" aria-hidden="true"></i>
                             Change Password
                         </a>
                     </li>

@@ -39,10 +39,25 @@
                             Shift Status
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('hr.holidayBatch') }}">
+                            <i class="fa fa-flag" aria-hidden="true"></i>
+                            Holiday Shift Status
+                        </a>
+                    </li>
+
                     <li>
                         <a href="{{ route('hr.assignEmpShiftAttendance') }}">
                             <i class="fa fa-calendar" aria-hidden="true"></i>
                             Shift Attendance
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('hr.checkShiftData') }}">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                            Check Shift
                         </a>
                     </li>
 
@@ -60,16 +75,11 @@
                         </a>
                     </li>
 
-                    <li>
-                        <a href="{{ route('hr.holidayBatch') }}">
-                            <i class="fa fa-bar-chart" aria-hidden="true"></i>
-                            Holiday Shift Status
-                        </a>
-                    </li>
+                    
 
                     <li>
                         <a href="{{ route('hr.changePassword') }}">
-                            <i class="fa fa-exchange" aria-hidden="true"></i>
+                            <i class="fa fa-retweet" aria-hidden="true"></i>
                             Change Password
                         </a>
                     </li>

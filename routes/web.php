@@ -143,9 +143,9 @@ Route::group(['prefix' => 'dept', 'as' => 'dept.', 'namespace' => 'Dept', 'middl
 
     Route::get('/shiftDetailPrint', 'DashboardController@shiftDetailPrint')->name('shiftDetailPrint');
 
-    Route::get('/checkShiftData', 'DashboardController@checkShiftData')->name('checkShiftData');
+    
 
-    Route::post('/importExcel', 'DashboardController@importExcel')->name('importExcel');
+    
 
     Route::get('/changePassword', 'DashboardController@changePassword')->name('changePassword');
 
@@ -185,4 +185,9 @@ Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware'
     Route::get('/changePassword', 'DashboardController@changePassword')->name('changePassword');
 
     Route::post('/postCredentials', 'DashboardController@postCredentials')->name('postCredentials');
+
+    Route::get('/checkShiftData', 'DashboardController@checkShiftData')->name('checkShiftData');
+
+    Route::post('/importExcel', 'DashboardController@importExcel')->name('importExcel');
+
 });

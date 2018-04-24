@@ -102,7 +102,7 @@
                     </li>
                     <li>
                         <a href="{{ route('admin.changePassword') }}">
-                            <i class="fa fa-exchange" aria-hidden="true"></i>
+                            <i class="fa fa-retweet" aria-hidden="true"></i>
                             Change Password
                         </a>
                     </li>

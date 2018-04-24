@@ -1,4 +1,4 @@
-@extends('dept.layouts.dept')
+@extends('hr.layouts.hr')
 
 @section('title', ' Shift Punch Records Compare')
 
@@ -18,7 +18,7 @@
 </style>
 
     <div class="page-header clearfix"></div>
-    <form style="border: 4px solid #a1a1a1;margin-top: 15px;padding: 30px;" action="{{ route('dept.importExcel') }}" class="form-horizontal" method="post" enctype="multipart/form-data">
+    <form style="border: 4px solid #a1a1a1;margin-top: 15px;padding: 30px;" action="{{ route('hr.importExcel') }}" class="form-horizontal" method="post" enctype="multipart/form-data">
         <div class="row top_tiles margin-top-40">
             <div class="col-md-4">
                 <div>Punch From: <input type="text" id="datepickerFrom" name="fromDate" required></div>
@@ -45,12 +45,16 @@
         @if(count($missingDatas) || count($differDatas))
             @if(count($missingDatas))
                 <div>
-                Missing Employee Codes are {{implode(', ', $missingDatas)}}  
+                Missing Employee Codes are :
+                <br/>
+                 {{implode(', ', $missingDatas)}}  
                 </div>
             @endif
             @if(count($differDatas))
                 <div>
-                Differ Serial no are {{implode(', ', $differDatas)}}  
+                Differ Serial no are :
+                <br/>
+                 {{implode(', ', $differDatas)}}  
                 </div>
             @endif
         @else

@@ -50,6 +50,11 @@
             </tr>
 
             <tr>
+                <th>Department</th>
+                <td>{{ $user->department->name }}</td>
+            </tr>
+
+            <tr>
                 <th>{{ __('views.admin.users.show.table_header_6') }}</th>
                 <td>{{ $user->created_at }} ({{ $user->created_at->diffForHumans() }})</td>
             </tr>

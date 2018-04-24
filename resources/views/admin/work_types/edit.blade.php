@@ -44,7 +44,7 @@
                                 </div>
                                 
                                 <div class="well well-sm margin-top-50">
-                                    <button type="submit" class="btn btn-primary btn-round btn-sm">Update work_type</button>
+                                    <button type="submit" class="btn btn-primary btn-round btn-sm">Update WorkType</button>
                                     <a class="btn btn-link pull-right" href="{{ route('admin.work_types.index') }}"><i class="glyphicon glyphicon-backward"></i>  Back</a>
                                 </div>
                             </div>

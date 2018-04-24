@@ -1,6 +1,6 @@
 @extends('hr.layouts.hr')
 
-@section('title', 'Shift Status List')
+@section('title', 'Holiday Shift Status List')
 <style>
     .box-style{
         border: 1px solid;

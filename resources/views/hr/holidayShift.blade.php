@@ -1,6 +1,6 @@
 @extends('hr.layouts.hr')
 
-@section('title', ' Shift Assign')
+@section('title', 'Holiday Shift Assign')
 
 @section('content')
 <style>
