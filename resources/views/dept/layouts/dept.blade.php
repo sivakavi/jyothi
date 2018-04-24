@@ -42,8 +42,11 @@
 @section('styles')
     {{ Html::style(mix('assets/admin/css/admin.css')) }}
     {{ Html::style(mix('assets/admin/css/dashboard.css')) }}
+    {{ Html::style('css/jquery-ui.css') }}
 @endsection
 
 @section('scripts')
     {{ Html::script(mix('assets/admin/js/admin.js')) }}
+    {{ Html::script('js/jquery-ui.js') }}
+    {{ Html::script('js/jquery.table2excel.min.js') }}
 @endsection
