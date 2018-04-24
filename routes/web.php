@@ -71,6 +71,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('/shiftDetailsChange', 'DashboardController@shiftDetailsChange')->name('shiftDetailsChange');
     Route::get('/employeeSearch', 'DashboardController@employeeSearch')->name('employeeSearch');
     Route::get('/employeeAdd', 'DashboardController@employeeAdd')->name('employeeAdd');
+
+    Route::get('/changePassword', 'DashboardController@changePassword')->name('changePassword');
+
+    Route::post('/postCredentials', 'DashboardController@postCredentials')->name('postCredentials');
 });
 
 
@@ -139,6 +143,14 @@ Route::group(['prefix' => 'dept', 'as' => 'dept.', 'namespace' => 'Dept', 'middl
 
     Route::get('/shiftDetailPrint', 'DashboardController@shiftDetailPrint')->name('shiftDetailPrint');
 
+    Route::get('/checkShiftData', 'DashboardController@checkShiftData')->name('checkShiftData');
+
+    Route::post('/importExcel', 'DashboardController@importExcel')->name('importExcel');
+
+    Route::get('/changePassword', 'DashboardController@changePassword')->name('changePassword');
+
+    Route::post('/postCredentials', 'DashboardController@postCredentials')->name('postCredentials');
+
 });
 
 Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware' => 'hr'], function () {
@@ -169,4 +181,8 @@ Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware'
     Route::get('/holidayShift', 'DashboardController@holidayShift')->name('holidayShift');
 
     Route::get('/holidayShiftAssign', 'DashboardController@holidayShiftAssign')->name('holidayShiftAssign');
+
+    Route::get('/changePassword', 'DashboardController@changePassword')->name('changePassword');
+
+    Route::post('/postCredentials', 'DashboardController@postCredentials')->name('postCredentials');
 });

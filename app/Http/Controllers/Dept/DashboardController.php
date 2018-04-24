@@ -18,6 +18,8 @@ use App\Leave;
 use App\Holiday;
 
 use Auth;
+use Hash;
+use Validator;
 use Illuminate\Support\Facades\Input;
 
 class DashboardController extends Controller
@@ -654,5 +656,106 @@ class DashboardController extends Controller
         // print_r($employee_datas);die;
         return \Response::json($employee_datas);
     }
-   
+    public function checkShiftData()
+	{
+        return view('dept.checkShiftData');
+    }
+    public function importExcel(Request $request)
+	{
+        $validator = Validator::make($request->all(), [
+            'import_file' => 'required|mimes:xlsx'
+        ]);
+
+        $fromDate      = Carbon::createFromFormat('d/m/Y', $request->get('fromDate'))->format('Y-m-d');
+        $toDate        = Carbon::createFromFormat('d/m/Y', $request->get('toDate'))->format('Y-m-d');
+
+        
+        
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+		if ($request->hasFile('import_file')) {
+			$path = $request->file('import_file')->getRealPath();
+			$rows = \Excel::load($path, function($reader) {
+			})->toArray();
+			$employees = [];
+			$existEmployees = [];
+            $employeeIds = [];
+            $punchRecords = $databaseRecords = [];
+			foreach($rows as $row){
+                if($row['ecode'] != null){
+                    $punchRecords[$row['ecode']]['date'] =  $row['punchdate']->format('Y-m-d');
+                    $punchRecords[$row['ecode']]['shift'] = $row['shift'];
+                    $punchRecords[$row['ecode']]['srno'] = $row['srno.'];
+                }
+            }
+        }
+        $assignShifts = AssignShift::whereBetween('nowDate', [$fromDate, $toDate])->get();
+        foreach ($assignShifts as $assignShift) {
+            $databaseRecords[$assignShift->employee->employee_id]['date'] = $assignShift->nowdate;
+            $databaseRecords[$assignShift->employee->employee_id]['shift'] = $assignShift->shift->allias;
+        }
+        dd($databaseRecords);
+        $message = "All Employees created successfully";
+        if(count($existEmployees)){
+            $message = "These employee id ".implode(", ", $existEmployees)." are not inserted. Please check";
+        }
+        return redirect()->route('admin.employees.index')->with('message', $message);
+            
+    }
+
+    public function changePassword()
+    {
+        return view('dept.changePassword');
+    }
+    public function admin_credential_rules(array $data)
+    {
+        $messages = [
+            'current-password.required' => 'Please enter current password',
+            'password.required' => 'Please enter password',
+        ];
+
+        $validator = Validator::make($data, [
+            'current-password' => 'required',
+            'password' => 'required|same:password',
+            'password_confirmation' => 'required|same:password',     
+        ], $messages);
+
+        return $validator;
+    } 
+    public function postCredentials(Request $request)
+    {
+        if(Auth::Check())
+        {
+            $request_data = $request->All();
+            $validator = $this->admin_credential_rules($request_data);
+            if($validator->fails())
+            {
+                return redirect()->route('dept.changePassword')
+                        ->withErrors($validator)
+                        ->withInput();
+            }
+            else
+            {  
+                $current_password = Auth::User()->password;
+                $message = '';
+                if(Hash::check($request_data['current-password'], $current_password))
+                {           
+                    $user_id = Auth::User()->id;                       
+                    $obj_user = User::find($user_id);
+                    $obj_user->password = Hash::make($request_data['password']);;
+                    $obj_user->save(); 
+                    $message = "Password Changed Successfully";
+                }
+                else
+                {           
+                    $error = array('current-password' => 'Please enter correct current password');
+                    $message = "Old Password Mismatch";                      
+                }
+                return redirect()->route('dept.changePassword')->with('message', $message);
+            }        
+        }
+        else
+        {
+            return redirect()->to('/');
+        }    
+    }
 }

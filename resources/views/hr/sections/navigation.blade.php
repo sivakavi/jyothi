@@ -68,6 +68,13 @@
                     </li>
 
                     <li>
+                        <a href="{{ route('hr.changePassword') }}">
+                            <i class="fa fa-exchange" aria-hidden="true"></i>
+                            Change Password
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="{{ route('logout') }}">
                             <i class="fa fa-sign-out" aria-hidden="true"></i>
                             {{ __('views.backend.section.header.menu_0') }}

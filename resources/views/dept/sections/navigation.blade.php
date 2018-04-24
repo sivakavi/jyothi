@@ -70,6 +70,20 @@
                             Print Shift
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('dept.checkShiftData') }}">
+                            <i class="fa fa-exchange" aria-hidden="true"></i>
+                            Check Shift
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('dept.changePassword') }}">
+                            <i class="fa fa-exchange" aria-hidden="true"></i>
+                            Change Password
+                        </a>
+                    </li>
+                    
                     <li>
                         <a href="{{ route('logout') }}">
                             <i class="fa fa-sign-out" aria-hidden="true"></i>
