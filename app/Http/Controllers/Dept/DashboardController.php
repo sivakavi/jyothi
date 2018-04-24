@@ -711,7 +711,7 @@ class DashboardController extends Controller
             }
             
         }
-        dd($differDatas, $missingDatas);
+        // dd($differDatas, $missingDatas);
         return view('dept.checkShiftData', compact('missingDatas', 'differDatas'));
     }
 
