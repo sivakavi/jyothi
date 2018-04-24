@@ -42,7 +42,12 @@ class UserController extends BaseControllers
      */
     public function store(Request $request)
     {
-        $userDetails = $request->only(['name', 'email', 'password', 'active', 'confirmed', 'department_id']);
+        if($request->input("role") == "hr"){
+            $userDetails = $request->only(['name', 'email', 'password', 'active', 'confirmed']);
+        }else{
+            $userDetails = $request->only(['name', 'email', 'password', 'active', 'confirmed', 'department_id']);
+        }
+        
         $userDetails['password'] = bcrypt($userDetails['password']);
         $role = Role::where('name', $request->only('role'))->first();
         \DB::transaction(function() use ($userDetails, $role) {

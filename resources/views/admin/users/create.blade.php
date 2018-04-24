@@ -1,5 +1,7 @@
 @extends('admin.layouts.admin')
 
+@section('title', 'Users / Create')
+
 @section('content')
     @if (\Session::has('success'))
         <div class="alert alert-success">
@@ -9,21 +11,9 @@
         </div>
     @endif
     <div class="page-header">
-        <h1>Users / Create </h1>
-        @if(app('request')->input('role')=="student")
-            <a href="{{ asset('excel/user.xlsx') }}">Sample User Excel</a>
-            <form style="border: 4px solid #a1a1a1;margin-top: 15px;padding: 30px;" action="{{ route('admin.users.importExcel') }}" class="form-horizontal" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <input type="file" name="import_file" />
-                @if($errors->has("import_file"))
-                    <span class="help-block">{{ $errors->first("import_file") }}</span>
-                @endif
-                <br/>
-                <button class="btn btn-primary">Import File</button>
-            </form>
-        @endif
     </div>
     @include('error')
+    <div class="margin-top-30">
     <form class="form-horizontal" method="post" action="{{ route('admin.users.store') }}" enctype="multipart/form-data">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <div class="form-group">
@@ -89,6 +79,7 @@
             </div>
         </div>
     </form>
+    </div>
 @endsection
 
 @section('scripts')
