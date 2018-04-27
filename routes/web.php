@@ -75,6 +75,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('/changePassword', 'DashboardController@changePassword')->name('changePassword');
 
     Route::post('/postCredentials', 'DashboardController@postCredentials')->name('postCredentials');
+
+    Route::get('/shiftBulkDetailsChange', 'DashboardController@shiftBulkDetailsChange')->name('shiftBulkDetailsChange');
 });
 
 

@@ -174,8 +174,6 @@ class DashboardController extends Controller
             $status_id = $employeedetail['emp_status'];
             $empDatepickerFrom      = Carbon::createFromFormat('d/m/Y', $employeedetail['empDatepickerFrom']);
             $empDatepickerTo      = Carbon::createFromFormat('d/m/Y', $employeedetail['empDatepickerTo']);
-            // $empDatepickerFrom = new \DateTime( $employeedetail['empDatepickerFrom']);
-            // $empDatepickerTo = new \DateTime( $employeedetail['empDatepickerTo']);
             $this->employeeShiftInsert($employee_id, $work_type_id, $shift_id, $status_id, $empDatepickerFrom, $empDatepickerTo);
         }
         return 'true';
@@ -261,8 +259,11 @@ class DashboardController extends Controller
         if($leave_id != 'false'){
             $assignshift->leave_id = $leave_id; 
         }
-        if($othours != 'false'){
+        if($othours != '0'){
             $assignshift->otHours = $othours; 
+            if($assignshift->employee->department->id != $this->user->department->id){
+                $assignshift->ot_department_id = $this->user->department->id;;
+            }
         }
         $assignshift->save();
         return 'true';
@@ -298,8 +299,11 @@ class DashboardController extends Controller
             if($leave_id != 'false'){
                 $assignshift->leave_id = $leave_id; 
             }
-            if($othours != 'false'){
+            if($othours != '0'){
                 $assignshift->otHours = $othours; 
+                if($assignshift->employee->department->id != $this->user->department->id){
+                    $assignshift->ot_department_id = $this->user->department->id;;
+                }
             }
             $assignshift->save();   
         }
@@ -336,6 +340,10 @@ class DashboardController extends Controller
             }
         }
         AssignShift::insert($employeeRecords);
+        if(count($employeeRecords)==0){
+            $batch->delete();
+            return 'false';
+        }
         return 'true';
     }
 
@@ -353,7 +361,7 @@ class DashboardController extends Controller
         if($leave_id == 'false'){
             $leave_id = NULL; 
         }
-        if($otHours == 'false'){
+        if($otHours == '0'){
             $otHours = NULL; 
         }
         $emp = AssignShift::where('employee_id', $empId)->where('nowdate', $empDate)->first();
@@ -364,11 +372,17 @@ class DashboardController extends Controller
             $emp->otHours = $otHours;
             $emp->status_id = $status_id;
             $emp->work_type_id = $work_type_id;
-            
+            if($otHours){
+                $emp->ot_department_id = $department_id;
+            }
+
             $emp->save();
             return 'true';
         }
         else{
+            if(!is_null($otHours)){
+                return 'false';
+            }
             $employee_details = Employee::find($empId);
             $batch = new Batch();
             $defaultshifts = Employee::find($empId)->department->shifts->first->get()->toArray();
@@ -554,6 +568,10 @@ class DashboardController extends Controller
                 }
             }
             AssignShift::insert($employeeRecords);
+            if(count($employeeRecords)==0){
+                $batch->delete();
+                return 'false';
+            }
             return 'true';
         }
         

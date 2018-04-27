@@ -27,6 +27,11 @@ use Validator;
 
 class DashboardController extends Controller
 {
+
+    private $department_id;
+
+    private $shift_id;
+
     /**
      * Create a new controller instance.
      *
@@ -117,20 +122,26 @@ class DashboardController extends Controller
     {
         $department_id = $request->get('department_id');
         $this->department_id = $department_id;
+        $pendingBatches = Batch::where('status', 'pending')->pluck('id')->toArray();
         $statuses = Status::where('department_id', $department_id)->get();
         $leaves = Leave::all();
+        $work_types = WorkType::where('department_id', $department_id)->get();
         $date = $request->get('date');
-        $shift_id = $request->get('shift_id');
+        $this->shift_id = $request->get('shift_id');
         $employees = AssignShift::where('nowdate', $date)
-                                ->where('shift_id', $shift_id)
+                                ->where(function ($q) {
+                                    $q->where('shift_id', $this->shift_id)
+                                    ->orWhere('changed_shift_id', $this->shift_id);
+                                })
                                 ->where(function ($q) {
                                     $q->where('department_id', $this->department_id)
                                     ->orWhere('changed_department_id', $this->department_id);
-                                })->paginate(10)
+                                })->whereNotIn('batch_id', $pendingBatches)->paginate(10)
                                 ;
         $variables = ['employees' => $employees->appends(Input::except('page')),
                         'statuses' => $statuses,
                         'leaves' => $leaves,
+                        'work_types' => $work_types,
                      ];
         return view('admin.shiftDetails', $variables);
     }
@@ -152,7 +163,7 @@ class DashboardController extends Controller
     }
     public function shiftDetailsChange(Request $request)
     {
-
+        $department_id = $request->get('department_id');
         $status_id = $request->get('status');
         $leave_id =  $request->get('leave');
         $id  = $request->get('assignShiftId');
@@ -165,27 +176,106 @@ class DashboardController extends Controller
         if($leave_id != 'false'){
             $assignshift->leave_id = $leave_id; 
         }
-        if($othours != 'false'){
-            $assignshift->otHours = $othours; 
+        if($othours != '0'){
+            $assignshift->otHours = $othours;
+            if($assignshift->employee->department->id != $department_id){
+                $assignshift->ot_department_id = $department_id;
+            } 
         }
         $assignshift->save();
         return 'true';
 
     }
 
+    public function shiftBulkDetailsChange(Request $request)
+    {
+        $department_id = $request->get('department_id');
+        $this->department_id = $department_id;
+        $this->shift_id = $request->get('shift_id');
+        $date      = $request->get('empDate');
+        $pendingBatches = Batch::where('status', 'pending')->pluck('id')->toArray();
+        $employees = AssignShift::where('nowdate', $date)
+                                ->where(function ($q) {
+                                    $q->where('shift_id', $this->shift_id)
+                                    ->orWhere('changed_shift_id', $this->shift_id);
+                                })
+                                ->where(function ($q) {
+                                    $q->where('department_id', $this->department_id)
+                                    ->orWhere('changed_department_id', $this->department_id);
+                                })->whereNotIn('batch_id', $pendingBatches)->pluck('id')->toArray()
+                                ;
+        $status_id = $request->get('status');
+        $leave_id =  $request->get('leave');
+        $id  = $request->get('assignShiftId');
+        $othours = $request->get('othours');
+        $work_type_id = $request->get('emp_work_type');
+        foreach ($employees as $key => $id) {
+            $assignshift = AssignShift::find($id);
+            $assignshift->status_id = $status_id;
+            $assignshift->work_type_id = $work_type_id;
+            $assignshift->leave_id = NULL;
+            $assignshift->otHours = NULL;
+            if($leave_id != 'false'){
+                $assignshift->leave_id = $leave_id; 
+            }
+            if($othours != '0'){
+                $assignshift->otHours = $othours; 
+                if($assignshift->employee->department->id != $department_id){
+                    $assignshift->ot_department_id = $department_id;
+                }
+            }
+            $assignshift->save();   
+        }
+        return 'true';
+    }
+
     public function employeeAdd(Request $request)
     {
-        $empId = $request->get('empId');
         $department_id = $request->get('department_id');
-        $empDate = new \DateTime($request->get('empDate'));
+        $empId = $request->get('emp_id');
+        $work_type_id = $request->get('emp_work_type');
+        $status_id = $request->get('status');
+        $leave_id = $request->get('leave');
+        $otHours = $request->get('othours');
+        $shift_id = $request->get('shift_id');
+        // $empDate = new \DateTime($request->get('empDate'));
+        $empDate      = $request->get('empDate');
+        if($leave_id == 'false'){
+            $leave_id = NULL; 
+        }
+        if($otHours == '0'){
+            $otHours = NULL; 
+        }
         $emp = AssignShift::where('employee_id', $empId)->where('nowdate', $empDate)->first();
         if($emp){
             $emp->changed_department_id = $department_id;
+            $emp->changed_shift_id = $shift_id;
+            $emp->leave_id = $leave_id;
+            $emp->otHours = $otHours;
+            $emp->status_id = $status_id;
+            $emp->work_type_id = $work_type_id;
+            if($otHours){
+                $emp->ot_department_id = $department_id;
+            }
             $emp->save();
             return 'true';
         }
         else{
-            return 'false';
+            if(!is_null($otHours)){
+                return 'false';
+            }
+            $employee_details = Employee::find($empId);
+            $defaultshifts = Employee::find($empId)->department->shifts->first->get()->toArray();
+            $batch = new Batch();
+            $batch->department_id = $defaultshifts['department_id'];
+            $batch->employee_id = $empId;
+            $batch->fromDate = $empDate;
+            $batch->toDate = $empDate;
+            $batch->status = 'confirmed';
+            $batch->save();
+            $data = array('department_id'=>$defaultshifts['department_id'], 'batch_id'=> $batch->id, 'employee_id'=> $empId, 'shift_id'=> $defaultshifts['id'], 'work_type_id'=> $work_type_id, 'status_id'=> $status_id, 'leave_id'=> $leave_id, 'otHours'=> $otHours, 'nowdate'=> $empDate, 'changed_department_id' => $department_id, 'changed_shift_id' => $shift_id);
+            AssignShift::insert($data);
+            return 'true';
         }
     }
 

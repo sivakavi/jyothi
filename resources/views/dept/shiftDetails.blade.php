@@ -42,8 +42,8 @@
 	                @endforeach
 	            </select>
 
-	            <div class="hide othours">
-	            	OT Hours : <input type="number" name="othours" id="othours">
+	            <div class="othours">
+	            	OT Hours : <input type="number" name="othours" id="othours" value="0">
 	            </div>
 	        </div>
 	        <div class="modal-footer">
@@ -70,7 +70,7 @@
         <th>Assigned Department</th>
         <th>Work Type</th>
         <th>Status</th>
-        <th>Leave</th>
+        <th class="hide">Leave</th>
         <th>OtHours</th>
         <th></th>
       </tr>
@@ -102,7 +102,7 @@
                 </td>
 
                 
-                <td class="">
+                <td class="hide">
                 	@if($empShift->leave)
                     	{{ $empShift->leave->name }}
                     @endif
@@ -159,7 +159,7 @@
                 {
                     status = $('.emp_status').find("option:selected").text();
                     leave = false;
-                    othours = false;
+                    othours = 0;
                     assignShiftId = $('#assignShift').val();
                     ajaxURL = "{{route('dept.shiftDetailsChange')}}";
                     if(assignShiftId == "" && $('#bulk_change').val() == 0){
@@ -173,9 +173,9 @@
                     empId = $('#emp_id').val();
                     shift_id = $('#shiftID').val();
                     if(status == 'Leave'){
-                        leave = $('.emp_leave').val();
+                        leave = false;
                     }
-                    else if(status == 'OT'){
+                    else if($('#othours').val()){
                         othours = $('#othours').val();
                     }
                     status = $('.emp_status').val();
@@ -192,6 +192,10 @@
                             $('#myModal').modal('toggle');
                             location.reload();
                           }
+						  else{
+	                  		alert('Employee Shift Not Assingned this date');
+							$('#myModal').modal('toggle');
+	                  	  }
                       },
                     });
                 } else{
@@ -217,7 +221,7 @@
 			});
     	   	$('.emp_status').on('change', function() {
     	   		var status = $(this).find("option:selected").text();
-    	   		$('.othours').addClass('hide');
+    	   		// $('.othours').addClass('hide');
     	   		$('.emp_leave').addClass('hide');
     	   		if(status == 'Leave'){
     	   			$('.emp_leave').removeClass('hide');
