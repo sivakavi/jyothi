@@ -42,7 +42,7 @@
 	                @endforeach
 	            </select>
 
-	            <div class="othours">
+	            <div class="hide othours">
 	            	OT Hours : <input type="number" name="othours" id="othours" value="0">
 	            </div>
 	        </div>
@@ -175,7 +175,7 @@
                     if(status == 'Leave'){
                         leave = false;
                     }
-                    else if($('#othours').val()){
+                    else if(status == 'OT'){
                         othours = $('#othours').val();
                     }
                     status = $('.emp_status').val();
@@ -221,7 +221,7 @@
 			});
     	   	$('.emp_status').on('change', function() {
     	   		var status = $(this).find("option:selected").text();
-    	   		// $('.othours').addClass('hide');
+    	   		$('.othours').addClass('hide');
     	   		$('.emp_leave').addClass('hide');
     	   		if(status == 'Leave'){
     	   			$('.emp_leave').removeClass('hide');
