@@ -34,8 +34,8 @@
                                 <td>{{$shift->name}}</td>
                                 <td>{{$shift->department->name}}</td>
                                 <td>{{$shift->allias}}</td>
-                                <td>{{date('g:i a', strtotime($shift->intime))}}</td>
-                                <td>{{date('g:i a', strtotime($shift->outtime))}}</td>
+                                <td>{{date('H:i', strtotime($shift->intime))}}</td>
+                                <td>{{date('H:i', strtotime($shift->outtime))}}</td>
                                 <td class="text-right">
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.shifts.show', $shift->id) }}"><i class="glyphicon glyphicon-eye-open"></i> View</a>
                                     <a class="btn btn-xs btn-warning" href="{{ route('admin.shifts.edit', $shift->id) }}"><i class="glyphicon glyphicon-edit"></i> Edit</a>

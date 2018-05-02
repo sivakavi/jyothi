@@ -215,9 +215,11 @@
 				$('#bulk_change').val('0');
 			});
 			$(document).on('click', '#empbulkassign', function(e) {
-				$('#bulk_change').val('1');
-				$('.modal-title').text('Bulk Changes')
-				$('#myModal').modal('toggle');
+				if($('#employeeShift tbody').children().length != 0){
+					$('#bulk_change').val('1');
+					$('.modal-title').text('Bulk Changes')
+					$('#myModal').modal('toggle');
+				}
 			});
     	   	$('.emp_status').on('change', function() {
     	   		var status = $(this).find("option:selected").text();

@@ -121,7 +121,19 @@
                         var trHTML = '<tr><th>Date</th><th>Employee Code</th><th>Employee Name</th><th>Shift Code</th><th>Shift Name</th><th>Department Code</th><th>Department Name</th></tr>';
                         $.each(data, function (i, item) {
                             trHTML += '';
-                            trHTML += '<tr><td>' + item.date + '</td><td class="emp_name">' + item.emp_code + '</td><td>' + item.emp_name + '</td><td>' + item.shift_code + '</td><td>' + item.shift_name + '</td><td>' + item.department_code + '</td><td>' + item.department_name + '</td></tr>';
+                            var today = new Date(item.date);
+                            var dd = today.getDate();
+                            var mm = today.getMonth()+1;
+
+                            var yyyy = today.getFullYear();
+                            if(dd<10){
+                                dd='0'+dd;
+                            } 
+                            if(mm<10){
+                                mm='0'+mm;
+                            } 
+                            var today = dd+'-'+mm+'-'+yyyy;
+                            trHTML += '<tr><td>' + today + '</td><td class="emp_name">' + item.emp_code + '</td><td>' + item.emp_name + '</td><td>' + item.shift_code + '</td><td>' + item.shift_name + '</td><td>' + item.department_code + '</td><td>' + item.department_name + '</td></tr>';
                         });
 
                         $('#records_table').append(trHTML);
