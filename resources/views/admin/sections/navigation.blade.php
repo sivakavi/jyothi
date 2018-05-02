@@ -43,7 +43,7 @@
                     <li>
                         <a href="{{ route('admin.departments.index') }}">
                             <i class="fa fa-institution" aria-hidden="true"></i>
-                            Departments
+                            Departments ( UNIT )
                         </a>
                     </li>
                     <li>
