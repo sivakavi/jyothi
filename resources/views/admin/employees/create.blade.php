@@ -10,6 +10,9 @@
 
     <div class="row margin-top-30">
         <div class="col-md-8 center-margin">
+            <a href={{ asset('assets/demo/DemoEmployee.xlsx') }}><button class="btn btn-success" style="float:right;">Download Sample File</button></a>
+            <br/>
+            <br/>
             <form style="border: 4px solid #a1a1a1;margin-top: 15px;padding: 30px;" action="{{ route('admin.employees.importExcel') }}" class="form-horizontal" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="file" name="import_file" />
@@ -18,7 +21,6 @@
                 @endif
                 <br/>
                 <button class="btn btn-primary">Import File</button>
-                <a href={{ asset('assets/demo/DemoEmployee.xlsx') }}><button class="btn btn-success" style="float:right;">Download Sample File</button></a>
             </form>
             <form class="form-horizontal form-label-left" action="{{ route('admin.employees.store') }}" method="POST">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
