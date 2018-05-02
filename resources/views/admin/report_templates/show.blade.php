@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Leave Show')
+@section('title', 'Report Template Show')
 
 @section('content')
 <div class="page-header clearfix"></div>
@@ -8,7 +8,6 @@
         <div class="col-md-8 col-sm-12 col-xs-12 center-margin">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>{{$leave->name}} <small>Details</small></h2>
                         <ul class="nav navbar-right">
                             <li class="cursor-pointer"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -21,11 +20,15 @@
                         <tbody>
                             <tr>
                             <th scope="row">ID</th>
-                            <td>{{$leave->id}}</td>
+                            <td>{{$rt->id}}</td>
                             </tr>
                             <tr>
                             <th scope="row">NAME</th>
-                            <td>{{$leave->name}}</td>
+                            <td>{{$rt->name}}</td>
+                            </tr>
+                            <tr>
+                            <th scope="row">FIELDS</th>
+                            <td>{{$rt->frontend_data}}</td>
                             </tr>
                             <tr>
                         </tbody>
@@ -35,5 +38,5 @@
         </div>
     </div>
 
-    <a class="btn btn-link" href="{{ route('admin.leaves.index') }}"><i class="glyphicon glyphicon-backward"></i>  Back</a>
+    <a class="btn btn-link" href="{{ route('admin.report_templates.index') }}"><i class="glyphicon glyphicon-backward"></i>  Back</a>
 @endsection

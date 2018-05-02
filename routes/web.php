@@ -77,6 +77,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('/postCredentials', 'DashboardController@postCredentials')->name('postCredentials');
 
     Route::get('/shiftBulkDetailsChange', 'DashboardController@shiftBulkDetailsChange')->name('shiftBulkDetailsChange');
+
+    Route::post('/saveTemplate', 'ReportTemplateController@saveTemplate')->name('saveTemplate');
+
+    Route::resource('report_templates', 'ReportTemplateController');
 });
 
 

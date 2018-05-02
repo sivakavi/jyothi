@@ -58,12 +58,12 @@
                             Categories
                         </a>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a href="{{ route('admin.leaves.index') }}">
                             <i class="fa fa-question-circle" aria-hidden="true"></i>
                             Leave
                         </a>
-                    </li>
+                    </li> -->
                     <li>
                         <a href="{{ route('admin.shifts.index') }}">
                             <i class="fa fa-cubes" aria-hidden="true"></i>
@@ -92,6 +92,12 @@
                         <a href="{{ route('admin.employees.index') }}">
                             <i class="fa fa-child" aria-hidden="true"></i>
                             Employee
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.report_templates.index') }}">
+                            <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                            Report Template
                         </a>
                     </li>
                     <li>
