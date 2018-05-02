@@ -30,7 +30,7 @@
         <th>Category</th>
         <th>Shift</th>
         <th>Status</th>
-        <th>Work Type</th>
+        <th>Process</th>
         <th>From Date</th>
         <th>To Date</th>
         <th></th>

@@ -53,7 +53,7 @@
                         <h4>{{ $departmentData['name']}} Department Details</h4>
                         <h5>Present - {{ isset($departmentData['present']) ? $departmentData['present']:'0'}}</h6>
                         <h5 style="margin-bottom: 25px;">Absent - {{ isset($departmentData['absent']) ? $departmentData['absent']:'0'}}</h6>
-                        <h6 style="font-weight: 900;">Worktypes</h6>
+                        <h6 style="font-weight: 900;">Process</h6>
                         @foreach ($departmentData as $key => $value)
                             @if($key != 'name' && $key != 'present' && $key != 'absent') 
                                 <h6>{{$key}} - {{$value}}</h6>

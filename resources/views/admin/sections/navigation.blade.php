@@ -85,7 +85,7 @@
                     <li>
                         <a href="{{ route('admin.work_types.index') }}">
                             <i class="fa fa-bolt" aria-hidden="true"></i>
-                            Work Type
+                            Process
                         </a>
                     </li>
                     <li>

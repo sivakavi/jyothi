@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'WorkType Update Form')
+@section('title', 'Process Update Form')
 
 @section('content')
     <div class="page-header clearfix">
@@ -17,7 +17,7 @@
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>WorkType Update Form</h2>
+                                <h2>Process Update Form</h2>
                                 <ul class="nav navbar-right">
                                 <li class="cursor-pointer"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                 </li>
@@ -44,7 +44,7 @@
                                 </div>
                                 
                                 <div class="well well-sm margin-top-50">
-                                    <button type="submit" class="btn btn-primary btn-round btn-sm">Update WorkType</button>
+                                    <button type="submit" class="btn btn-primary btn-round btn-sm">Update Process</button>
                                     <a class="btn btn-link pull-right" href="{{ route('admin.work_types.index') }}"><i class="glyphicon glyphicon-backward"></i>  Back</a>
                                 </div>
                             </div>

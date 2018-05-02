@@ -62,6 +62,13 @@
                     </li>
 
                     <li>
+                        <a href="{{ route('hr.shiftDetailsShow') }}">
+                            <i class="fa fa-print" aria-hidden="true"></i>
+                            Print Shift
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="{{ route('hr.reportPage') }}">
                             <i class="fa fa-bar-chart" aria-hidden="true"></i>
                             Report

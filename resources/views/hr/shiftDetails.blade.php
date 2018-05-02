@@ -22,7 +22,7 @@
 	        <div class="modal-body">
 	        	<input type="hidden" id="assignShift">
                 <select class="form-control emp_work_type">
-                    <option value=""> Please Select Work Type</option>
+                    <option value=""> Please Select Process</option>
                     @foreach($work_types as $work_type)
                         <option value="{{$work_type->id}}">{{$work_type->name}}</option>
                     @endforeach
@@ -69,7 +69,7 @@
         <th>Category</th>
         <th>Employee Department</th>
         <th>Assigned Department</th>
-        <th>Work Type</th>
+        <th>Process</th>
         <th>Status</th>
         <th class="hide">Leave</th>
         <th>OtHours</th>
@@ -203,7 +203,7 @@
                       },
                     });
                 } else{
-                    alert("Please select status and worktype");
+                    alert("Please select status and process");
                 }
     	   	});
     	   	 $(document).on('click', '.empassign', function(e) {

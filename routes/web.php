@@ -192,4 +192,8 @@ Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware'
 
     Route::post('/importExcel', 'DashboardController@importExcel')->name('importExcel');
 
+    Route::get('/shiftDetailsShow', 'DashboardController@shiftDetailsShow')->name('shiftDetailsShow');
+
+    Route::get('/shiftDetailPrint', 'DashboardController@shiftDetailPrint')->name('shiftDetailPrint');
+
 });

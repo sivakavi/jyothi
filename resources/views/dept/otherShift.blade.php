@@ -157,7 +157,7 @@
 							if(data!=""){
 								$('#records_table').show();
 								$('#records_table').html('');
-								var trHTML = '<tr><th>Employee Id</th><th>Employee Name</th>  <th>Employee Department</th><th> Shift</th><th> Worktype</th><th> Status</th><th></th></tr>';
+								var trHTML = '<tr><th>Employee Id</th><th>Employee Name</th>  <th>Employee Department</th><th> Shift</th><th> Process</th><th> Status</th><th></th></tr>';
 						        $.each(data, function (i, item) {
 						        	trHTML += '';
 						            trHTML += '<tr><td class="empSearchId">' + item.id + '</td><td class="emp_name">' + item.name + '</td><td>' + item.department_name + '</td>' +

@@ -67,7 +67,7 @@
                                     </div>
 
                                     <div class="form-group @if($errors->has('department_id')) has-error @endif">
-                                        <label for="name-field">Work type</label>
+                                        <label for="name-field">Process</label>
                                         <select class="form-control work_type" name="work_type_id">
                                             @foreach($work_types as $work_type)
                                                 <option value="{{$work_type->id}}" @if($batches['work_type_id'] == $work_type->id ) selected @endif>{{$work_type->name}}</option>
