@@ -3,7 +3,9 @@
 @section('title', __('views.admin.users.show.title', ['name' => $user->name]))
 
 @section('content')
-    <div class="row">
+    <div class="page-header clearfix">
+    </div>
+    <div class="row" style="margin-top:30px;">
         <table class="table table-striped table-hover">
             <tbody>
 
@@ -49,10 +51,15 @@
                 </td>
             </tr>
 
-            <tr>
-                <th>Department</th>
-                <td>{{ $user->department->name }}</td>
-            </tr>
+            @if( $user->roles->pluck('name')->implode(',') == 'dept')
+                <tr>
+                    <th>Department</th>
+                    <td>{{ $user->department->name }}</td>
+                </tr>
+            @else
+                <tr/>
+            @endif
+                    
 
             <tr>
                 <th>{{ __('views.admin.users.show.table_header_6') }}</th>
@@ -66,4 +73,6 @@
             </tbody>
         </table>
     </div>
+
+    <a class="btn btn-link" href="{{ route('admin.users') }}"><i class="glyphicon glyphicon-backward"></i>  Back</a>
 @endsection
