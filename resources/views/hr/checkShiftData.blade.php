@@ -18,6 +18,10 @@
 </style>
 
     <div class="page-header clearfix"></div>
+    <div style="margin-top:20px;">
+    <a href={{ asset('assets/demo/DemoPunch.xlsx') }}><button class="btn btn-success" style="float:right;">Download Sample File</button></a>
+    <br/>
+    <br/>
     <form style="border: 4px solid #a1a1a1;margin-top: 15px;padding: 30px;" action="{{ route('hr.importExcel') }}" class="form-horizontal" method="post" enctype="multipart/form-data">
         <div class="row top_tiles margin-top-40">
             <div class="col-md-4">
@@ -38,6 +42,7 @@
             <button class="btn btn-primary">Import File</button>
         </div>
     </form>
+    </div>
 
     <div class="margin-top-40">
     @if(isset($missingDatas) && isset($differDatas))

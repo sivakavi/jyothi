@@ -18,6 +18,7 @@
                 @endif
                 <br/>
                 <button class="btn btn-primary">Import File</button>
+                <a href={{ asset('assets/demo/DemoEmployee.xlsx') }}><button class="btn btn-success" style="float:right;">Download Sample File</button></a>
             </form>
             <form class="form-horizontal form-label-left" action="{{ route('admin.employees.store') }}" method="POST">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">

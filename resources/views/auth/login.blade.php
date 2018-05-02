@@ -28,12 +28,12 @@
                             <input id="password" type="password" class="form-control" name="password"
                                    placeholder="{{ __('views.auth.login.input_1') }}" required>
                         </div>
-                        <div class="checkbox al_left">
+                        <!-- <div class="checkbox al_left">
                             <label>
                                 <input type="checkbox"
                                        name="remember" {{ old('remember') ? 'checked' : '' }}> {{ __('views.auth.login.input_2') }}
                             </label>
-                        </div>
+                        </div> -->
 
                         @if (session('status'))
                             <div class="alert alert-success">
@@ -52,6 +52,8 @@
                             <!-- <a class="reset_pass" href="{{ route('password.request') }}">
                                 {{ __('views.auth.login.action_1') }}
                             </a> -->
+
+                            
                         </div>
 
                         <div class="clearfix"></div>
