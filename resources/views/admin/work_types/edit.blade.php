@@ -35,7 +35,7 @@
 
                                 <div class="form-group @if($errors->has('department_id')) has-error @endif">
                                     <label for="name-field">Department</label>
-                                    <select class="form-control" name="department_id" id="department_id">
+                                    <select class="form-control" name="department_id" id="department_id" required>
                                         <option value="">Select any one Department...</option>
                                         @foreach($departments as $department)
                                             <option @if($work_type->department->id == $department->id) selected @endif value="{{$department->id}}">{{$department->name}}</option>

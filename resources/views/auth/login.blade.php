@@ -48,10 +48,10 @@
                         @endif
 
                         <div>
-                            <button class="btn btn-default submit" type="submit">{{ __('views.auth.login.action_0') }}</button>
-                            <a class="reset_pass" href="{{ route('password.request') }}">
+                            <button class="btn btn-default submit login-btn" type="submit">{{ __('views.auth.login.action_0') }}</button>
+                            <!-- <a class="reset_pass" href="{{ route('password.request') }}">
                                 {{ __('views.auth.login.action_1') }}
-                            </a>
+                            </a> -->
                         </div>
 
                         <div class="clearfix"></div>
@@ -80,6 +80,11 @@
     <style type="text/css">
         body{
             background: url(http://www.jyothylaboratories.com/images/body-bg1.jpg) no-repeat center top fixed;
+        }
+
+        .login-btn{
+            margin: 25px 0 !important;
+            width: 150px;
         }
     </style>
     @parent
