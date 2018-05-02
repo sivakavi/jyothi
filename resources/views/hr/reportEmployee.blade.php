@@ -3,14 +3,14 @@
 @section('title', 'Employee Based Report')
 
 <style>
-    .box-container {
+    /* .box-container {
         height: 250px;
         overflow-y: scroll;
     }
 
     .box-item {
         z-index: 1000
-    }
+    } */
 
     .reaport-area{
         display: none;
@@ -65,51 +65,20 @@
                 <select id="emp_id" class="form-control" name="emp_id">
                     <option value="">Select Employee...</option>
                 </select>
-    </div>
+            </div>
             </div>
         </div>
         <br/>
         <div class="row">
-                <div class="col-md-6">
-                    <div>
-                        <div class="panel panel-default column-list">
-                            <div class="panel-heading">
-                            <h1 class="panel-title">Column List</h1>
-                            </div>
-                            <div id="container1" class="panel-body box-container">
-                                <div itemid="work_dept_name" class="btn btn-default box-item">Work Department Name</div>
-                                <div itemid="work_dept_code" class="btn btn-default box-item">Work Department Code</div>
-                                <div itemid="shift_name" class="btn btn-default box-item">Shift Name</div>
-                                <div itemid="shift_code" class="btn btn-default box-item">Shift Code</div>
-                                <div itemid="shift_date" class="btn btn-default box-item">Shift Date</div>
-                                <div itemid="status" class="btn btn-default box-item">Status</div>
-                                <div itemid="process" class="btn btn-default box-item">Process</div>
-                                <div itemid="leave_type" class="btn btn-default box-item">Leave Type</div>
-                                <div itemid="ot_hours" class="btn btn-default box-item">OT Hours</div>
-                                <div itemid="emp_name" class="btn btn-default box-item">Emp. Name</div>
-                                <div itemid="emp_dept_name" class="btn btn-default box-item">Emp. Department Name</div>
-                                <div itemid="emp_dep_code" class="btn btn-default box-item">Emp. Department Code</div>
-                                <div itemid="emp_code" class="btn btn-default box-item">Emp. Code</div>
-                                <div itemid="cost_centre" class="btn btn-default box-item">Cost Centre</div>
-                                <div itemid="cost_centre_desc" class="btn btn-default box-item">Cost Centre Desc</div>
-                                <div itemid="gl_account" class="btn btn-default box-item">GL Account</div>
-                                <div itemid="gl_account_desc" class="btn btn-default box-item">GL Account Desc</div>
-                                <div itemid="location" class="btn btn-default box-item">Emp. Location</div>
-                                <div itemid="category" class="btn btn-default box-item">Emp. Category Name</div>
-                                <div itemid="gender" class="btn btn-default box-item">Emp. Gender</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div>
-                        <div class="panel panel-default report-column-list">
-                            <div class="panel-heading">
-                            <h1 class="panel-title">Report Column List</h1>
-                            </div>
-                            <div id="container2" class="panel-body box-container"></div>
-                        </div>
-                    </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="name-field">Template</label>
+                    <select class="form-control" name="template_id" id="template_id">
+                        <option value="">Select any Template...</option>
+                        @foreach($report_templates as $rt)
+                        <option value="{{$rt->backend_data}}">{{$rt->name}}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
         </div>
@@ -143,6 +112,8 @@
         <br/>
     </div>
 
+    </div>
+
 @endsection
 
 @section('scripts')
@@ -164,11 +135,6 @@
           var fullDate = new Date(year1,month1,day1);
           return fullDate;
         }
-
-        $('.box-item').draggable({
-            cursor: 'move',
-            helper: "clone"
-        });
 
             $( "#department_id" ).change(function() {
                 var ajaxUrl = "{{ route('hr.getDepartmentEmployee') }}";
@@ -214,34 +180,17 @@
             }
         });
 
-        $("#container1").droppable({
-            drop: function(event, ui) {
-            var itemid = $(event.originalEvent.toElement).attr("itemid");
-            $('.box-item').each(function() {
-                if ($(this).attr("itemid") === itemid) {
-                $(this).appendTo("#container1");
-                }
-            });
-            }
-        });
-
-        $("#container2").droppable({
-            drop: function(event, ui) {
-            var itemid = $(event.originalEvent.toElement).attr("itemid");
-            $('.box-item').each(function() {
-                if ($(this).attr("itemid") === itemid) {
-                $(this).appendTo("#container2");
-                }
-            });
-            }
-        });
-
+        
         $("#reportBtn").click(function(){
-            var field_array = [];
-            $("#container2 div").each(function() {
-                field_array.push($(this).attr("itemid"));
-            });
 
+            var templateArray = $("#template_id").val();
+
+            if(templateArray){
+            
+            var field_array = [];
+
+            field_array = templateArray.split(',');
+            
             var fromDate = $("#datepickerFrom").val();
             var toDate = $("#datepickerTo").val();
 
@@ -310,6 +259,9 @@
                 }
             }else{
                 alert("Please choose date...");
+            }
+            }else{
+                alert("please choose template");
             }
         });
 

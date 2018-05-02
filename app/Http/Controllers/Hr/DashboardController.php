@@ -17,6 +17,7 @@ use App\WorkType;
 use App\Holiday;
 use App\AssignShift;
 use App\Batch;
+use App\ReportTemplate;
 use Auth;
 use Illuminate\Support\Facades\Input;
 use Hash;
@@ -380,13 +381,15 @@ class DashboardController extends Controller
 
     public function reportPage()
     {
-        return view('hr.report');
+        $report_templates = ReportTemplate::all(['id', 'name', 'frontend_data', 'backend_data']);
+        return view('hr.report', compact('report_templates'));
     }
 
     public function reportEmployeePage()
     {
         $departments = Department::all(['id', 'name']);
-        return view('hr.reportEmployee', compact('departments'));
+        $report_templates = ReportTemplate::all(['id', 'name', 'frontend_data', 'backend_data']);
+        return view('hr.reportEmployee', compact('departments', 'report_templates'));
     }
 
     public function getReport(Request $request)
