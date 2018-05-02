@@ -44,7 +44,7 @@
                 <td class="">
                     <select class="form-control emp_shift">
                         @foreach($shifts as $shift)
-                            <option value="{{$shift->id}}" @if($assignShift['shift_id'] == $shift->id ) selected @endif>{{$shift->name}}</option>
+                            <option value="{{$shift->id}}" @if($assignShift['shift_id'] == $shift->id ) selected @endif>{{$shift->allias}}</option>
                         @endforeach
                     </select>
                 </td>

@@ -52,7 +52,7 @@
                                         <label for="name-field">Shift</label>
                                         <select class="form-control emp_shift" name="shift_id">
                                             @foreach($shifts as $shift)
-                                                <option value="{{$shift->id}}" @if($batches['shift_id'] == $shift->id ) selected @endif>{{$shift->name}}</option>
+                                                <option value="{{$shift->id}}" @if($batches['shift_id'] == $shift->id ) selected @endif>{{$shift->allias}}</option>
                                             @endforeach
                                         </select>
                                     </div>

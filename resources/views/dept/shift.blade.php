@@ -58,7 +58,7 @@
                 <td class="">
                     <select class="form-control emp_shift">
                         @foreach($shifts as $shift)
-                            <option value="{{$shift->id}}">{{$shift->name}}</option>
+                            <option value="{{$shift->id}}">{{$shift->allias}}</option>
                         @endforeach
                     </select>
                 </td>
