@@ -54,7 +54,7 @@
                 <select id="emp_id" class="form-control" name="emp_id">
                     <option value="">Select Employee...</option>
                     @foreach($employees as $employee)
-                    <option value="{{$employee->id}}">{{$employee >name}} - {{$employee->employee_id}}</option>
+                    <option value="{{$employee->id}}">{{$employee->name}} - {{$employee->employee_id}}</option>
                     @endforeach
                 </select>
             </div>

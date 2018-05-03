@@ -369,14 +369,14 @@ class DashboardController extends Controller
     public function reportPage()
     {
         $report_templates = ReportTemplate::all(['id', 'name', 'frontend_data', 'backend_data']);
-        return view('hr.report', compact('report_templates'));
+        return view('admin.report', compact('report_templates'));
     }
 
     public function reportEmployeePage()
     {
         $departments = Department::all(['id', 'name']);
         $report_templates = ReportTemplate::all(['id', 'name', 'frontend_data', 'backend_data']);
-        return view('hr.reportEmployee', compact('departments', 'report_templates'));
+        return view('admin.reportEmployee', compact('departments', 'report_templates'));
     }
 
     public function getReport(Request $request)
