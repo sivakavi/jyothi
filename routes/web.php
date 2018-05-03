@@ -116,6 +116,7 @@ Route::group(['prefix' => 'dept', 'as' => 'dept.', 'namespace' => 'Dept', 'middl
     Route::get('/', 'DashboardController@index')->name('dashboard');
     Route::get('/shift', 'DashboardController@shift')->name('shift');
     Route::get('/shiftStatus', 'DashboardController@shiftBatch')->name('shiftBatch');
+    Route::get('/holidayShiftStatus', 'DashboardController@holidayShiftBatch')->name('holidayShiftBatch');
     Route::post('/assignShift', 'DashboardController@assignShift')->name('assignShift');
     Route::get('/assignShiftCheck', 'DashboardController@assignShiftCheck')->name('assignShiftCheck');
     Route::get('/assignEmpShiftCheck', 'DashboardController@assignEmpShiftCheck')->name('assignEmpShiftCheck');

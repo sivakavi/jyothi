@@ -40,6 +40,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('dept.holidayShiftBatch') }}">
+                            <i class="fa fa-flag" aria-hidden="true"></i>
+                            Holiday Shift Status
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('dept.shift') }}">
                             <i class="fa fa-external-link" aria-hidden="true"></i>
                             Assign Shift

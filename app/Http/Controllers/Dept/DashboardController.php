@@ -73,6 +73,12 @@ class DashboardController extends Controller
         $batches = Batch::where('status', 'pending')->where('department_id', $this->user->department->id)->orderBy('id', 'asc')->paginate(10);
         return view('dept.batch', compact('batches'));
     }
+    
+    public function holidayShiftBatch()
+    {
+        $batches = Batch::where('status', 'pending_holiday')->where('department_id', $this->user->department->id)->orderBy('id', 'asc')->paginate(10);
+        return view('dept.holidayBatch', compact('batches'));
+    }
 
     public function shift()
     {
