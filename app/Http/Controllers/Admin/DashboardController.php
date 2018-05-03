@@ -170,7 +170,9 @@ class DashboardController extends Controller
         $othours = $request->get('othours');
         $assignshift = AssignShift::find($id);
 
-        $assignshift->status_id = $status_id;
+        if(Status::find($status_id)->name != 'OT'){
+            $assignshift->status_id = $status_id;
+        }
         $assignshift->leave_id = NULL;
         $assignshift->otHours = NULL;
         if($leave_id != 'false'){
@@ -211,7 +213,9 @@ class DashboardController extends Controller
         $work_type_id = $request->get('emp_work_type');
         foreach ($employees as $key => $id) {
             $assignshift = AssignShift::find($id);
-            $assignshift->status_id = $status_id;
+            if(Status::find($status_id)->name != 'OT'){
+                $assignshift->status_id = $status_id;
+            }
             $assignshift->work_type_id = $work_type_id;
             $assignshift->leave_id = NULL;
             $assignshift->otHours = NULL;
@@ -252,7 +256,9 @@ class DashboardController extends Controller
             $emp->changed_shift_id = $shift_id;
             $emp->leave_id = $leave_id;
             $emp->otHours = $otHours;
-            $emp->status_id = $status_id;
+            if(Status::find($status_id)->name != 'OT'){
+                $emp->status_id = $status_id;
+            }
             $emp->work_type_id = $work_type_id;
             if($otHours){
                 $emp->ot_department_id = $department_id;
