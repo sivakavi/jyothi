@@ -749,7 +749,7 @@ class DashboardController extends Controller
     public function reportPage()
     {
         $report_templates = ReportTemplate::all(['id', 'name', 'frontend_data', 'backend_data']);
-        return view('hr.report', compact('report_templates'));
+        return view('dept.report', compact('report_templates'));
     }
 
     public function reportEmployeePage()
@@ -757,7 +757,7 @@ class DashboardController extends Controller
         $department_id = $this->user->department->id;
         $employees = Employee::where('department_id',$department_id)->get();
         $report_templates = ReportTemplate::all(['id', 'name', 'frontend_data', 'backend_data']);
-        return view('hr.reportEmployee', compact('employees', 'report_templates'));
+        return view('dept.reportEmployee', compact('employees', 'report_templates'));
     }
 
     public function getReport(Request $request)
