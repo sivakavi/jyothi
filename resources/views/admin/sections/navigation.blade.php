@@ -106,6 +106,21 @@
                             Shift Attendance
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('admin.reportPage') }}">
+                            <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                            Report
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('admin.reportEmployeePage') }}">
+                            <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                            Report - Employee Based
+                        </a>
+                    </li>
+
                     <li>
                         <a href="{{ route('admin.changePassword') }}">
                             <i class="fa fa-retweet" aria-hidden="true"></i>

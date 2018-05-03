@@ -77,6 +77,20 @@
                         </a>
                     </li>
 
+                    <li>
+                        <a href="{{ route('dept.reportPage') }}">
+                            <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                            Report
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('dept.reportEmployeePage') }}">
+                            <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                            Report - Employee Based
+                        </a>
+                    </li>
+
                     
                     <li>
                         <a href="{{ route('dept.changePassword') }}">

@@ -81,6 +81,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('/saveTemplate', 'ReportTemplateController@saveTemplate')->name('saveTemplate');
 
     Route::resource('report_templates', 'ReportTemplateController');
+
+    Route::get('/report', 'DashboardController@reportPage')->name('reportPage');
+    Route::get('/reportEmployee', 'DashboardController@reportEmployeePage')->name('reportEmployeePage');
+    Route::get('/getReport', 'DashboardController@getReport')->name('getReport');
+
+    Route::get('/getDepartmentEmployee', 'DashboardController@getDepartmentEmployee')->name('getDepartmentEmployee');
+
+    
 });
 
 
@@ -157,6 +165,10 @@ Route::group(['prefix' => 'dept', 'as' => 'dept.', 'namespace' => 'Dept', 'middl
     Route::get('/changePassword', 'DashboardController@changePassword')->name('changePassword');
 
     Route::post('/postCredentials', 'DashboardController@postCredentials')->name('postCredentials');
+
+    Route::get('/report', 'DashboardController@reportPage')->name('reportPage');
+    Route::get('/reportEmployee', 'DashboardController@reportEmployeePage')->name('reportEmployeePage');
+    Route::get('/getReport', 'DashboardController@getReport')->name('getReport');
 
 });
 

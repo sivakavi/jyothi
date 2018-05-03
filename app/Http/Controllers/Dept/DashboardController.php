@@ -16,6 +16,7 @@ use App\Department;
 use App\Batch;
 use App\Leave;
 use App\Holiday;
+use App\ReportTemplate;
 
 use Auth;
 use Hash;
@@ -744,4 +745,191 @@ class DashboardController extends Controller
             return redirect()->to('/');
         }    
     }
+
+    public function reportPage()
+    {
+        $report_templates = ReportTemplate::all(['id', 'name', 'frontend_data', 'backend_data']);
+        return view('hr.report', compact('report_templates'));
+    }
+
+    public function reportEmployeePage()
+    {
+        $department_id = $this->user->department->id;
+        $employees = Employee::where('department_id',$department_id)->get();
+        $report_templates = ReportTemplate::all(['id', 'name', 'frontend_data', 'backend_data']);
+        return view('hr.reportEmployee', compact('employees', 'report_templates'));
+    }
+
+    public function getReport(Request $request)
+    {
+        // $fromDate = new \DateTime( $request->get('fromDate'));
+        // $toDate = new \DateTime( $request->get('toDate'));
+        $fromDate   = Carbon::createFromFormat('d/m/Y', $request->get('fromDate'))->subDay();
+        $toDate     = Carbon::createFromFormat('d/m/Y', $request->get('toDate'));
+        $fieldArray = $request->get('fieldArray');
+        $fieldArray = explode(',', $fieldArray);
+        $upperCaseFieldArray = array_map('strtoupper', $fieldArray);
+
+        if($request->has('employee_id')){
+            $emp_id = $request->get('employee_id');
+            $report = AssignShift::where('employee_id',$emp_id)->whereBetween('nowdate', [$fromDate, $toDate])->get();
+        }else{
+            $department_id = $this->user->department->id;
+            $report = AssignShift::where('department_id',$department_id)->whereBetween('nowdate', [$fromDate, $toDate])->get();
+        }
+        
+        
+        $finalArray = [];
+        //$finalArray[] = $upperCaseFieldArray;
+
+        foreach($report as $singleRow){
+            $singleItem = [];
+            $nowdate = $singleRow->nowdate.' 23:59:59';
+            $log = $singleRow->employee->employeeLogsLatestUpdate($nowdate);
+            
+            if (in_array("work_dept_name", $fieldArray)) {
+                if($singleRow->changed_department_id){
+                    $singleItem["work_dept_name"] = $singleRow->changed_department->name;
+                }else{
+                    $singleItem["work_dept_name"] = $singleRow->department->name;
+                }
+            }
+
+            if (in_array("work_dept_code", $fieldArray)) {
+                if($singleRow->changed_department_id){
+                    $singleItem["work_dept_code"] = $singleRow->changed_department->department_code;
+                }else{
+                    $singleItem["work_dept_code"] = $singleRow->department->department_code;
+                }
+            }
+
+            if (in_array("shift_name", $fieldArray)) {
+                if($singleRow->changed_shift_id){
+                    $singleItem["shift_name"] = $singleRow->changed_shift->name;
+                }else{
+                    $singleItem["shift_name"] = $singleRow->shift->name;
+                }
+            }
+
+            if (in_array("shift_code", $fieldArray)) {
+                if($singleRow->changed_shift_id){
+                    $singleItem["shift_code"] = $singleRow->changed_shift->allias;
+                }else{
+                    $singleItem["shift_code"] = $singleRow->shift->allias;
+                }
+            }
+
+            if (in_array("shift_date", $fieldArray)) {
+                $singleItem["shift_date"] = $singleRow->nowdate;
+            }
+
+            if (in_array("status", $fieldArray)) {
+                $singleItem["status"] = $singleRow->status->name;
+            }
+
+            if (in_array("process", $fieldArray)) {
+                $singleItem["process"] = $singleRow->work_type->name;
+            }
+
+            if (in_array("leave_type", $fieldArray)) {
+                if($singleRow->leave){
+                    $singleItem["leave_type"] = $singleRow->leave->name;
+                }else{
+                    $singleItem["leave_type"] = "";
+                }
+                
+            }
+
+            if (in_array("ot_hours", $fieldArray)) {
+                $singleItem["ot_hours"] = 0;
+                if($singleRow->otHours){
+                    $singleItem["ot_hours"] = $singleRow->otHours;
+                }
+            }
+
+            if (in_array("ot_department", $fieldArray)) {
+                if($singleRow->ot_department_id){
+                    $singleItem["ot_department"] = $singleRow->ot_department->name;
+                }else{
+                    $singleItem["ot_department"] = $singleRow->department->name;
+                }
+                
+            }
+
+            if (in_array("emp_name", $fieldArray)) {
+                $singleItem["emp_name"] = $singleRow->employee->name;
+            }
+
+            if (in_array("emp_dept_name", $fieldArray)) {
+                if($log){
+                    $singleItem["emp_dept_name"] = $log->department->name;
+                }
+                else{
+                    $singleItem["emp_dept_name"] = $singleRow->employee->department->name;
+                }
+            }
+
+            if (in_array("emp_dep_code", $fieldArray)) {
+                if($log){
+                    $singleItem["emp_dep_code"] = $log->department->department_code;
+                }
+                else{
+                    $singleItem["emp_dep_code"] = $singleRow->employee->department->department_code;
+                }
+            }
+
+            if (in_array("emp_code", $fieldArray)) {
+                $singleItem["emp_code"] = $singleRow->employee->employee_id;
+            }
+
+            if (in_array("cost_centre", $fieldArray)) {
+                if($log){
+                    $singleItem["cost_centre"] = $log->cost_centre;
+                } else {
+                    $singleItem["cost_centre"] = $singleRow->employee->cost_centre;
+                }
+            }
+
+            if (in_array("cost_centre_desc", $fieldArray)) {
+                $singleItem["cost_centre_desc"] = $singleRow->employee->cost_centre_desc;
+            }
+
+            if (in_array("gl_account", $fieldArray)) {
+                if($log){
+                    $singleItem["gl_account"] = $log->gl_accounts;
+                } else {
+                    $singleItem["gl_account"] = $singleRow->employee->gl_accounts;
+                }
+            }
+
+            if (in_array("gl_account_desc", $fieldArray)) {
+                $singleItem["gl_account_desc"] = $singleRow->employee->gl_description;
+            }
+
+            if (in_array("location", $fieldArray)) {
+                if($log){
+                    $singleItem["location"] = $log->location->name;
+                } else{
+                    $singleItem["location"] = $singleRow->employee->location->name;
+                }
+            }
+
+            if (in_array("category", $fieldArray)) {
+                if($log){
+                    $singleItem["category"] = $log->category->name;
+                }else{
+                    $singleItem["category"] = $singleRow->employee->category->name;
+                }
+            }
+
+            if (in_array("gender", $fieldArray)) {
+                $singleItem["gender"] = $singleRow->employee->gender;
+            }
+
+            $finalArray[] = $singleItem;
+        }
+
+        return $finalArray;
+    }
+
 }
