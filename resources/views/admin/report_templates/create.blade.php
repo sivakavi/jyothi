@@ -62,8 +62,8 @@
                                                         <div itemid="shift_date" class="btn btn-default box-item">Shift Date</div>
                                                         <div itemid="status" class="btn btn-default box-item">Status</div>
                                                         <div itemid="process" class="btn btn-default box-item">Process</div>
-                                                        <div itemid="leave_type" class="btn btn-default box-item">Leave Type</div>
                                                         <div itemid="ot_hours" class="btn btn-default box-item">OT Hours</div>
+                                                        <div itemid="ot_department" class="btn btn-default box-item">OT Department</div>
                                                         <div itemid="emp_name" class="btn btn-default box-item">Emp. Name</div>
                                                         <div itemid="emp_dept_name" class="btn btn-default box-item">Emp. Department Name</div>
                                                         <div itemid="emp_dep_code" class="btn btn-default box-item">Emp. Department Code</div>

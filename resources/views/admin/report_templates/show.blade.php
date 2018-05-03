@@ -1,7 +1,11 @@
 @extends('admin.layouts.admin')
 
 @section('title', 'Report Template Show')
-
+<style>
+    td{
+            word-break: break-all;
+    }
+</style>
 @section('content')
 <div class="page-header clearfix"></div>
     <div class="row margin-top-30">

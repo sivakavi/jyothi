@@ -58,7 +58,7 @@ class DashboardController extends Controller
         $departmentDatas = [];
         foreach($assignShifts as $assignShift){
             if($assignShift->changed_department_id == '0'){
-                if($assignShift->status->name != 'Leave'){
+                if($assignShift->status->name != 'LL'){
                     $departmentDatas[$assignShift->department_id]['name'] = $assignShift->department->name;
                     if(!isset($departmentDatas[$assignShift->department_id]['present'])){
                         $departmentDatas[$assignShift->department_id]['present'] = 0;
@@ -78,7 +78,7 @@ class DashboardController extends Controller
                 }
             }
             else{
-                if($assignShift->status->name != 'Leave'){
+                if($assignShift->status->name != 'LL'){
                     $departmentDatas[$assignShift->changed_department_id]['name'] = $assignShift->changed_department->name;
                     if(!isset($departmentDatas[$assignShift->changed_department_id]['present'])){
                         $departmentDatas[$assignShift->changed_department_id]['present'] = 0;

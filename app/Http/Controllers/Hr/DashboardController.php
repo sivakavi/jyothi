@@ -415,8 +415,8 @@ class DashboardController extends Controller
 
         foreach($report as $singleRow){
             $singleItem = [];
-            //$nowdate = $singleRow->nowdate.' 23:59:59';
-            //$log = $singleRow->employee->employeeLogsLatestUpdate($nowdate);
+            $nowdate = $singleRow->nowdate.' 23:59:59';
+            $log = $singleRow->employee->employeeLogsLatestUpdate($nowdate);
             
             if (in_array("work_dept_name", $fieldArray)) {
                 if($singleRow->changed_department_id){
@@ -472,7 +472,19 @@ class DashboardController extends Controller
             }
 
             if (in_array("ot_hours", $fieldArray)) {
-                $singleItem["ot_hours"] = $singleRow->otHours;
+                $singleItem["ot_hours"] = 0;
+                if($singleRow->otHours){
+                    $singleItem["ot_hours"] = $singleRow->otHours;
+                }
+            }
+
+            if (in_array("ot_department", $fieldArray)) {
+                if($singleRow->ot_department_id){
+                    $singleItem["ot_department"] = $singleRow->ot_department->name;
+                }else{
+                    $singleItem["ot_department"] = $singleRow->department->name;
+                }
+                
             }
 
             if (in_array("emp_name", $fieldArray)) {
@@ -480,13 +492,21 @@ class DashboardController extends Controller
             }
 
             if (in_array("emp_dept_name", $fieldArray)) {
-                //$singleItem["emp_dept_name"] = $log->department->name;
-                $singleItem["emp_dept_name"] = $singleRow->employee->department->name;
+                if($log){
+                    $singleItem["emp_dept_name"] = $log->department->name;
+                }
+                else{
+                    $singleItem["emp_dept_name"] = $singleRow->employee->department->name;
+                }
             }
 
             if (in_array("emp_dep_code", $fieldArray)) {
-                //$singleItem["emp_dep_code"] = $log->department->department_code;
-                $singleItem["emp_dep_code"] = $singleRow->employee->department->department_code;
+                if($log){
+                    $singleItem["emp_dep_code"] = $log->department->department_code;
+                }
+                else{
+                    $singleItem["emp_dep_code"] = $singleRow->employee->department->department_code;
+                }
             }
 
             if (in_array("emp_code", $fieldArray)) {
@@ -494,8 +514,11 @@ class DashboardController extends Controller
             }
 
             if (in_array("cost_centre", $fieldArray)) {
-                //$singleItem["cost_centre"] = $log->cost_centre;
-                $singleItem["cost_centre"] = $singleRow->employee->cost_centre;
+                if($log){
+                    $singleItem["cost_centre"] = $log->cost_centre;
+                } else {
+                    $singleItem["cost_centre"] = $singleRow->employee->cost_centre;
+                }
             }
 
             if (in_array("cost_centre_desc", $fieldArray)) {
@@ -503,8 +526,11 @@ class DashboardController extends Controller
             }
 
             if (in_array("gl_account", $fieldArray)) {
-                $singleItem["gl_account"] = $singleRow->employee->gl_accounts;
-                //$singleItem["gl_account"] = $log->gl_accounts;
+                if($log){
+                    $singleItem["gl_account"] = $log->gl_accounts;
+                } else {
+                    $singleItem["gl_account"] = $singleRow->employee->gl_accounts;
+                }
             }
 
             if (in_array("gl_account_desc", $fieldArray)) {
@@ -512,13 +538,19 @@ class DashboardController extends Controller
             }
 
             if (in_array("location", $fieldArray)) {
-                //$singleItem["location"] = $log->location->name;
-                $singleItem["location"] = $singleRow->employee->location->name;
+                if($log){
+                    $singleItem["location"] = $log->location->name;
+                } else{
+                    $singleItem["location"] = $singleRow->employee->location->name;
+                }
             }
 
             if (in_array("category", $fieldArray)) {
-                //$singleItem["category"] = $log->category->name;
-                $singleItem["category"] = $singleRow->employee->category->name;
+                if($log){
+                    $singleItem["category"] = $log->category->name;
+                }else{
+                    $singleItem["category"] = $singleRow->employee->category->name;
+                }
             }
 
             if (in_array("gender", $fieldArray)) {

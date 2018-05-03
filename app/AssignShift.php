@@ -46,4 +46,9 @@ class AssignShift extends Model
     {
         return $this->belongsTo('App\Department', 'changed_department_id');
     }
+
+    public function ot_department()
+    {
+        return $this->belongsTo('App\Department', 'ot_department_id');
+    }
 }
