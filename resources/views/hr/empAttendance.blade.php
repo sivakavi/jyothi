@@ -20,6 +20,7 @@
             <option value="{{$department->id}}">{{$department->name}}</option>
         @endforeach
     </select>
+    </div>
     <div class="form-group">
         <label for="shift_id">Shift</label>
         <select id = "shift_id" class="form-control" name="shift_id" required>
