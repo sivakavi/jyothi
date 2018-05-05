@@ -56,9 +56,11 @@ class DashboardController extends Controller
         $employees = Employee::all()->count();
         $shift_ids = Shift::where('intime', '<', date('H:i:s'))->pluck('id')->toArray();
         $nowdate = new \DateTime();
+        $pendingBatches = Batch::where('status', 'pending')->pluck('id')->toArray();
         // $nowdate->modify('-1 day');
         $assignShifts = AssignShift::whereIn('shift_id', $shift_ids)
                         ->where('nowdate', $nowdate->format('Y-m-d'))
+                        ->whereNotIn('batch_id', $pendingBatches)
                         ->get();
         $departmentDatas = [];
         foreach($assignShifts as $assignShift){
@@ -114,11 +116,13 @@ class DashboardController extends Controller
         $this->department_id = $department_id;
         $nowdate = new \DateTime();
         // $nowdate->modify('-1 day');
+        $pendingBatches = Batch::where('status', 'pending')->pluck('id')->toArray();
         $assignShifts = AssignShift::whereIn('shift_id', $shift_ids)
                                     ->where(function ($q) {
                                         $q->where('department_id', $this->department_id)
                                         ->orWhere('changed_department_id', $this->department_id);
                                     })
+                                    ->whereNotIn('batch_id', $pendingBatches)
                                     ->where('nowdate', $nowdate->format('Y-m-d'))
                                     ->get();
         $departmentDatas = [];

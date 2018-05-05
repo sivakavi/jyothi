@@ -140,6 +140,13 @@
             }
         });
 
+    $("#saveBtn").click(function() {
+        $(this).click(function() {
+            return false;
+        });
+        return true;
+    });
+
     $('#saveBtn').click(function(e){
 
             var field_array = [];
@@ -174,7 +181,7 @@
                   },
                   success:function(data) {
                       alert('Report Template Created Successfully');
-                      location.reload();
+                      location.href = "{{ route('admin.report_templates.index') }}";
                   },
                 });
             }else{
