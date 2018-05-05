@@ -667,7 +667,7 @@ class DashboardController extends Controller
                 ;
         $employee_datas = [];
         foreach ($employees as $employee) {
-            $employee_data['date'] = Carbon::parse($employee->nowdate)->format('d-m-Y');
+            $employee_data['date'] = Carbon::parse($employee->nowdate)->format('d/m/Y');
             $employee_data['emp_name'] = $employee->employee->name;
             $employee_data['emp_code'] = $employee->employee->employee_id;
             if($employee->changed_department_id == 0){

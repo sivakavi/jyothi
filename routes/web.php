@@ -88,6 +88,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::get('/getDepartmentEmployee', 'DashboardController@getDepartmentEmployee')->name('getDepartmentEmployee');
 
+    Route::get('/getDepartmentEmployeeAttendance', 'DashboardController@getDepartmentEmployeeAttendance')->name('getDepartmentEmployeeAttendance');
+
     
 });
 

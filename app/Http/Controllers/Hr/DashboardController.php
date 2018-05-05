@@ -457,7 +457,7 @@ class DashboardController extends Controller
             }
 
             if (in_array("shift_date", $fieldArray)) {
-                $singleItem["shift_date"] = $singleRow->nowdate;
+                $singleItem["shift_date"] = $singleRow->nowdate->format('d/m/Y');
             }
 
             if (in_array("status", $fieldArray)) {

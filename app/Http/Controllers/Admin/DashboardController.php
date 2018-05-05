@@ -55,11 +55,15 @@ class DashboardController extends Controller
         $users = User::all()->count();
         $employees = Employee::all()->count();
         $shift_ids = Shift::where('intime', '<', date('H:i:s'))->pluck('id')->toArray();
-        $assignShifts = AssignShift::whereIn('shift_id', [5,3])->get();
+        $nowdate = new \DateTime();
+        // $nowdate->modify('-1 day');
+        $assignShifts = AssignShift::whereIn('shift_id', $shift_ids)
+                        ->where('nowdate', $nowdate->format('Y-m-d'))
+                        ->get();
         $departmentDatas = [];
         foreach($assignShifts as $assignShift){
             if($assignShift->changed_department_id == '0'){
-                if($assignShift->status->name != 'LL'){
+                if($assignShift->status->name != 'LL' && $assignShift->status->name != 'AA'){
                     $departmentDatas[$assignShift->department_id]['name'] = $assignShift->department->name;
                     if(!isset($departmentDatas[$assignShift->department_id]['present'])){
                         $departmentDatas[$assignShift->department_id]['present'] = 0;
@@ -79,7 +83,7 @@ class DashboardController extends Controller
                 }
             }
             else{
-                if($assignShift->status->name != 'LL'){
+                if($assignShift->status->name != 'LL' && $assignShift->status->name != 'AA'){
                     $departmentDatas[$assignShift->changed_department_id]['name'] = $assignShift->changed_department->name;
                     if(!isset($departmentDatas[$assignShift->changed_department_id]['present'])){
                         $departmentDatas[$assignShift->changed_department_id]['present'] = 0;
@@ -99,7 +103,53 @@ class DashboardController extends Controller
                 }
             }
         }
-        return view('admin.dashboard',  compact('departments', 'shifts', 'users', 'employees', 'departmentDatas'));
+        $today = $nowdate->format('d/m/Y');
+        return view('admin.dashboard',  compact('departments', 'shifts', 'users', 'employees', 'departmentDatas', 'today'));
+    }
+
+    public function getDepartmentEmployeeAttendance(Request $request)
+    {
+        $department_id = $request->input('department_id');
+        $shift_ids = Shift::where('intime', '<', date('H:i:s'))->pluck('id')->toArray();
+        $this->department_id = $department_id;
+        $nowdate = new \DateTime();
+        // $nowdate->modify('-1 day');
+        $assignShifts = AssignShift::whereIn('shift_id', $shift_ids)
+                                    ->where(function ($q) {
+                                        $q->where('department_id', $this->department_id)
+                                        ->orWhere('changed_department_id', $this->department_id);
+                                    })
+                                    ->where('nowdate', $nowdate->format('Y-m-d'))
+                                    ->get();
+        $departmentDatas = [];
+        // dd($assignShifts);
+        $present = $absent = [];
+        foreach($assignShifts as $assignShift){
+            if($assignShift->changed_department_id == '0'){
+                // echo $assignShift->status->name;
+                if($assignShift->status->name != 'LL' && $assignShift->status->name != 'AA'){
+                    $present[] = $assignShift->employee_id;
+                }
+                else{
+                    $absent[] = $assignShift->employee_id;
+                }
+            }
+            else{
+                if($assignShift->status->name != 'LL' && $assignShift->status->name != 'AA'){
+                    $present[] = $assignShift->employee_id;
+                }
+                else{
+                    $absent[] = $assignShift->employee_id;
+                }
+            }
+        }
+        $presentEmployees = Employee::whereIn('id', $present)->get();
+        $absentEmployees = Employee::whereIn('id', $absent)->get();
+        $today = $nowdate->format('d/m/Y');
+        $department = Department::find($department_id);
+        $departmentName = $department->name;
+        $departmentCode = $department->department_code;
+        return view('admin.empAttendanceDetails', compact('presentEmployees', 'absentEmployees', 'today', 'departmentName', 'departmentCode'));        
     }
 
     public function assignEmpShiftAttendance()
