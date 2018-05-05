@@ -5,125 +5,129 @@
 @section('content')
     <div class="page-header clearfix">
     </div>
-    <input type="hidden" value="{{ app('request')->input('date') }}" id="shiftDate">
-    <input type="hidden" value="{{ app('request')->input('department_id') }}" id="department_id">
-    <input type="hidden" value="{{ app('request')->input('shift_id') }}" id="shiftID">
-    <div class="modal fade" id="myModal" role="dialog">
-	    <div class="modal-dialog">
-	    
-	      <!-- Modal content-->
-	      <div class="modal-content">
-	        <div class="modal-header">
-	          <button type="button" class="close" data-dismiss="modal">&times;</button>
-	          <h4 class="modal-title"></h4>
-              <input type="hidden" id="emp_id" value="">
-              <input type="hidden" id="bulk_change" value="0">
-	        </div>
-	        <div class="modal-body">
-	        	<input type="hidden" id="assignShift">
-                <select class="form-control emp_work_type">
-                    <option value=""> Please Select Process</option>
-                    @foreach($work_types as $work_type)
-                        <option value="{{$work_type->id}}">{{$work_type->name}}</option>
-                    @endforeach
-                </select>
-                <br>
-	          	<select class="form-control emp_status">
-	          		<option value=""> Please Select Status</option>
-	                @foreach($statuses as $status)
-	                    <option value="{{$status->id}}">{{$status->name}}</option>
-	                @endforeach
-	            </select>
-	            <br>
+	@if($employees->count())
+		<input type="hidden" value="{{ app('request')->input('date') }}" id="shiftDate">
+		<input type="hidden" value="{{ app('request')->input('department_id') }}" id="department_id">
+		<input type="hidden" value="{{ app('request')->input('shift_id') }}" id="shiftID">
+		<div class="modal fade" id="myModal" role="dialog">
+			<div class="modal-dialog">
+			
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title"></h4>
+				<input type="hidden" id="emp_id" value="">
+				<input type="hidden" id="bulk_change" value="0">
+				</div>
+				<div class="modal-body">
+					<input type="hidden" id="assignShift">
+					<select class="form-control emp_work_type">
+						<option value=""> Please Select Process</option>
+						@foreach($work_types as $work_type)
+							<option value="{{$work_type->id}}">{{$work_type->name}}</option>
+						@endforeach
+					</select>
+					<br>
+					<select class="form-control emp_status">
+						<option value=""> Please Select Status</option>
+						@foreach($statuses as $status)
+							<option value="{{$status->id}}">{{$status->name}}</option>
+						@endforeach
+					</select>
+					<br>
 
-	            <select class="form-control emp_leave hide">
-	          		<option value=""> Please Select Leave Type</option>
-	                @foreach($leaves as $leave)
-	                    <option value="{{$leave->id}}">{{$leave->name}}</option>
-	                @endforeach
-	            </select>
+					<select class="form-control emp_leave hide">
+						<option value=""> Please Select Leave Type</option>
+						@foreach($leaves as $leave)
+							<option value="{{$leave->id}}">{{$leave->name}}</option>
+						@endforeach
+					</select>
 
-	            <div class="hide othours">
-	            	OT Hours : <input type="number" name="othours" id="othours" value="0">
-	            </div>
-	        </div>
-	        <div class="modal-footer">
-	          <button type="button" class="btn btn-default saveModal">Save and Close</button>
-	          <button type="button" class="btn btn-default closeModal" data-dismiss="modal">Close</button>
-	        </div>
-	      </div>
-	      
-	    </div>
-	  </div>
-	  <div class="pull-right">
-	  	Search by Emp Code : <input type="text" name="empName" id="empName">&nbsp;&nbsp;<button type="button" class="btn btn-primary btn-round btn-sm empSearch"><i class="fa fa-search" aria-hidden="true"></i></button>
-	  </div>
-	  <br>
-	  <br>
-	  <table id ="records_table" class="table table-bordered"></table>
-    <table class="table table-bordered" id="employeeShift">
-    <thead>
-      <tr>
-        <th>Employee Id</th>
-        <th>Employee Name</th>
-        <th>Category</th>
-        <th>Employee Department</th>
-        <th>Assigned Department</th>
-        <th>Process</th>
-        <th>Status</th>
-        <th class="hide">Leave</th>
-        <th>OtHours</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-        @foreach ($employees as $empShift)
-            <tr>
-                <td class="assign_shift_id hide">{{ $empShift->id }}</td>
-                <td class="emp_id">{{ $empShift->employee->id }}</td>
-                <td class="emp_name">{{ $empShift->employee->name }}</td>
-                <td class="category">{{ $empShift->employee->category->name }}</td>
-                <td class="">
-                    {{ $empShift->employee->department->name }}
-                </td>
-                <td class="">
-                	@if($empShift->changed_department)
-                    	{{ $empShift->changed_department->name }}
-                    @else
-                    	{{ $empShift->employee->department->name }}
-                    @endif
-                </td>
-                
-                <td class="">
-                    {{ $empShift->work_type->name }}
-                </td>
+					<div class="hide othours">
+						OT Hours : <input type="number" name="othours" id="othours" value="0">
+					</div>
+				</div>
+				<div class="modal-footer">
+				<button type="button" class="btn btn-default saveModal">Save and Close</button>
+				<button type="button" class="btn btn-default closeModal" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+			
+			</div>
+		</div>
+		<div class="pull-right">
+			Search by Emp Code : <input type="text" name="empName" id="empName">&nbsp;&nbsp;<button type="button" class="btn btn-primary btn-round btn-sm empSearch"><i class="fa fa-search" aria-hidden="true"></i></button>
+		</div>
+		<br>
+		<br>
+		<table id ="records_table" class="table table-bordered"></table>
+		<table class="table table-bordered" id="employeeShift">
+		<thead>
+		<tr>
+			<th>Employee Id</th>
+			<th>Employee Name</th>
+			<th>Category</th>
+			<th>Employee Department</th>
+			<th>Assigned Department</th>
+			<th>Process</th>
+			<th>Status</th>
+			<th class="hide">Leave</th>
+			<th>OtHours</th>
+			<th></th>
+		</tr>
+		</thead>
+		<tbody>
+			@foreach ($employees as $empShift)
+				<tr>
+					<td class="assign_shift_id hide">{{ $empShift->id }}</td>
+					<td class="emp_id">{{ $empShift->employee->id }}</td>
+					<td class="emp_name">{{ $empShift->employee->name }}</td>
+					<td class="category">{{ $empShift->employee->category->name }}</td>
+					<td class="">
+						{{ $empShift->employee->department->name }}
+					</td>
+					<td class="">
+						@if($empShift->changed_department)
+							{{ $empShift->changed_department->name }}
+						@else
+							{{ $empShift->employee->department->name }}
+						@endif
+					</td>
+					
+					<td class="">
+						{{ $empShift->work_type->name }}
+					</td>
 
-                <td class="empStatus">
-                    {{ $empShift->status->name }}
-                </td>
+					<td class="empStatus">
+						{{ $empShift->status->name }}
+					</td>
 
-                
-                <td class="hide">
-                	@if($empShift->leave)
-                    	{{ $empShift->leave->name }}
-                    @endif
-                </td>
-                <td class="">
-                    {{ $empShift->otHours }}
-                </td>
-                <td class="">
-                    <button type="button" class="btn btn-primary btn-round btn-sm empassign">Change</button>
-                </td>
-            </tr>
-        @endforeach
-    </tbody>
-  </table>
-<div class="pull-right">
-    {{ $employees->links() }}
-</div>
-<div class="text-center">
-	<button type="button" id="empbulkassign" class="btn btn-primary btn-round btn-sm">Bulk Change</button>
-</div>
+					
+					<td class="hide">
+						@if($empShift->leave)
+							{{ $empShift->leave->name }}
+						@endif
+					</td>
+					<td class="">
+						{{ $empShift->otHours }}
+					</td>
+					<td class="">
+						<button type="button" class="btn btn-primary btn-round btn-sm empassign">Change</button>
+					</td>
+				</tr>
+			@endforeach
+		</tbody>
+	</table>
+	<div class="pull-right">
+		{{ $employees->links() }}
+	</div>
+	<div class="text-center">
+		<button type="button" id="empbulkassign" class="btn btn-primary btn-round btn-sm">Bulk Change</button>
+	</div>
+	@else
+        <h3 class="text-center alert alert-info">There is no employees in that Shift for your Department.</h3>
+    @endif
 @endsection
 
 @section('scripts')
