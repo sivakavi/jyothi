@@ -18,7 +18,7 @@
 </style>
 
     <div class="page-header clearfix"></div>
-
+    @if($shifts->count())
     <div class="row top_tiles margin-top-40">
         <div class="col-md-3">
             <div>Bulk From: <input type="text" id="datepickerFrom"></div>
@@ -33,68 +33,70 @@
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
 
     <div class="margin-top-40">
-    <table class="table table-bordered" id="employeeShift">
-    <thead>
-      <tr>
-        <th></th>
-        <th>Employee Id</th>
-        <th>Employee Name</th>
-        <th>Category</th>
-        <th>Shift</th>
-        <th>Status</th>
-        <th>Process</th>
-        <th>From Date</th>
-        <th>To Date</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-        @foreach ($employees as $employee)
-            <tr>
-                <td><input type="checkbox" class="isEmpSelected"/></td>
-                <td class="emp_id">{{ $employee->id }}</td>
-                <td class="emp_name">{{ $employee->name }}</td>
-                <td class="category">{{ $employee->category->name }}</td>
-                <td class="">
-                    <select class="form-control emp_shift">
-                        @foreach($shifts as $shift)
-                            <option value="{{$shift->id}}">{{$shift->allias}}</option>
-                        @endforeach
-                    </select>
-                </td>
-                <td class="">
-                    <select class="form-control emp_status">
-                        @foreach($statuses as $status)
-                            <option value="{{$status->id}}">{{$status->name}}</option>
-                        @endforeach
-                    </select>
-                </td>
-                <td class="">
-                    <select class="form-control work_type">
-                        @foreach($work_types as $work_type)
-                            <option value="{{$work_type->id}}">{{$work_type->name}}</option>
-                        @endforeach
-                    </select>
-                </td>
-                <td class="">
-                    <input type="text" class="empDatepickerFrom">
-                </td>
-                <td class="">
-                    <input type="text" class="empDatepickerTo">
-                </td>
-                <td class="">
-                    <button type="submit" class="empShiftAssign" class="btn btn-primary btn-round btn-sm">Assign</button>
-                </td>
-                
-            </tr>
-        @endforeach
-    </tbody>
-  </table>
-    <div class="well well-sm margin-top-50 text-center">
-        <button type="submit" id="shiftAssign" class="btn btn-primary btn-round btn-sm">Assign</button>
+        <table class="table table-bordered" id="employeeShift">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Employee Id</th>
+            <th>Employee Name</th>
+            <th>Category</th>
+            <th>Shift</th>
+            <th>Status</th>
+            <th>Process</th>
+            <th>From Date</th>
+            <th>To Date</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach ($employees as $employee)
+                <tr>
+                    <td><input type="checkbox" class="isEmpSelected"/></td>
+                    <td class="emp_id">{{ $employee->id }}</td>
+                    <td class="emp_name">{{ $employee->name }}</td>
+                    <td class="category">{{ $employee->category->name }}</td>
+                    <td class="">
+                        <select class="form-control emp_shift">
+                            @foreach($shifts as $shift)
+                                <option value="{{$shift->id}}">{{$shift->allias}}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td class="">
+                        <select class="form-control emp_status">
+                            @foreach($statuses as $status)
+                                <option value="{{$status->id}}">{{$status->name}}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td class="">
+                        <select class="form-control work_type">
+                            @foreach($work_types as $work_type)
+                                <option value="{{$work_type->id}}">{{$work_type->name}}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td class="">
+                        <input type="text" class="empDatepickerFrom">
+                    </td>
+                    <td class="">
+                        <input type="text" class="empDatepickerTo">
+                    </td>
+                    <td class="">
+                        <button type="submit" class="empShiftAssign" class="btn btn-primary btn-round btn-sm">Assign</button>
+                    </td>
+                    
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+        <div class="well well-sm margin-top-50 text-center">
+            <button type="submit" id="shiftAssign" class="btn btn-primary btn-round btn-sm">Assign</button>
+        </div>
     </div>
-</div>
-
+    @else
+        <h3 class="text-center alert alert-info">There is no Shift for your Department. Please contact Admin to create shift!</h3>
+    @endif
 @endsection
 
 @section('scripts')
