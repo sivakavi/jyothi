@@ -48,7 +48,7 @@
             <br>
             <h3>Attendance Department Details for {{$today}}</h3>
             @foreach ($departmentDatas as $departmentData)
-                <a href="{{ URL::route('admin.getDepartmentEmployeeAttendance', array('department_id'=> key($departmentDatas))) }}">
+                <a href="{{ URL::route('admin.getDepartmentEmployeeAttendance', array('department_id'=> $departmentData['department_id'])) }}">
                     <div class="animated flipInY col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="tile-stats" style="padding:20px 0px !important;">
                             <div class="icon" style="top:45px !important;right:80px !important;"><i class="fa fa-institution" style="font-size:80px !important;"></i></div>
