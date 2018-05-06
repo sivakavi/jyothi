@@ -18,75 +18,78 @@
 </style>
 
     <div class="page-header clearfix"></div>
-    <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
-    <input type="hidden" name="department_id" id="department_id" value="{{ $_GET['department_id']}}">
-    <div class="margin-top-40">
-    <div class="col-md-3">
-            <div>Bulk Select: <input type="checkbox" id="isEmpBulkSelected"/></div>
+    @if(count($assignShifts))
+        <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+        <input type="hidden" name="department_id" id="department_id" value="{{ $_GET['department_id']}}">
+        <div class="margin-top-40">
+        <div class="col-md-3">
+                <div>Bulk Select: <input type="checkbox" id="isEmpBulkSelected"/></div>
+            </div>
+        <table class="table table-bordered" id="employeeShift">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Employee Id</th>
+            <th>Employee Name</th>
+            <th>Category</th>
+            <th>Shift</th>
+            <th>Status</th>
+            <th>Process</th>
+            <th>From Date</th>
+            <th>To Date</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach ($assignShifts as $assignShift)
+                <tr>
+                    <td><input type="checkbox" class="isEmpSelected"/></td>
+                    <td class="emp_id">{{ $assignShift['employee_id'] }}</td>
+                    <td class="emp_name">{{ $assignShift['employee_name'] }}</td>
+                    <td class="category">{{ $assignShift['category_name'] }}</td>
+                    <td class="">
+                        <select class="form-control emp_shift">
+                            @foreach($shifts as $shift)
+                                <option value="{{$shift->id}}" @if($assignShift['shift_id'] == $shift->id ) selected @endif>{{$shift->allias}}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td class="">
+                        <select class="form-control emp_status">
+                            @foreach($statuses as $status)
+                                <option value="{{$status->id}}" @if($assignShift['status_id'] == $status->id ) selected @endif>{{$status->name}}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td class="">
+                        <select class="form-control work_type">
+                            @foreach($work_types as $work_type)
+                                <option value="{{$work_type->id}}" @if($assignShift['work_type_id'] == $work_type->id ) selected @endif>{{$work_type->name}}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td class="">
+                        <input type="text" class="empDatepickerFrom" value="{{ date('d/m/Y', strtotime($assignShift['fromDate'])) }}">
+                    </td>
+                    <td class="">
+                        <input type="text" class="empDatepickerTo" value="{{ date('d/m/Y', strtotime($assignShift['toDate'])) }}">
+                    </td>
+                    <td class="batch_id hide">{{ $assignShift['id'] }}</td>
+                    <td class="">
+                        <button type="submit" class="btn btn-primary btn-round btn-sm empShiftAssign">Confirmed</button>
+                    </td>
+
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+    <div class="well well-sm margin-top-50 text-center">
+            <button type="submit" id="shiftAssign" class="btn btn-primary btn-round btn-sm">Confirmed</button>
         </div>
-    <table class="table table-bordered" id="employeeShift">
-    <thead>
-      <tr>
-        <th></th>
-        <th>Employee Id</th>
-        <th>Employee Name</th>
-        <th>Category</th>
-        <th>Shift</th>
-        <th>Status</th>
-        <th>Process</th>
-        <th>From Date</th>
-        <th>To Date</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-        @foreach ($assignShifts as $assignShift)
-            <tr>
-                <td><input type="checkbox" class="isEmpSelected"/></td>
-                <td class="emp_id">{{ $assignShift['employee_id'] }}</td>
-                <td class="emp_name">{{ $assignShift['employee_name'] }}</td>
-                <td class="category">{{ $assignShift['category_name'] }}</td>
-                <td class="">
-                    <select class="form-control emp_shift">
-                        @foreach($shifts as $shift)
-                            <option value="{{$shift->id}}" @if($assignShift['shift_id'] == $shift->id ) selected @endif>{{$shift->allias}}</option>
-                        @endforeach
-                    </select>
-                </td>
-                <td class="">
-                    <select class="form-control emp_status">
-                        @foreach($statuses as $status)
-                            <option value="{{$status->id}}" @if($assignShift['status_id'] == $status->id ) selected @endif>{{$status->name}}</option>
-                        @endforeach
-                    </select>
-                </td>
-                <td class="">
-                    <select class="form-control work_type">
-                        @foreach($work_types as $work_type)
-                            <option value="{{$work_type->id}}" @if($assignShift['work_type_id'] == $work_type->id ) selected @endif>{{$work_type->name}}</option>
-                        @endforeach
-                    </select>
-                </td>
-                <td class="">
-                    <input type="text" class="empDatepickerFrom" value="{{ date('d/m/Y', strtotime($assignShift['fromDate'])) }}">
-                </td>
-                <td class="">
-                    <input type="text" class="empDatepickerTo" value="{{ date('d/m/Y', strtotime($assignShift['toDate'])) }}">
-                </td>
-                <td class="batch_id hide">{{ $assignShift['id'] }}</td>
-                <td class="">
-                    <button type="submit" class="btn btn-primary btn-round btn-sm empShiftAssign">Confirmed</button>
-                </td>
-
-            </tr>
-        @endforeach
-    </tbody>
-  </table>
-  <div class="well well-sm margin-top-50 text-center">
-        <button type="submit" id="shiftAssign" class="btn btn-primary btn-round btn-sm">Confirmed</button>
     </div>
-</div>
-
+    @else
+        <h3 class="text-center alert alert-info">Empty!</h3>
+    @endif
 @endsection
 
 @section('scripts')

@@ -69,7 +69,7 @@
             @endif
         @else
             <div>
-                All Rrecords correct  
+                All Records correct  
             </div>
         @endif
     @endif
