@@ -42,6 +42,15 @@ class UserController extends BaseControllers
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'email' => 'required|unique:users|email|max:255',
+            'active' => 'sometimes|boolean',
+            'confirmed' => 'sometimes|boolean',
+        ]);
+
+        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+
         if($request->input("role") == "hr"){
             $userDetails = $request->only(['name', 'email', 'password', 'active', 'confirmed']);
         }else{
