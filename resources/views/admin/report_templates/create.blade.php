@@ -140,12 +140,6 @@
             }
         });
 
-    $("#saveBtn").click(function() {
-        $(this).click(function() {
-            return false;
-        });
-        return true;
-    });
 
     $('#saveBtn').click(function(e){
 
@@ -172,6 +166,7 @@
         if(templateName){
             if(field_array.length){
                 e.stopPropagation();
+                $(this).attr('disabled', true);
                 jQuery.ajax({
                   url: "{{route('admin.saveTemplate')}}",
                   type: 'POST',

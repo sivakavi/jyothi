@@ -130,10 +130,10 @@ class DashboardController extends Controller
                                     })
                                     ->whereNotIn('batch_id', $pendingBatches)
                                     ->where('nowdate', $nowdate->format('Y-m-d'))
-                                    ;
+                                    ->get();
         $departmentDatas = [];
         
-        dd($pendingBatches);
+        // dd($pendingBatches);
         // dd($assignShifts);
         $present = $absent = [];
         foreach($assignShifts as $assignShift){

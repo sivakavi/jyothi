@@ -569,13 +569,15 @@ class DashboardController extends Controller
                 $day_num = $i->format("N");
                 if($day_num < 7 && !in_array($nowdate, $holidays)) { /* weekday */
                     $data = array(
-                        'department_id'=>$defaultshifts['department_id'], 'batch_id'=> $batch->id,
+                        'department_id'=>$defaultshifts['department_id'],
+                        'batch_id'=> $batch->id,
                         'employee_id'=> $employee_id,
                         'shift_id'=> $defaultshifts['id'],
                         'work_type_id'=> $work_type_id,
                         'status_id'=> $status_id,
                         'nowdate'=> $nowdate,
-                        'changed_department_id' => $department_id, 'changed_shift_id' => $shift_id
+                        'changed_department_id' => $department_id,
+                        'changed_shift_id' => $shift_id
                     );
                     $employeeRecords[] = $data;
                 }
