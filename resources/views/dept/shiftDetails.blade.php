@@ -111,9 +111,13 @@
 					<td class="">
 						{{ $empShift->otHours }}
 					</td>
+					
 					<td class="">
+					@if(Auth::user()->department->id == $empShift->changed_department_id || $empShift->changed_department_id == 0)
 						<button type="button" class="btn btn-primary btn-round btn-sm empassign">Change</button>
+					@endif
 					</td>
+					
 				</tr>
 			@endforeach
 		</tbody>

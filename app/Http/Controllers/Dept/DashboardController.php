@@ -301,22 +301,24 @@ class DashboardController extends Controller
         $work_type_id = $request->get('emp_work_type');
         foreach ($employees as $key => $id) {
             $assignshift = AssignShift::find($id);
-            if(Status::find($status_id)->name != 'OT'){
-                $assignshift->status_id = $status_id;
-            }
-            $assignshift->work_type_id = $work_type_id;
-            $assignshift->leave_id = NULL;
-            $assignshift->otHours = NULL;
-            if($leave_id != 'false'){
-                $assignshift->leave_id = $leave_id; 
-            }
-            if($othours != '0'){
-                $assignshift->otHours = $othours; 
-                if($assignshift->employee->department->id != $this->user->department->id){
-                    $assignshift->ot_department_id = $this->user->department->id;;
+            if($this->user->department->id == $assignshift->changed_department_id || $assignshift->changed_department_id == 0){
+                if(Status::find($status_id)->name != 'OT'){
+                    $assignshift->status_id = $status_id;
                 }
-            }
-            $assignshift->save();   
+                $assignshift->work_type_id = $work_type_id;
+                $assignshift->leave_id = NULL;
+                $assignshift->otHours = NULL;
+                if($leave_id != 'false'){
+                    $assignshift->leave_id = $leave_id; 
+                }
+                if($othours != '0'){
+                    $assignshift->otHours = $othours; 
+                    if($assignshift->employee->department->id != $this->user->department->id){
+                        $assignshift->ot_department_id = $this->user->department->id;;
+                    }
+                }
+                $assignshift->save();
+            }   
         }
         return 'true';
     }
