@@ -159,6 +159,7 @@ class DashboardController extends Controller
 
         $employeeRecords = [];
         $holidays = Holiday::all()->pluck('holiday_at')->toArray();
+        $existRecord = AssignShift::where('batch_id', $batch->id)->first();
         AssignShift::where('batch_id', $batch->id)->delete();
         $empDatepickerFrom =  new \DateTime($empDatepickerFrom);
         $empDatepickerTo =  new \DateTime($empDatepickerTo);
@@ -166,7 +167,7 @@ class DashboardController extends Controller
             $nowdate =  $i->format("Y-m-d");
             $day_num = $i->format("N");
             if($day_num < 7 && !in_array($nowdate, $holidays)) { /* weekday */
-                    $data = array('department_id'=>$department_id, 'batch_id'=> $batch->id, 'employee_id'=> $employee_id, 'shift_id'=> $shift_id, 'work_type_id'=> $work_type_id, 'status_id'=> $status_id, 'leave_id'=> null, 'otHours'=> null, 'nowdate'=> $nowdate);
+                    $data = array('department_id'=>$department_id, 'batch_id'=> $batch->id, 'employee_id'=> $employee_id, 'shift_id'=> $shift_id, 'work_type_id'=> $work_type_id, 'status_id'=> $status_id, 'leave_id'=> null, 'otHours'=> null, 'nowdate'=> $nowdate, 'changed_department_id'=> $existRecord->changed_department_id, 'changed_shift_id'=> $existRecord->changed_shift_id);
                     $employeeRecords[] = $data;
             }
         }
