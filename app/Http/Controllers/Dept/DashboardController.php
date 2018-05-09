@@ -360,6 +360,47 @@ class DashboardController extends Controller
         return 'true';
     }
 
+    private function employeeReAssignShiftInsert($ch_department_id, $employee_id, $work_type_id, $ch_shift_id, $status_id, $empDatepickerFrom, $empDatepickerTo)
+    {
+        
+        $defaultshifts = Employee::find($employee_id)->department->shifts->first->get()->toArray();
+
+        $ass_shift_id = $ch_shift_id;
+        $change_department_id = $change_shift_id = 0;
+        if($defaultshifts['department_id'] != $ch_department_id){
+            $change_department_id = $defaultshifts['department_id'];
+            $change_shift_id = $defaultshifts['id'];
+            $ass_shift_id = $defaultshifts['id'];
+        }
+        $batch = new Batch();
+
+        $batch->department_id = $defaultshifts['department_id'];
+        $batch->employee_id = $employee_id;
+        $batch->fromDate = $empDatepickerFrom;
+        $batch->toDate = $empDatepickerTo;
+        $batch->status = 'pending';
+        $batch->save();
+
+        $employeeRecords = [];
+        $holidays = Holiday::all()->pluck('holiday_at')->toArray();
+        $empDatepickerFrom =  new \DateTime($empDatepickerFrom);
+        $empDatepickerTo =  new \DateTime($empDatepickerTo);
+        for($i = $empDatepickerFrom; $i <= $empDatepickerTo; $i->modify('+1 day')){
+            $nowdate =  $i->format("Y-m-d");
+            $day_num = $i->format("N");
+            if($day_num < 7 && !in_array($nowdate, $holidays)) { /* weekday */
+                    $data = array('department_id'=>$defaultshifts['department_id'], 'batch_id'=> $batch->id, 'employee_id'=> $employee_id, 'shift_id'=> $ass_shift_id, 'work_type_id'=> $work_type_id, 'status_id'=> $status_id, 'leave_id'=> null, 'otHours'=> null, 'nowdate'=> $nowdate, 'changed_department_id'=> $change_department_id, 'changed_shift_id'=> $change_shift_id);
+                    $employeeRecords[] = $data;
+            }
+        }
+        AssignShift::insert($employeeRecords);
+        if(count($employeeRecords)==0){
+            $batch->delete();
+            return 'false';
+        }
+        return 'true';
+    }
+
     public function employeeAdd(Request $request)
     {
         $department_id = $this->user->department->id;
@@ -436,12 +477,46 @@ class DashboardController extends Controller
         return view('dept.reassignlist');
     }
 
+    public function getShift(Request $request)
+    {
+        $department_id = $request->input('department_id');
+        $shifts = Shift::all(['id', 'name', 'department_id'])->where('department_id',$department_id);
+        $data = [];
+        foreach($shifts as $shift){
+            $data[$shift->id] = $shift->name;
+        }
+        return response()->json($data);
+    }
+
+    public function getWorkType(Request $request)
+    {
+        $department_id = $request->input('department_id');
+        $shifts = WorkType::all(['id', 'name', 'department_id'])->where('department_id',$department_id);
+        $data = [];
+        foreach($shifts as $shift){
+            $data[$shift->id] = $shift->name;
+        }
+        return response()->json($data);
+    }
+
+    public function getStatus(Request $request)
+    {
+        $department_id = $request->input('department_id');
+        $shifts = Status::all(['id', 'name', 'department_id'])->where('department_id',$department_id);
+        $data = [];
+        foreach($shifts as $shift){
+            $data[$shift->id] = $shift->name;
+        }
+        return response()->json($data);
+    }
+
     public function employeeReassign(Request $request)
     {
         $department_id = $this->user->department->id;
         $shifts = Shift::where('department_id', $department_id)->get();
         $statuses = Status::where('department_id', $department_id)->get();
         $work_types = WorkType::where('department_id', $department_id)->get();
+        $departments = Department::all();
 
         $batchId = $request->get('batch_id');
         $batchDetails = Batch::find($batchId);
@@ -458,7 +533,7 @@ class DashboardController extends Controller
             $batches['check'] = false;
         }
         // dd($batches);
-        return view('dept.reassign', compact('batches', 'shifts', 'statuses', 'work_types'));
+        return view('dept.reassign', compact('batches', 'shifts', 'statuses', 'work_types', 'departments'));
             ;
     }
 
@@ -468,6 +543,7 @@ class DashboardController extends Controller
         $fromDate = $request->get('fromDate');
         $toDate = $request->get('toDate');
         $status_id = $request->get('status_id');
+        $department_id = $request->get('department_id');
         $shift_id = $request->get('shift_id');
         $work_type_id = $request->get('work_type_id');
         $batchDetails = Batch::find($batch_id);
@@ -478,7 +554,7 @@ class DashboardController extends Controller
         
         $employee_id = $batchDetails->employee_id;
         if(new \DateTime($batchDetails->fromDate) > new \DateTime()){
-            $this->employeeShiftInsert($employee_id, $work_type_id, $shift_id, $status_id, $request->get('fromDate'), $request->get('toDate'));
+            $this->employeeReAssignShiftInsert($department_id, $employee_id, $work_type_id, $shift_id, $status_id, $request->get('fromDate'), $request->get('toDate'));
             $batchDetails->delete();
             AssignShift::where('batch_id', $batch_id)->delete();
         }
@@ -487,7 +563,7 @@ class DashboardController extends Controller
             $batchDetails->toDate = $previous_day;
             $batchDetails->save();
             $fromDate->modify('+1 day');
-            $this->employeeShiftInsert($employee_id, $work_type_id, $shift_id, $status_id, $request->get('fromDate'), $request->get('toDate'));
+            $this->employeeReAssignShiftInsert($department_id, $employee_id, $work_type_id, $shift_id, $status_id, $request->get('fromDate'), $request->get('toDate'));
             $fromDate = $request->get('fromDate');
             $toDate = $request->get('toDate');
             //$fromDate      = Carbon::createFromFormat('d/m/Y', $fromDate)->format("Y-m-d");

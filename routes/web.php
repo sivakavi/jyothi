@@ -172,6 +172,12 @@ Route::group(['prefix' => 'dept', 'as' => 'dept.', 'namespace' => 'Dept', 'middl
     Route::get('/reportEmployee', 'DashboardController@reportEmployeePage')->name('reportEmployeePage');
     Route::get('/getReport', 'DashboardController@getReport')->name('getReport');
 
+    Route::get('/getShift', 'DashboardController@getShift')->name('getShift');
+
+    Route::get('/getStatus', 'DashboardController@getStatus')->name('getStatus');
+
+    Route::get('/getWorkType', 'DashboardController@getWorkType')->name('getWorkType');
+
 });
 
 Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware' => 'hr'], function () {

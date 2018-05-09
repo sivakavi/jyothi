@@ -49,8 +49,17 @@
                                     </div>
 
                                     <div class="form-group @if($errors->has('department_id')) has-error @endif">
+                                        <label for="name-field">Department</label>
+                                        <select id="department_id" class="form-control emp_shift" name="department_id">
+                                            @foreach($departments as $department)
+                                                <option value="{{$department->id}}" @if(Auth::user()->department->id == $department->id ) selected @endif>{{$department->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group @if($errors->has('department_id')) has-error @endif">
                                         <label for="name-field">Shift</label>
-                                        <select class="form-control emp_shift" name="shift_id">
+                                        <select id = "shift_id" class="form-control emp_shift" name="shift_id">
                                             @foreach($shifts as $shift)
                                                 <option value="{{$shift->id}}" @if($batches['shift_id'] == $shift->id ) selected @endif>{{$shift->allias}}</option>
                                             @endforeach
@@ -59,7 +68,7 @@
 
                                     <div class="form-group @if($errors->has('department_id')) has-error @endif">
                                         <label for="name-field">Status</label>
-                                        <select class="form-control emp_status" name="status_id">
+                                        <select id = "status_id" class="form-control emp_status" name="status_id">
                                             @foreach($statuses as $status)
                                                 <option value="{{$status->id}}" @if($batches['status_id'] == $status->id ) selected @endif>{{$status->name}}</option>
                                             @endforeach
@@ -68,7 +77,7 @@
 
                                     <div class="form-group @if($errors->has('department_id')) has-error @endif">
                                         <label for="name-field">Process</label>
-                                        <select class="form-control work_type" name="work_type_id">
+                                        <select id="work_type_id" class="form-control work_type" name="work_type_id">
                                             @foreach($work_types as $work_type)
                                                 <option value="{{$work_type->id}}" @if($batches['work_type_id'] == $work_type->id ) selected @endif>{{$work_type->name}}</option>
                                             @endforeach
@@ -117,6 +126,58 @@
             document.getElementById("fromDate").setAttribute("min", today);
             document.getElementById("toDate").setAttribute("min", today);
             document.getElementById("fromDate").setAttribute("max", $('#toDate').val());
+
+            $( "#department_id" ).change(function() {
+                var ajaxUrl = "{{ route('dept.getShift') }}";
+                $.ajax({
+                    url: ajaxUrl,
+                    type: 'GET',
+                    data: {
+                        department_id: $(this).val()
+                    },
+                    success:function(response) {
+                        var $select = $('#shift_id');
+                        $select.find('option').remove();
+                        $.each(response,function(key, value) 
+                        {
+                            $select.append('<option value=' + key + '>' + value + '</option>');
+                        });
+                    }
+                });
+                var ajaxUrl = "{{ route('dept.getStatus') }}";
+                $.ajax({
+                    url: ajaxUrl,
+                    type: 'GET',
+                    data: {
+                        department_id: $(this).val()
+                    },
+                    success:function(response) {
+                        var $select = $('#status_id');
+                        $select.find('option').remove();
+                        $.each(response,function(key, value) 
+                        {
+                            $select.append('<option value=' + key + '>' + value + '</option>');
+                        });
+                    }
+                });
+                var ajaxUrl = "{{ route('dept.getWorkType') }}";
+                $.ajax({
+                    url: ajaxUrl,
+                    type: 'GET',
+                    data: {
+                        department_id: $(this).val()
+                    },
+                    success:function(response) {
+                        var $select = $('#work_type_id');
+                        $select.find('option').remove();
+                        $.each(response,function(key, value) 
+                        {
+                            $select.append('<option value=' + key + '>' + value + '</option>');
+                        });
+                    }
+                });
+            });
+
         });
     </script>
 @endsection

@@ -606,8 +606,9 @@ class DashboardController extends Controller
         $batch_id               = $request->get('batch_id');
         $empDatepickerFrom      = Carbon::createFromFormat('d/m/Y', $request->get('empDatepickerFrom'))->format("Y-m-d");
         $empDatepickerTo        = Carbon::createFromFormat('d/m/Y', $request->get('empDatepickerTo'))->format("Y-m-d");
-        $empDatepickerFromCount = Batch::whereBetween('fromDate', [$empDatepickerFrom, $empDatepickerTo])->where('id', '!=', $batch_id)->where('employee_id', $employee_id)->get()->count();
-        $empDatepickerToCount   = Batch::whereBetween('toDate', [$empDatepickerFrom, $empDatepickerTo])->where('id', '!=', $batch_id)->where('employee_id', $employee_id)->get()->count();
+        $empDatepickerFromCount = AssignShift::whereBetween('nowdate', [$empDatepickerFrom, $empDatepickerTo])->where('batch_id', '!=', $batch_id)->where('employee_id', $employee_id)->get()->count();
+        $empDatepickerToCount   = AssignShift::whereBetween('nowdate', [$empDatepickerFrom, $empDatepickerTo])->where('batch_id', '!=', $batch_id)->where('employee_id', $employee_id)->get()->count();
+        
         if($empDatepickerFromCount || $empDatepickerToCount)
             return 'false';
 
