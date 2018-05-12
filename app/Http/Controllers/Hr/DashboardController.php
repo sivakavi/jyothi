@@ -103,7 +103,17 @@ class DashboardController extends Controller
     public function shift(Request $request)
     {
         $department_id = $request->department_id;
-        $batches = Batch::where('department_id', $department_id)->where('status', 'pending')->get()->toArray();
+        $this->department_id = $department_id;
+        // $batches = Batch::where('department_id', $department_id)->where('status', 'pending')->get()->toArray();
+        $pendingBatches = Batch::where('status', 'pending')->pluck('id')->toArray();
+        $batchesIds = AssignShift::where(function ($q) {
+                                    $q->where('department_id', $this->department_id)
+                                    ->where('changed_department_id', 0)
+                                    ->orWhere('changed_department_id', $this->department_id);
+                                })->whereIn('batch_id', $pendingBatches)->pluck('batch_id')->toArray();
+
+        $batchesIds = array_unique($batchesIds);
+        $batches = Batch::whereIn('id', $batchesIds)->get()->toArray();
         
         foreach ($batches as $key => $batch) {
             $employeeShift = AssignShift::where('batch_id', $batch['id'])->where('employee_id', $batch['employee_id'])->first();
@@ -736,6 +746,7 @@ class DashboardController extends Controller
         $this->dept = $request->get('dept');  
         $employees = AssignShift::whereBetween('nowdate', [$fromDate,   $toDate])->where(function ($q) {
                     $q->where('department_id', $this->dept)
+                    ->where('changed_department_id', 0)
                     ->orWhere('changed_department_id', $this->dept);
                 })->whereIn('batch_id', $completedBatches)->get()
                 ;
