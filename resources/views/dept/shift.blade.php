@@ -18,7 +18,7 @@
 </style>
 
     <div class="page-header clearfix"></div>
-    @if($shifts->count())
+    @if($shifts->count()&&$statuses->count()&&$work_types->count()&&$employees->count())
     <div class="row top_tiles margin-top-40">
         <div class="col-md-3">
             <div>Bulk From: <input type="text" id="datepickerFrom"></div>
@@ -95,7 +95,7 @@
         </div>
     </div>
     @else
-        <h3 class="text-center alert alert-info">There is no Shift for your Department. Please contact Admin to create shift!</h3>
+        <h3 class="text-center alert alert-info">Please check shift, status, process, employees in your department (contact Admin to create)</h3>
     @endif
 @endsection
 
@@ -304,6 +304,7 @@
                       employeeDetailsArray(new_employee);
                     }
                 });
+                $(this).attr('disabled', true);
                 jQuery.ajax({
                   url: "{{route('dept.assignShift')}}",
                   type: 'POST',

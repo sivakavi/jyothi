@@ -18,7 +18,7 @@
 </style>
 
     <div class="page-header clearfix"></div>
-    @if($employees->count())
+    @if($shifts->count()&&$statuses->count()&&$work_types->count()&&$employees->count())
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
 
     <div class="margin-top-40">
@@ -79,7 +79,7 @@
   </table>
 </div>
     @else
-        <h3 class="text-center alert alert-info">There is no employees in that Shift for your Department.</h3>
+        <h3 class="text-center alert alert-info">Please check shift, status, process, employees in your department (contact Admin to create)</h3>
     @endif
 @endsection
 

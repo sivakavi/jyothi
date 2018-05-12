@@ -240,7 +240,7 @@ class DashboardController extends Controller
         $emp_name = $request->get('name');
         $employees = [];
         //$employeeDetails = Employee::where('department_id', '!=', $this->user->department->id)->where('name', 'LIKE', strtolower($emp_name) . '%')->get();
-        $employeeDetails = Employee::where('employee_id', $emp_name)->get();
+        $employeeDetails = Employee::where('department_id', '!=', $this->user->department->id)->where('employee_id', $emp_name)->get();
         foreach ($employeeDetails as $employeeDetail) {
             $employee['id'] = $employeeDetail->id;
             $employee['name'] = $employeeDetail->name;
@@ -366,12 +366,15 @@ class DashboardController extends Controller
         $defaultshifts = Employee::find($employee_id)->department->shifts->first->get()->toArray();
 
         $ass_shift_id = $ch_shift_id;
+        // echo $ass_shift_id;
         $change_department_id = $change_shift_id = 0;
         if($defaultshifts['department_id'] != $ch_department_id){
-            $change_department_id = $defaultshifts['department_id'];
-            $change_shift_id = $defaultshifts['id'];
+            $change_department_id = $ch_department_id;
+            $change_shift_id = $ch_shift_id;
             $ass_shift_id = $defaultshifts['id'];
         }
+        // dd($defaultshifts['department_id'] != $ch_department_id);
+        // dd($defaultshifts['department_id'],$ass_shift_id,$change_department_id,$change_shift_id,$ch_department_id,$ch_shift_id);
         $batch = new Batch();
 
         $batch->department_id = $defaultshifts['department_id'];
@@ -389,7 +392,18 @@ class DashboardController extends Controller
             $nowdate =  $i->format("Y-m-d");
             $day_num = $i->format("N");
             if($day_num < 7 && !in_array($nowdate, $holidays)) { /* weekday */
-                    $data = array('department_id'=>$defaultshifts['department_id'], 'batch_id'=> $batch->id, 'employee_id'=> $employee_id, 'shift_id'=> $ass_shift_id, 'work_type_id'=> $work_type_id, 'status_id'=> $status_id, 'leave_id'=> null, 'otHours'=> null, 'nowdate'=> $nowdate, 'changed_department_id'=> $change_department_id, 'changed_shift_id'=> $change_shift_id);
+                    $data = array(
+                    'department_id'=>$defaultshifts['department_id'],
+                    'batch_id'=> $batch->id,
+                    'employee_id'=> $employee_id, 
+                    'shift_id'=> $ass_shift_id, 
+                    'work_type_id'=> $work_type_id, 
+                    'status_id'=> $status_id, 
+                    'leave_id'=> null, 
+                    'otHours'=> null, 
+                    'nowdate'=> $nowdate, 
+                    'changed_department_id'=> $change_department_id, 
+                    'changed_shift_id'=> $change_shift_id);
                     $employeeRecords[] = $data;
             }
         }
@@ -742,6 +756,7 @@ class DashboardController extends Controller
         $completedBatches = Batch::where('status', 'confirmed')->pluck('id')->toArray();    
         $employees = AssignShift::whereBetween('nowdate', [$fromDate,   $toDate])->where(function ($q) {
                     $q->where('department_id', $this->user->department->id)
+                    ->where('changed_department_id', 0)
                     ->orWhere('changed_department_id', $this->user->department->id);
                 })->whereIn('batch_id', $completedBatches)->get()
                 ;
@@ -849,13 +864,13 @@ class DashboardController extends Controller
         $fieldArray = $request->get('fieldArray');
         $fieldArray = explode(',', $fieldArray);
         $upperCaseFieldArray = array_map('strtoupper', $fieldArray);
-
+        $pendingBatches = Batch::where('status', 'pending')->pluck('id')->toArray();
         if($request->has('employee_id')){
             $emp_id = $request->get('employee_id');
-            $report = AssignShift::where('employee_id',$emp_id)->whereBetween('nowdate', [$fromDate, $toDate])->get();
+            $report = AssignShift::where('employee_id',$emp_id)->whereNotIn('batch_id', $pendingBatches)->whereBetween('nowdate', [$fromDate, $toDate])->get();
         }else{
             $department_id = $this->user->department->id;
-            $report = AssignShift::where('department_id',$department_id)->whereBetween('nowdate', [$fromDate, $toDate])->get();
+            $report = AssignShift::where('department_id',$department_id)->whereNotIn('batch_id', $pendingBatches)->whereBetween('nowdate', [$fromDate, $toDate])->get();
         }
         
         
@@ -927,14 +942,17 @@ class DashboardController extends Controller
                     $singleItem["ot_hours"] = $singleRow->otHours;
                 }
             }
-
+           
             if (in_array("ot_department", $fieldArray)) {
-                if($singleRow->ot_department_id){
-                    $singleItem["ot_department"] = $singleRow->ot_department->name;
-                }else{
-                    $singleItem["ot_department"] = $singleRow->department->name;
+                $singleItem["ot_department"] = '';
+                if($singleItem["ot_hours"]){
+                    if($singleRow->ot_department_id){
+                        $singleItem["ot_department"] = $singleRow->ot_department->name;
+                    }else{
+                        $singleItem["ot_department"] = $singleRow->department->name;
+                    }
                 }
-                
+
             }
 
             if (in_array("emp_name", $fieldArray)) {

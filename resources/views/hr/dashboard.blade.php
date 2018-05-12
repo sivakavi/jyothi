@@ -8,13 +8,15 @@
 
     <div style="margin-top:80px;">
         <div class="row">
-            <div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                <div class="tile-stats" style="padding:20px 0px !important;">
-                    <div class="icon" style="top:45px !important;right:80px !important;"><i class="fa fa-cubes" style="font-size:80px !important;"></i></div>
-                    <div class="count">{{$shifts}}</div>
-                    <h3>Pending Shift Count</h3>
+            <a href="{{ URL::route('hr.shiftBatch')}}">
+                <div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="tile-stats" style="padding:20px 0px !important;">
+                        <div class="icon" style="top:45px !important;right:80px !important;"><i class="fa fa-cubes" style="font-size:80px !important;"></i></div>
+                        <div class="count">{{$shifts}}</div>
+                        <h3>Pending Shift Count</h3>
+                    </div>
                 </div>
-            </div>
+            </a>
             <div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12">
                 <div class="tile-stats" style="padding:20px 0px !important;">
                     <div class="icon" style="top:45px !important;right:80px !important;"><i class="fa fa-institution" style="font-size:80px !important;"></i></div>
@@ -22,13 +24,15 @@
                     <h3>Departments</h3>
                 </div>
             </div>
-            <div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                <div class="tile-stats" style="padding:20px 0px !important;">
-                    <div class="icon" style="top:45px !important;right:80px !important;"><i class="fa fa-cubes" style="font-size:80px !important;"></i></div>
-                    <div class="count">{{$holidayShifts}}</div>
-                    <h3>Holiday Pending Shift Count</h3>
+            <a href="{{ URL::route('hr.holidayBatch')}}">
+                <div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="tile-stats" style="padding:20px 0px !important;">
+                        <div class="icon" style="top:45px !important;right:80px !important;"><i class="fa fa-cubes" style="font-size:80px !important;"></i></div>
+                        <div class="count">{{$holidayShifts}}</div>
+                        <h3>Holiday Pending Shift Count</h3>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
     

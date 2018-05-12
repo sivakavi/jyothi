@@ -408,12 +408,12 @@ class DashboardController extends Controller
         $fieldArray = $request->get('fieldArray');
         $fieldArray = explode(',', $fieldArray);
         $upperCaseFieldArray = array_map('strtoupper', $fieldArray);
-
+        $pendingBatches = Batch::where('status', 'pending')->pluck('id')->toArray();
         if($request->has('employee_id')){
             $emp_id = $request->get('employee_id');
-            $report = AssignShift::where('employee_id',$emp_id)->whereBetween('nowdate', [$fromDate, $toDate])->get();
+            $report = AssignShift::where('employee_id',$emp_id)->whereNotIn('batch_id', $pendingBatches)->whereBetween('nowdate', [$fromDate, $toDate])->get();
         }else{
-            $report = AssignShift::whereBetween('nowdate', [$fromDate, $toDate])->get();
+            $report = AssignShift::whereBetween('nowdate', [$fromDate, $toDate])->whereNotIn('batch_id', $pendingBatches)->get();
         }
         
         
@@ -487,10 +487,13 @@ class DashboardController extends Controller
             }
 
             if (in_array("ot_department", $fieldArray)) {
-                if($singleRow->ot_department_id){
-                    $singleItem["ot_department"] = $singleRow->ot_department->name;
-                }else{
-                    $singleItem["ot_department"] = $singleRow->department->name;
+                $singleItem["ot_department"] = '';
+                if($singleItem["ot_hours"]){
+                    if($singleRow->ot_department_id){
+                        $singleItem["ot_department"] = $singleRow->ot_department->name;
+                    }else{
+                        $singleItem["ot_department"] = $singleRow->department->name;
+                    }
                 }
                 
             }

@@ -16,6 +16,9 @@
             <i class="glyphicon glyphicon-plus"></i> Create
         </a>
     </h1>
+    <div class="text-center">
+        <input type="text" placeholder="Code" name="empName" id="empName">&nbsp;&nbsp;<button type="button" class="btn btn-primary btn-round btn-sm empSearch"><i class="fa fa-search" aria-hidden="true"></i></button>
+    </div>
     <div class="row" style="margin-top:80px;">
         <div class="col-md-12">
             @if($employees->count())
@@ -77,4 +80,21 @@
         </div>
     </div>
 
+@endsection
+@section('scripts')
+    @parent
+    {{ Html::script(mix('assets/admin/js/dashboard.js')) }}
+    <script type="text/javascript">
+        $('.empSearch').click(function(e){
+    	   	e.preventDefault();
+            if($('#empName').val()==''){
+                alert('Please enter code!..');
+            }else{
+                $(this).attr('disabled', true);
+                var empName = $('#empName').val();
+    	   		var datas = 'name='+ empName;
+                location.href = "{{route('admin.employees.index')}}?"+datas;
+            }
+        });
+    </script>
 @endsection

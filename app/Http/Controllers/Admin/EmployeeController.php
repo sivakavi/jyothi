@@ -22,10 +22,14 @@ class EmployeeController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
-		$employees = Employee::withoutGlobalScopes()->orderBy('id', 'asc')->paginate(10);
-
+		$empcode = $request->input('name');
+		$employees = Employee::withoutGlobalScopes()->orderBy('id', 'asc');
+		if($empcode){
+			$employees = $employees->where('employee_id', $empcode);
+		}
+		$employees = $employees->paginate(10);
 		return view('admin.employees.index', compact('employees'));
 	}
 

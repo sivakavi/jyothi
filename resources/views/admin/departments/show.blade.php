@@ -1,6 +1,6 @@
 @extends('admin.layouts.admin')
 
-@section('title', __('views.admin.department.view.title'))
+@section('title', __('View Department'))
 
 @section('content')
 <div class="page-header clearfix"></div>
