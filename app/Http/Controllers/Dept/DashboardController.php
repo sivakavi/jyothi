@@ -867,10 +867,18 @@ class DashboardController extends Controller
         $pendingBatches = Batch::where('status', 'pending')->pluck('id')->toArray();
         if($request->has('employee_id')){
             $emp_id = $request->get('employee_id');
-            $report = AssignShift::where('employee_id',$emp_id)->whereNotIn('batch_id', $pendingBatches)->whereBetween('nowdate', [$fromDate, $toDate])->get();
+            $report = AssignShift::where('employee_id',$emp_id)->whereNotIn('batch_id', $pendingBatches)->where(function ($q) {
+                $q->where('department_id', $this->user->department->id)
+                ->where('changed_department_id', 0)
+                ->orWhere('changed_department_id', $this->user->department->id);
+            })->whereBetween('nowdate', [$fromDate, $toDate])->get();
         }else{
             $department_id = $this->user->department->id;
-            $report = AssignShift::where('department_id',$department_id)->whereNotIn('batch_id', $pendingBatches)->whereBetween('nowdate', [$fromDate, $toDate])->get();
+            $report = AssignShift::where(function ($q) {
+                $q->where('department_id', $this->user->department->id)
+                ->where('changed_department_id', 0)
+                ->orWhere('changed_department_id', $this->user->department->id);
+            })->whereNotIn('batch_id', $pendingBatches)->whereBetween('nowdate', [$fromDate, $toDate])->get();
         }
         
         
