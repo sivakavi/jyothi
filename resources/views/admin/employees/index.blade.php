@@ -27,8 +27,8 @@
                     <thead>
                         <tr>
                         <th>ID</th>
-                        <th>CODE</th>
-                        <th>NAME</th>
+                        <th>@sortablelink('employee_id','code',['page' => $employees->currentPage()])</th>
+                        <th>@sortablelink('name','name',['page' => $employees->currentPage()])</th>
                         <th>GENDER</th>
                         <th>DEPARTMENT</th>
                         <th>CATEGORY</th>

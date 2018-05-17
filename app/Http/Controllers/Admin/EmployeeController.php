@@ -25,11 +25,11 @@ class EmployeeController extends Controller {
 	public function index(Request $request)
 	{
 		$empcode = $request->input('name');
-		$employees = Employee::withoutGlobalScopes()->orderBy('id', 'asc');
+		$employees = Employee::withoutGlobalScopes();
 		if($empcode){
 			$employees = $employees->where('employee_id', $empcode);
 		}
-		$employees = $employees->paginate(10);
+		$employees = $employees->sortable(['name'])->paginate(10);
 		return view('admin.employees.index', compact('employees'));
 	}
 
