@@ -1,4 +1,4 @@
-@extends('hr.layouts.hr')
+@extends('admin.layouts.admin')
 
 @section('title', ' Shift Punch Records Compare')
 
@@ -22,7 +22,7 @@
     <a href={{ asset('DemoPunch.xlsx') }}><button class="btn btn-success" style="float:right;">Download Sample File</button></a>
     <br/>
     <br/>
-    <form style="border: 4px solid #a1a1a1;margin-top: 15px;padding: 30px;" action="{{ route('hr.importExcel') }}" class="form-horizontal" method="post" enctype="multipart/form-data">
+    <form style="border: 4px solid #a1a1a1;margin-top: 15px;padding: 30px;" action="{{ route('admin.importExcel') }}" class="form-horizontal" method="post" enctype="multipart/form-data">
         <div class="row top_tiles margin-top-40">
             <div class="col-md-4">
                 <div>Punch From: <input type="text" id="datepickerFrom" name="fromDate" required></div>

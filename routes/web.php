@@ -90,6 +90,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::get('/getDepartmentEmployeeAttendance', 'DashboardController@getDepartmentEmployeeAttendance')->name('getDepartmentEmployeeAttendance');
 
+    Route::get('/checkShiftData', 'DashboardController@checkShiftData')->name('checkShiftData');
+
+    Route::post('/importExcel', 'DashboardController@importExcel')->name('importExcel');
+
     
 });
 

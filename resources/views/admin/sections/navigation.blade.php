@@ -100,6 +100,14 @@
                             Report Template
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('admin.checkShiftData') }}">
+                            <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                            Check Shift
+                        </a>
+                    </li>
+
                     <li>
                         <a href="{{ route('admin.assignEmpShiftAttendance') }}">
                             <i class="fa fa-calendar" aria-hidden="true"></i>

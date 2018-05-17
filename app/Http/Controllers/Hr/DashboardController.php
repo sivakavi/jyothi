@@ -700,6 +700,11 @@ class DashboardController extends Controller
                 }
             }
         }
+        if(count($punchRecords) == 0){
+            $validator->errors()->add('import_file', 'Excel is empty');
+            return redirect()->back()->withErrors($validator->errors());
+        }
+        
         $assignShifts = AssignShift::whereBetween('nowDate', [$fromDate, $toDate])->get();
         foreach ($assignShifts as $assignShift) {
             $databaseRecords[$assignShift->employee->employee_id]['date'] = strtotime($assignShift->nowdate);
@@ -728,7 +733,7 @@ class DashboardController extends Controller
             
         }
         // dd($differDatas, $missingDatas);
-        return view('hr.checkShiftData', compact('missingDatas', 'differDatas'));
+        return view('hr.checkShiftDataResult', compact('missingDatas', 'differDatas'));
     }
 
     public function shiftDetailsShow()
