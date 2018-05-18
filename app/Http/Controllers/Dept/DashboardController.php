@@ -51,12 +51,12 @@ class DashboardController extends Controller
     {
         $department_id = $this->user->department->id;
         $shiftDetails = [];
-        $shifts = Shift::where('intime', '<', date('H:i:s'))->where('department_id', $department_id)->orderBy('intime', 'desc')->take(3)->get()->toArray();
+        $shifts = Shift::where('intime', '<', date('H:i:s'))->where('department_id', $department_id)->orderBy('intime', 'desc')->take(6)->get()->toArray();
         foreach ($shifts as $key => $value) {
             $shiftDetails[] = $this->shiftdetailsformat($value, date('Y-m-d'));
         }
-        if(count($shifts)<3){
-            $take = 3 - count($shifts);
+        if(count($shifts)<6){
+            $take = 6 - count($shifts);
             $previous_shifts = Shift::where('department_id', $department_id)->orderBy('outtime', 'desc')->take($take)->get()->toArray();
             foreach ($previous_shifts as $key => $value) {
                 $date_yesterday = date('Y-m-d',strtotime("-1 days"));
