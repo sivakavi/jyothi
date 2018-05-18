@@ -65,6 +65,7 @@
 		<thead>
 		<tr>
 			<th>Employee Id</th>
+			<th>Employee code</th>
 			<th>Employee Name</th>
 			<th>Category</th>
 			<th>Employee Department</th>
@@ -81,6 +82,7 @@
 				<tr>
 					<td class="assign_shift_id hide">{{ $empShift->id }}</td>
 					<td class="emp_id">{{ $empShift->employee->id }}</td>
+					<td class="emp_code">{{ $empShift->employee->employee_id }}</td>
 					<td class="emp_name">{{ $empShift->employee->name }}</td>
 					<td class="category">{{ $empShift->employee->category->name }}</td>
 					<td class="">

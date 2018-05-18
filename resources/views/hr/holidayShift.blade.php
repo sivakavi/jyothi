@@ -26,6 +26,7 @@
         <thead>
         <tr>
             <th>Employee Id</th>
+            <th>Employee Code</th>
             <th>Employee Name</th>
             <th>Category</th>
             <th>Shift</th>
@@ -40,6 +41,7 @@
             @foreach ($assignShifts as $assignShift)
                 <tr>
                     <td class="emp_id">{{ $assignShift['employee_id'] }}</td>
+                    <td class="emp_code">{{ $assignShift['employee_code'] }}</td>
                     <td class="emp_name">{{ $assignShift['employee_name'] }}</td>
                     <td class="category">{{ $assignShift['category_name'] }}</td>
                     <td class="">

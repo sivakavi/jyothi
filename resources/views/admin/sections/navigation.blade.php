@@ -103,7 +103,7 @@
 
                     <li>
                         <a href="{{ route('admin.checkShiftData') }}">
-                            <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                            <i class="fa fa-eye" aria-hidden="true"></i>
                             Check Shift
                         </a>
                     </li>

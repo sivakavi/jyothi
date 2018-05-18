@@ -30,6 +30,7 @@
         <tr>
             <th></th>
             <th>Employee Id</th>
+            <th>Employee Code</th>
             <th>Employee Name</th>
             <th>Category</th>
             <th>Shift</th>
@@ -45,6 +46,7 @@
                 <tr>
                     <td><input type="checkbox" class="isEmpSelected"/></td>
                     <td class="emp_id">{{ $assignShift['employee_id'] }}</td>
+                    <td class="emp_code">{{ $assignShift['employee_code'] }}</td>
                     <td class="emp_name">{{ $assignShift['employee_name'] }}</td>
                     <td class="category">{{ $assignShift['category_name'] }}</td>
                     <td class="">

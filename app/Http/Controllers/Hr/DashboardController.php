@@ -123,6 +123,7 @@ class DashboardController extends Controller
             $batches[$key]['category_name'] = $employeeShift->employee->category->name;
             $batches[$key]['work_type_id'] = $employeeShift->work_type_id;
             $batches[$key]['status_id'] = $employeeShift->status_id;
+            $batches[$key]['employee_code'] = $employeeShift->employee->employee_id;
             ;
         }
         $assignShifts = $batches;
@@ -603,6 +604,7 @@ class DashboardController extends Controller
             $batches[$key]['category_name'] = $employeeShift->employee->category->name;
             $batches[$key]['work_type_id'] = $employeeShift->work_type_id;
             $batches[$key]['status_id'] = $employeeShift->status_id;
+            $batches[$key]['employee_code'] = $employeeShift->employee->employee_id;
             ;
         }
         $assignShifts = $batches;

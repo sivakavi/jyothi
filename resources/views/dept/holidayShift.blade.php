@@ -26,6 +26,7 @@
     <thead>
       <tr>
         <th>Employee Id</th>
+        <th>Employee Code</th>
         <th>Employee Name</th>
         <th>Category</th>
         <th>Shift</th>
@@ -40,6 +41,7 @@
         @foreach ($employees as $employee)
             <tr>
                 <td class="emp_id">{{ $employee->id }}</td>
+                <td class="emp_code">{{ $employee->employee_id }}</td>
                 <td class="emp_name">{{ $employee->name }}</td>
                 <td class="category">{{ $employee->category->name }}</td>
                 <td class="">
