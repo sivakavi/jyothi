@@ -647,7 +647,8 @@ class DashboardController extends Controller
                     $punchRecords[$row['ecode']]['shift'] = $row['shift'];
                     $punchRecords[$row['ecode']]['srno'] = $row['srno.'];
                     $punchRecords[$row['ecode']]['ecode'] = $row['ecode'];
-                    $punchRecords[$row['ecode']][$punchRecords[$row['ecode']]['date']] = $row['shift'];
+                    $punchRecords[$row['ecode']][$punchRecords[$row['ecode']]['date']]['shift'] = $row['shift'];
+                    $punchRecords[$row['ecode']][$punchRecords[$row['ecode']]['date']]['status'] = $row['mustermark'];
                 }
             }
         }
@@ -661,7 +662,11 @@ class DashboardController extends Controller
             $databaseRecords[$assignShift->employee->employee_id]['date'] = strtotime($assignShift->nowdate);
             $databaseRecords[$assignShift->employee->employee_id]['shift'] = $assignShift->shift->allias;
             $databaseRecords[$assignShift->employee->employee_id]['ecode'] = $assignShift->employee->employee_id;
-            $databaseRecords[$assignShift->employee->employee_id][strtotime($assignShift->nowdate)] = $assignShift->shift->allias;
+            $databaseRecords[$assignShift->employee->employee_id][strtotime($assignShift->nowdate)]['shift'] = $assignShift->shift->allias;
+            if($assignShift->changed_shift_id != 0){
+                $databaseRecords[$assignShift->employee->employee_id][strtotime($assignShift->nowdate)]['shift'] = $assignShift->changed_shift->allias;
+            }
+            $databaseRecords[$assignShift->employee->employee_id][strtotime($assignShift->nowdate)]['status'] = $assignShift->status->name;
         }
         // dd($databaseRecords,$punchRecords);
         $missingDatas = $differDatas = [];
@@ -670,7 +675,7 @@ class DashboardController extends Controller
                 // dd($databaseRecords[$punchRecord['ecode']][$databaseRecords[$punchRecord['ecode']]['date']]);
 
                 if(isset($databaseRecords[$punchRecord['ecode']][$databaseRecords[$punchRecord['ecode']]['date']])){
-                    if($databaseRecords[$punchRecord['ecode']][$databaseRecords[$punchRecord['ecode']]['date']] != $punchRecord[$punchRecord['date']]){
+                    if($databaseRecords[$punchRecord['ecode']][$databaseRecords[$punchRecord['ecode']]['date']]['shift'] != $punchRecord[$punchRecord['date']]['shift'] || $databaseRecords[$punchRecord['ecode']][$databaseRecords[$punchRecord['ecode']]['date']]['status'] != $punchRecord[$punchRecord['date']]['status']){
                         $differDatas[] = (int)$punchRecord['srno'];
                     }
                 }else{
