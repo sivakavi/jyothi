@@ -62,8 +62,9 @@ class DashboardController extends Controller
                         ->where('nowdate', $nowdate->format('Y-m-d'))
                         ->whereNotIn('batch_id', $pendingBatches)
                         ->get();
-                        // dd($assignShifts);
+                        // dd($assignShifts->toArray());
         $departmentDatas = [];
+        $wholeDatas = [];
         foreach($assignShifts as $assignShift){
             if($assignShift->changed_department_id == '0'){
                 if($assignShift->status->name != 'LL' && $assignShift->status->name != 'AA'){
@@ -71,11 +72,19 @@ class DashboardController extends Controller
                     if(!isset($departmentDatas[$assignShift->department_id]['present'])){
                         $departmentDatas[$assignShift->department_id]['present'] = 0;
                     }
+                    if(!isset($wholeDatas['present'])){
+                        $wholeDatas['present'] = 0;
+                    }
+                    $wholeDatas['present'] = $wholeDatas['present'] + 1;
                     $departmentDatas[$assignShift->department_id]['present'] = $departmentDatas[$assignShift->department_id]['present'] + 1;
                     $departmentDatas[$assignShift->department_id]['department_id'] = $assignShift->department_id;
                     if(!isset($departmentDatas[$assignShift->department_id][$assignShift->work_type->name])){
                         $departmentDatas[$assignShift->department_id][$assignShift->work_type->name] = 0;
                     }
+                    if(!isset($wholeDatas[$assignShift->work_type->name])){
+                        $wholeDatas[$assignShift->work_type->name] = 0;
+                    }
+                    $wholeDatas[$assignShift->work_type->name] = $wholeDatas[$assignShift->work_type->name] + 1;
                     $departmentDatas[$assignShift->department_id][$assignShift->work_type->name] = $departmentDatas[$assignShift->department_id][$assignShift->work_type->name] + 1;
                 }
                 else{
@@ -83,6 +92,10 @@ class DashboardController extends Controller
                     if(!isset($departmentDatas[$assignShift->department_id]['absent'])){
                         $departmentDatas[$assignShift->department_id]['absent'] = 0;
                     }
+                    if(!isset($wholeDatas['absent'])){
+                        $wholeDatas['absent'] = 0;
+                    }
+                    $wholeDatas['absent'] = $wholeDatas['absent'] + 1;
                     $departmentDatas[$assignShift->department_id]['absent'] = $departmentDatas[$assignShift->department_id]['absent'] + 1;
                     $departmentDatas[$assignShift->department_id]['department_id'] = $assignShift->department_id;
                 }
@@ -93,11 +106,19 @@ class DashboardController extends Controller
                     if(!isset($departmentDatas[$assignShift->changed_department_id]['present'])){
                         $departmentDatas[$assignShift->changed_department_id]['present'] = 0;
                     }
+                    if(!isset($wholeDatas['present'])){
+                        $wholeDatas['present'] = 0;
+                    }
+                    $wholeDatas['present'] = $wholeDatas['present'] + 1;
                     $departmentDatas[$assignShift->changed_department_id]['present'] = $departmentDatas[$assignShift->changed_department_id]['present'] + 1;
                     $departmentDatas[$assignShift->changed_department_id]['department_id'] = $assignShift->changed_department_id;
                     if(!isset($departmentDatas[$assignShift->changed_department_id][$assignShift->work_type->name])){
                         $departmentDatas[$assignShift->changed_department_id][$assignShift->work_type->name] = 0;
                     }
+                    if(!isset($wholeDatas[$assignShift->work_type->name])){
+                        $wholeDatas[$assignShift->work_type->name] = 0;
+                    }
+                    $wholeDatas[$assignShift->work_type->name] = $wholeDatas[$assignShift->work_type->name] + 1;
                     $departmentDatas[$assignShift->changed_department_id][$assignShift->work_type->name] = $departmentDatas[$assignShift->changed_department_id][$assignShift->work_type->name] + 1;
                 }
                 else{
@@ -105,13 +126,18 @@ class DashboardController extends Controller
                     if(!isset($departmentDatas[$assignShift->changed_department_id]['absent'])){
                         $departmentDatas[$assignShift->changed_department_id]['absent'] = 0;
                     }
+                    if(!isset($wholeDatas['absent'])){
+                        $wholeDatas['absent'] = 0;
+                    }
+                    $wholeDatas['absent'] = $wholeDatas['absent'] + 1;
                     $departmentDatas[$assignShift->changed_department_id]['absent'] = $departmentDatas[$assignShift->changed_department_id]['absent'] + 1;
                     $departmentDatas[$assignShift->changed_department_id]['department_id'] = $assignShift->changed_department_id;
                 }
             }
         }
         $today = $nowdate->format('d/m/Y');
-        return view('admin.dashboard',  compact('departments', 'shifts', 'users', 'employees', 'departmentDatas', 'today'));
+        // dd($wholeDatas);
+        return view('admin.dashboard',  compact('departments', 'shifts', 'users', 'employees', 'departmentDatas', 'today', 'wholeDatas'));
     }
 
     public function getDepartmentEmployeeAttendance(Request $request)

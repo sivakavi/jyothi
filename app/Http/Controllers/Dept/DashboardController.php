@@ -57,9 +57,13 @@ class DashboardController extends Controller
         }
         $previous_shifts = Shift::where('department_id', $department_id)->orderBy('outtime', 'desc')->get()->toArray();
         $date_yesterday = date('Y-m-d',strtotime("-1 days"));
-        $shiftDetails[] = $this->shiftdetailsformat($value, $date_yesterday);
-        $date_yesterday = date('Y-m-d',strtotime("-2 days"));
-        $shiftDetails[] = $this->shiftdetailsformat($value, $date_yesterday);
+        foreach ($previous_shifts as $key => $value) {
+            $shiftDetails[] = $this->shiftdetailsformat($value, $date_yesterday);
+        }
+        // $date_yesterday = date('Y-m-d',strtotime("-2 days"));
+        // foreach ($previous_shifts as $key => $value) {
+        //     $shiftDetails[] = $this->shiftdetailsformat($value, $date_yesterday);
+        // }
         return view('dept.dashboard', compact('shiftDetails'));
     }
 
