@@ -478,167 +478,115 @@ class DashboardController extends Controller
         $fieldArray = explode(',', $fieldArray);
         $upperCaseFieldArray = array_map('strtoupper', $fieldArray);
         $pendingBatches = Batch::where('status', 'pending')->pluck('id')->toArray();
+        $pendingBatches = implode(", ", $pendingBatches);
+        $where_condition = "";
         if($request->has('employee_id')){
             $emp_id = $request->get('employee_id');
-            $report = AssignShift::where('employee_id',$emp_id)->whereNotIn('batch_id', $pendingBatches)->whereBetween('nowdate', [$fromDate, $toDate])->get();
-        }else{
-            $report = AssignShift::whereBetween('nowdate', [$fromDate, $toDate])->whereNotIn('batch_id', $pendingBatches)->get();
+            $where_condition = "and emp.employee_id = $emp_id ";
+        }
+        if($pendingBatches!=""){
+            $where_condition = $where_condition. "and emp.batch_id NOT IN ($pendingBatches)";
         }
         
         
+        if (in_array("work_dept_name", $fieldArray)) {
+            $selected[] = "CASE WHEN emp.changed_department_id=0 THEN dpt.name ELSE ch_dpt.name END as work_dept_name ";
+        }
+        if (in_array("work_dept_code", $fieldArray)) {
+            $selected[] = "CASE WHEN emp.changed_department_id=0 THEN dpt.department_code ELSE ch_dpt.department_code END as work_dept_code";
+        }
+        if (in_array("shift_name", $fieldArray)) {
+            $selected[] = "CASE WHEN emp.changed_shift_id=0 THEN shf.name ELSE ch_shf.name END as shift_name";
+        }
+        if (in_array("shift_code", $fieldArray)) {
+            $selected[] = "CASE WHEN emp.changed_shift_id=0 THEN shf.allias ELSE ch_shf.allias END as shift_code";
+        }
+        if (in_array("shift_date", $fieldArray)) {
+            $selected[] = "DATE_FORMAT(emp.nowdate, '%d/%m/%Y') as shift_date";
+        }
+        if (in_array("status", $fieldArray)) {
+            $selected[] = "st.name as status";
+        }
+        if (in_array("process", $fieldArray)) {
+            $selected[] = "wt.name as process";
+        }
+        if (in_array("leave_type", $fieldArray)) {
+            $selected[] = "CASE WHEN emp.leave_id IS NULL THEN '' ELSE lv.name END as leave_type";
+        }
+        if (in_array("ot_hours", $fieldArray)) {
+            $selected[] = "CASE WHEN emp.otHours IS NULL THEN '0' else emp.otHours END as ot_hours";
+        }
+        if (in_array("ot_department", $fieldArray)) {
+            $selected[] = "CASE WHEN emp.otHours IS NULL THEN '' else CASE WHEN emp.ot_department_id=0 THEN dpt.name ELSE ot_dpt.name END END as ot_department";
+        }
+        if (in_array("emp_name", $fieldArray)) {
+            $selected[] = "usr.name as emp_name";
+        }
+        if (in_array("emp_dept_name", $fieldArray)) {
+            $selected[] = "emp_dpt.name as emp_dept_name";
+        }
+        if (in_array("emp_dep_code", $fieldArray)) {
+            $selected[] = "emp_dpt.department_code as emp_dep_code";
+        }
+        if (in_array("emp_code", $fieldArray)) {
+            $selected[] = "usr.employee_id as emp_code";
+        }
+        if (in_array("cost_centre", $fieldArray)) {
+            $selected[] = "el.cost_centre as cost_centre";
+        }
+        if (in_array("cost_centre_desc", $fieldArray)) {
+            $selected[] = "usr.cost_centre_desc as cost_centre_desc";
+        }
+        if (in_array("cost_centre_desc", $fieldArray)) {
+            $selected[] = "usr.cost_centre_desc as cost_centre_desc";
+        }
+        if (in_array("gl_account", $fieldArray)) {
+            $selected[] = "el.gl_accounts as gl_account";
+        }
+        if (in_array("gl_account_desc", $fieldArray)) {
+            $selected[] = "usr.gl_description as gl_account_desc";
+        }
+        if (in_array("location", $fieldArray)) {
+            $selected[] = "loc.name as location";
+        }
+        if (in_array("category", $fieldArray)) {
+            $selected[] = "cat.name as category";
+        }
+        if (in_array("gender", $fieldArray)) {
+            $selected[] = "usr.gender as gender";
+        }
+        $select_query = implode(", ", $selected);
         $finalArray = [];
+        $finalArray = \DB::select("SELECT 
+        $select_query
+        from assign_shifts emp  
+        INNER JOIN departments dpt on dpt.id = emp.department_id 
+        INNER JOIN departments ch_dpt on ch_dpt.id = emp.changed_department_id 
+        INNER JOIN shifts shf on shf.id = emp.shift_id 
+        INNER JOIN shifts ch_shf on ch_shf.id = emp.changed_shift_id
+        INNER JOIN statuses st on st.id = emp.status_id 
+        INNER JOIN work_types wt on wt.id = emp.work_type_id 
+        LEFT JOIN leaves lv on lv.id = emp.leave_id 
+        LEFT JOIN departments ot_dpt on ot_dpt.id = emp.ot_department_id
+        INNER JOIN employees usr on usr.id = emp.employee_id 
+        INNER JOIN employee_logs el on el.employee_id = emp.employee_id 
+        INNER JOIN departments emp_dpt on emp_dpt.id = el.department_id
+        INNER JOIN categories cat on cat.id = el.category_id 
+        INNER JOIN locations loc on loc.id = el.location_id 
+        
+        where el.created_at = 
+            (select created_at 
+            from employee_logs 
+            where created_at <= CONCAT(emp.nowdate, ' 23:59:59')  
+            and employee_id = emp.employee_id 
+            ORDER BY created_at DESC limit 1) 
+            $where_condition and emp.nowdate between ? and ?", [$fromDate, $toDate])
+        ;
+        
+        // $finalArray = [];
         //$finalArray[] = $upperCaseFieldArray;
 
-        foreach($report as $singleRow){
-            $singleItem = [];
-            $nowdate = $singleRow->nowdate.' 23:59:59';
-            $log = $singleRow->employee->employeeLogsLatestUpdate($nowdate);
-            
-            if (in_array("work_dept_name", $fieldArray)) {
-                if($singleRow->changed_department_id){
-                    $singleItem["work_dept_name"] = $singleRow->changed_department->name;
-                }else{
-                    $singleItem["work_dept_name"] = $singleRow->department->name;
-                }
-            }
-
-            if (in_array("work_dept_code", $fieldArray)) {
-                if($singleRow->changed_department_id){
-                    $singleItem["work_dept_code"] = $singleRow->changed_department->department_code;
-                }else{
-                    $singleItem["work_dept_code"] = $singleRow->department->department_code;
-                }
-            }
-
-            if (in_array("shift_name", $fieldArray)) {
-                if($singleRow->changed_shift_id){
-                    $singleItem["shift_name"] = $singleRow->changed_shift->name;
-                }else{
-                    $singleItem["shift_name"] = $singleRow->shift->name;
-                }
-            }
-
-            if (in_array("shift_code", $fieldArray)) {
-                if($singleRow->changed_shift_id){
-                    $singleItem["shift_code"] = $singleRow->changed_shift->allias;
-                }else{
-                    $singleItem["shift_code"] = $singleRow->shift->allias;
-                }
-            }
-
-            if (in_array("shift_date", $fieldArray)) {
-                $nowdate=new \DateTime($singleRow->nowdate);
-                $singleItem["shift_date"] = $nowdate->format('d/m/Y');
-            }
-
-            if (in_array("status", $fieldArray)) {
-                $singleItem["status"] = $singleRow->status->name;
-            }
-
-            if (in_array("process", $fieldArray)) {
-                $singleItem["process"] = $singleRow->work_type->name;
-            }
-
-            if (in_array("leave_type", $fieldArray)) {
-                if($singleRow->leave){
-                    $singleItem["leave_type"] = $singleRow->leave->name;
-                }else{
-                    $singleItem["leave_type"] = "";
-                }
-                
-            }
-
-            if (in_array("ot_hours", $fieldArray)) {
-                $singleItem["ot_hours"] = 0;
-                if($singleRow->otHours){
-                    $singleItem["ot_hours"] = $singleRow->otHours;
-                }
-            }
-
-            if (in_array("ot_department", $fieldArray)) {
-                $singleItem["ot_department"] = '';
-                if($singleItem["ot_hours"]){
-                    if($singleRow->ot_department_id){
-                        $singleItem["ot_department"] = $singleRow->ot_department->name;
-                    }else{
-                        $singleItem["ot_department"] = $singleRow->department->name;
-                    }
-                }
-                
-            }
-
-            if (in_array("emp_name", $fieldArray)) {
-                $singleItem["emp_name"] = $singleRow->employee->name;
-            }
-
-            if (in_array("emp_dept_name", $fieldArray)) {
-                if($log){
-                    $singleItem["emp_dept_name"] = $log->department->name;
-                }
-                else{
-                    $singleItem["emp_dept_name"] = $singleRow->employee->department->name;
-                }
-            }
-
-            if (in_array("emp_dep_code", $fieldArray)) {
-                if($log){
-                    $singleItem["emp_dep_code"] = $log->department->department_code;
-                }
-                else{
-                    $singleItem["emp_dep_code"] = $singleRow->employee->department->department_code;
-                }
-            }
-
-            if (in_array("emp_code", $fieldArray)) {
-                $singleItem["emp_code"] = $singleRow->employee->employee_id;
-            }
-
-            if (in_array("cost_centre", $fieldArray)) {
-                if($log){
-                    $singleItem["cost_centre"] = $log->cost_centre;
-                } else {
-                    $singleItem["cost_centre"] = $singleRow->employee->cost_centre;
-                }
-            }
-
-            if (in_array("cost_centre_desc", $fieldArray)) {
-                $singleItem["cost_centre_desc"] = $singleRow->employee->cost_centre_desc;
-            }
-
-            if (in_array("gl_account", $fieldArray)) {
-                if($log){
-                    $singleItem["gl_account"] = $log->gl_accounts;
-                } else {
-                    $singleItem["gl_account"] = $singleRow->employee->gl_accounts;
-                }
-            }
-
-            if (in_array("gl_account_desc", $fieldArray)) {
-                $singleItem["gl_account_desc"] = $singleRow->employee->gl_description;
-            }
-
-            if (in_array("location", $fieldArray)) {
-                if($log){
-                    $singleItem["location"] = $log->location->name;
-                } else{
-                    $singleItem["location"] = $singleRow->employee->location->name;
-                }
-            }
-
-            if (in_array("category", $fieldArray)) {
-                if($log){
-                    $singleItem["category"] = $log->category->name;
-                }else{
-                    $singleItem["category"] = $singleRow->employee->category->name;
-                }
-            }
-
-            if (in_array("gender", $fieldArray)) {
-                $singleItem["gender"] = $singleRow->employee->gender;
-            }
-
-            $finalArray[] = $singleItem;
-        }
+        
 
         return $finalArray;
     }
