@@ -487,7 +487,7 @@ class DashboardController extends Controller
         if($pendingBatches!=""){
             $where_condition = $where_condition. "and emp.batch_id NOT IN ($pendingBatches)";
         }
-        
+        $where_condition = $where_condition. "and usr.remark='active'";
         
         if (in_array("work_dept_name", $fieldArray)) {
             $selected[] = "CASE WHEN emp.changed_department_id=0 THEN dpt.name ELSE ch_dpt.name END as work_dept_name ";
