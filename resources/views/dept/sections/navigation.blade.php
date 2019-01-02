@@ -57,6 +57,14 @@
                             Re-Assign Shift
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('dept.assignEmpShiftAttendance') }}">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            Shift Attendance
+                        </a>
+                    </li>
+
                     <li>
                         <a href="{{ route('dept.otherDept') }}">
                             <i class="fa fa-exchange" aria-hidden="true"></i>

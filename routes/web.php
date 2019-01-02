@@ -94,7 +94,21 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::post('/importExcel', 'DashboardController@importExcel')->name('importExcel');
 
-    
+    Route::get('/employeeReassignList', 'DashboardController@employeeReassignList')->name('employeeReassignList');
+
+    Route::get('/employeeBatchSearch', 'DashboardController@employeeBatchSearch')->name('employeeBatchSearch');
+
+    Route::get('/employeeReassign', 'DashboardController@employeeReassign')->name('employeeReassign');
+
+    Route::get('/getStatus', 'DashboardController@getStatus')->name('getStatus');
+
+    Route::get('/employeeHoliday', 'DashboardController@employeeHoliday')->name('employeeHoliday');
+
+    Route::get('/unexpectedHoliday', 'DashboardController@unexpectedHoliday')->name('unexpectedHoliday');
+
+    Route::get('/getWorkType', 'DashboardController@getWorkType')->name('getWorkType');
+
+    Route::post('/employeeReassignStore', 'DashboardController@employeeReassignStore')->name('employeeReassignStore');
 });
 
 
@@ -127,6 +141,19 @@ Route::group(['prefix' => 'student', 'as' => 'student.', 'namespace' => 'Student
 });
 
 Route::group(['prefix' => 'dept', 'as' => 'dept.', 'namespace' => 'Dept', 'middleware' => 'dept'], function () {
+    
+    Route::get('/assignEmpShiftAttendance', 'DashboardController@assignEmpShiftAttendance')->name('assignEmpShiftAttendance');
+
+    Route::get('/shiftCHDetails', 'DashboardController@shiftCHDetails')->name('shiftCHDetails');
+
+    Route::get('/shiftCHDetailsChange', 'DashboardController@shiftCHDetailsChange')->name('shiftCHDetailsChange');
+
+    Route::get('/employeeCHAdd', 'DashboardController@employeeCHAdd')->name('employeeCHAdd');
+
+    Route::get('/shiftCHBulkDetailsChange', 'DashboardController@shiftCHBulkDetailsChange')->name('shiftCHBulkDetailsChange');
+
+    Route::get('/employeeCHSearch', 'DashboardController@employeeCHSearch')->name('employeeCHSearch');
+
     Route::get('/', 'DashboardController@index')->name('dashboard');
     Route::get('/shift', 'DashboardController@shift')->name('shift');
     Route::get('/shiftStatus', 'DashboardController@shiftBatch')->name('shiftBatch');
@@ -224,5 +251,17 @@ Route::group(['prefix' => 'hr', 'as' => 'hr.', 'namespace' => 'Hr', 'middleware'
     Route::get('/shiftDetailsShow', 'DashboardController@shiftDetailsShow')->name('shiftDetailsShow');
 
     Route::get('/shiftDetailPrint', 'DashboardController@shiftDetailPrint')->name('shiftDetailPrint');
+
+    Route::get('/employeeReassignList', 'DashboardController@employeeReassignList')->name('employeeReassignList');
+
+    Route::get('/employeeBatchSearch', 'DashboardController@employeeBatchSearch')->name('employeeBatchSearch');
+
+    Route::get('/employeeReassign', 'DashboardController@employeeReassign')->name('employeeReassign');
+
+    Route::get('/getStatus', 'DashboardController@getStatus')->name('getStatus');
+
+    Route::get('/getWorkType', 'DashboardController@getWorkType')->name('getWorkType');
+
+    Route::post('/employeeReassignStore', 'DashboardController@employeeReassignStore')->name('employeeReassignStore');
 
 });

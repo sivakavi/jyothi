@@ -1,4 +1,4 @@
-@extends('dept.layouts.dept')
+@extends('admin.layouts.admin')
 
 @section('title', ' ReAssign Shift')
 
@@ -22,7 +22,7 @@
                 var datas = 'name='+ empName;
                 if(empName != ''){
                     jQuery.ajax({
-                        url: "{{route('dept.employeeBatchSearch')}}",
+                        url: "{{route('admin.employeeBatchSearch')}}",
                         type: 'GET',
                         data: datas,
                         success:function(data) {
@@ -52,7 +52,7 @@
              $(document).on('click', '.empreassign', function(e) {
     	   		var tr = $(this).closest("tr");
     	   		batchId = tr.find('.empSearchId').text();
-    	   		location.href = "{{ route('dept.employeeReassign') }}" + "?batch_id=" + batchId;
+    	   		location.href = "{{ route('admin.employeeReassign') }}" + "?batch_id=" + batchId;
     	   	});
             $('#empName').keypress(function(e){
                 if(e.which == 13){//Enter key pressed

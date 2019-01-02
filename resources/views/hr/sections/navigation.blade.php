@@ -69,6 +69,13 @@
                     </li>
 
                     <li>
+                        <a href="{{ route('hr.employeeReassignList') }}">
+                            <i class="fa fa-exchange" aria-hidden="true"></i>
+                            Re-Assign Shift
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="{{ route('hr.reportPage') }}">
                             <i class="fa fa-bar-chart" aria-hidden="true"></i>
                             Report

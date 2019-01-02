@@ -75,6 +75,7 @@
                                                         <div itemid="location" class="btn btn-default box-item">Emp. Location</div>
                                                         <div itemid="category" class="btn btn-default box-item">Emp. Category Name</div>
                                                         <div itemid="gender" class="btn btn-default box-item">Emp. Gender</div>
+                                                        <div itemid="reason_for_holiday" class="btn btn-default box-item">Reason For Holiday</div>
                                                     </div>
                                                 </div>
                                             </div>

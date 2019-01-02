@@ -15,10 +15,12 @@
     <div class="row" style="margin-top:80px;">
         <div class="col-md-12">
             @foreach ($batches as $batch)
-            <a href="{{ URL::route('hr.holidayShift', array('department_id'=> $batch->department_id)) }}">
-            <div class="col-md-6 box-style">
-                {{ $batch->department->name }}
-            </div></a>
+            @if($holiday_department_count[$batch->department->id])
+                <a href="{{ URL::route('hr.holidayShift', array('department_id'=> $batch->department_id)) }}">
+                    <div class="col-md-6 box-style">
+                        {{ $batch->department->name." - ".$holiday_department_count[$batch->department->id] }} 
+                    </div></a>
+                @endif
             @endforeach
             <div class="pull-right">
                 {{ $batches->links() }}

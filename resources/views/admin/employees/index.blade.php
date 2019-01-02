@@ -96,5 +96,10 @@
                 location.href = "{{route('admin.employees.index')}}?"+datas;
             }
         });
+        $('#empName').keypress(function(e){
+            if(e.which == 13){//Enter key pressed
+                $('.empSearch').click();//Trigger search button click event
+            }
+        });
     </script>
 @endsection

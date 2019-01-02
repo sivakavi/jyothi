@@ -128,6 +128,13 @@
                             Report - Employee Based
                         </a>
                     </li>
+                    
+                    <li>
+                        <a href="{{ route('admin.employeeHoliday') }}">
+                            <i class="fa fa-exchange" aria-hidden="true"></i>
+                            Unexpected Holiday
+                        </a>
+                    </li>
 
                     <li>
                         <a href="{{ route('admin.changePassword') }}">

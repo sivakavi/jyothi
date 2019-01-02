@@ -419,7 +419,7 @@ class DashboardController extends Controller
         $fieldArray = $request->get('fieldArray');
         $fieldArray = explode(',', $fieldArray);
         $upperCaseFieldArray = array_map('strtoupper', $fieldArray);
-        $pendingBatches = Batch::where('status', 'pending')->pluck('id')->toArray();
+        $pendingBatches = Batch::where('status', 'like', 'pending%')->pluck('id')->toArray();
         $pendingBatches = implode(", ", $pendingBatches);
         $where_condition = "";
         if($request->has('employee_id')){
@@ -535,8 +535,13 @@ class DashboardController extends Controller
 
     public function holidayBatch()
     {
+        $holiday_department_count = [];
         $batches = Batch::groupBy('department_id')->paginate(10);
-        return view('hr.holidayBatch', compact('batches'));
+        $departments = Department::all()->pluck('id')->toArray();
+        foreach($departments as $department_id){
+            $holiday_department_count[$department_id] = Batch::where('department_id', $department_id)->where('status', 'pending_holiday')->get()->count();
+        }
+        return view('hr.holidayBatch', compact('batches', 'holiday_department_count'));
     }
 
     public function holidayShift(Request $request)
@@ -751,7 +756,182 @@ class DashboardController extends Controller
         ], $messages);
 
         return $validator;
-    } 
+    }
+
+    public function employeeReassignList()
+    {
+        return view('hr.reassignlist');
+    }
+    
+    public function employeeBatchSearch(Request $request)
+    {
+        $emp_name = $request->get('name');
+        $employee = $batches = [];
+        //$employee = Employee::where('department_id', $this->user->department->id)->where('name', strtolower($emp_name))->pluck('id')->toArray();
+        $employee = Employee::where('employee_id', $emp_name)->pluck('id')->toArray();
+        if(count($employee)){
+            $batches = Batch::where('employee_id', $employee[0])->where('toDate','>', new \DateTime())->orderBy('created_at', 'DESC')->take(3)->get()->toArray();
+        }
+        else{
+            return '';
+        }
+        if(count($batches))
+            return \Response::json($batches);
+        return '';
+    }
+
+    public function getWorkType(Request $request)
+    {
+        $department_id = $request->input('department_id');
+        $shifts = WorkType::all(['id', 'name', 'department_id'])->where('department_id',$department_id);
+        $data = [];
+        foreach($shifts as $shift){
+            $data[$shift->id] = $shift->name;
+        }
+        return response()->json($data);
+    }
+
+    public function getStatus(Request $request)
+    {
+        $department_id = $request->input('department_id');
+        $shifts = Status::all(['id', 'name', 'department_id'])->where('department_id',$department_id);
+        $data = [];
+        foreach($shifts as $shift){
+            $data[$shift->id] = $shift->name;
+        }
+        return response()->json($data);
+    }
+
+    public function employeeReassign(Request $request)
+    {
+        $batchId = $request->get('batch_id');
+        $batchDetails = Batch::find($batchId);
+        $employeeShift = AssignShift::where('batch_id', $batchId)->where('employee_id', $batchDetails->employee_id)->first();
+        $department_id = $employeeShift->changed_department_id;
+        if($department_id == 0){
+            $department_id = $employeeShift->department_id;
+        }
+        
+        $shifts = Shift::where('department_id', $department_id)->get();
+        // dd($shifts->toArray());
+        $statuses = Status::where('department_id', $department_id)->get();
+        $work_types = WorkType::where('department_id', $department_id)->get();
+        $departments = Department::all();
+
+        $batchId = $request->get('batch_id');
+        $batchDetails = Batch::find($batchId);
+        $employeeShift = AssignShift::where('batch_id', $batchId)->where('employee_id', $batchDetails->employee_id)->first();
+        $batches['shift_id'] = $employeeShift->shift_id;
+        $batches['changed_shift_id'] = $employeeShift->changed_shift_id;
+        $batches['employee_name'] = $employeeShift->employee->name;
+        $batches['category_name'] = $employeeShift->employee->category->name;
+        $batches['work_type_id'] = $employeeShift->work_type_id;
+        $batches['status_id'] = $employeeShift->status_id;
+        $batches['fromDate'] = $batchDetails->fromDate;
+        $batches['toDate'] = $batchDetails->toDate;
+        $batches['check'] = true;
+        if(new \DateTime($batches['fromDate']) > new \DateTime()){
+            $batches['check'] = false;
+        }
+        return view('hr.reassign', compact('batches', 'shifts', 'statuses', 'work_types', 'departments', 'department_id'));
+            ;
+    }
+
+    public function employeeReassignStore(Request $request)
+    {
+        $batch_id = $request->get('batch_id');
+        $fromDate = $request->get('fromDate');
+        $toDate = $request->get('toDate');
+        $status_id = $request->get('status_id');
+        $department_id = $request->get('department_id');
+        $shift_id = $request->get('shift_id');
+        $work_type_id = $request->get('work_type_id');
+        $batchDetails = Batch::find($batch_id);
+        //$fromDate      = Carbon::createFromFormat('d/m/Y', $fromDate);
+        //$toDate      = Carbon::createFromFormat('d/m/Y', $toDate);
+        $fromDate = new \DateTime($fromDate);
+        $toDate = new \DateTime($toDate);
+        
+        $employee_id = $batchDetails->employee_id;
+        if(new \DateTime($batchDetails->fromDate) > new \DateTime()){
+            $this->employeeReAssignShiftInsert($department_id, $employee_id, $work_type_id, $shift_id, $status_id, $request->get('fromDate'), $request->get('toDate'));
+            $batchDetails->delete();
+            AssignShift::where('batch_id', $batch_id)->delete();
+        }
+        else{
+            $previous_day = $fromDate->modify('-1 day');
+            $batchDetails->toDate = $previous_day;
+            $batchDetails->save();
+            $fromDate->modify('+1 day');
+            $this->employeeReAssignShiftInsert($department_id, $employee_id, $work_type_id, $shift_id, $status_id, $request->get('fromDate'), $request->get('toDate'));
+            $fromDate = $request->get('fromDate');
+            $toDate = $request->get('toDate');
+            //$fromDate      = Carbon::createFromFormat('d/m/Y', $fromDate)->format("Y-m-d");
+            //$toDate      = Carbon::createFromFormat('d/m/Y', $toDate)->format("Y-m-d");
+            $fromDate = new \DateTime($fromDate);
+            $toDate = new \DateTime($toDate);
+            $deleteShifts = AssignShift::where('batch_id', $batch_id)->whereBetween('nowdate', [$fromDate, $toDate]);     
+            $deleteShifts->delete();
+        }
+        return redirect()->route('hr.employeeReassignList');
+        
+    }
+
+    private function employeeReAssignShiftInsert($ch_department_id, $employee_id, $work_type_id, $ch_shift_id, $status_id, $empDatepickerFrom, $empDatepickerTo)
+    {
+        
+        $defaultshifts = Employee::find($employee_id)->department->shifts->first->get()->toArray();
+
+        $ass_shift_id = $ch_shift_id;
+        // echo $ass_shift_id;
+        $change_department_id = $change_shift_id = 0;
+        if($defaultshifts['department_id'] != $ch_department_id){
+            $change_department_id = $ch_department_id;
+            $change_shift_id = $ch_shift_id;
+            $ass_shift_id = $defaultshifts['id'];
+        }
+        // dd($defaultshifts['department_id'] != $ch_department_id);
+        // dd($defaultshifts['department_id'],$ass_shift_id,$change_department_id,$change_shift_id,$ch_department_id,$ch_shift_id);
+        $batch = new Batch();
+
+        $batch->department_id = $defaultshifts['department_id'];
+        $batch->employee_id = $employee_id;
+        $batch->fromDate = $empDatepickerFrom;
+        $batch->toDate = $empDatepickerTo;
+        $batch->status = 'confirmed';
+        $batch->save();
+
+        $employeeRecords = [];
+        $holidays = Holiday::all()->pluck('holiday_at')->toArray();
+        $empDatepickerFrom =  new \DateTime($empDatepickerFrom);
+        $empDatepickerTo =  new \DateTime($empDatepickerTo);
+        for($i = $empDatepickerFrom; $i <= $empDatepickerTo; $i->modify('+1 day')){
+            $nowdate =  $i->format("Y-m-d");
+            $day_num = $i->format("N");
+            if($day_num < 7 && !in_array($nowdate, $holidays)) { /* weekday */
+                    $data = array(
+                    'department_id'=>$defaultshifts['department_id'],
+                    'batch_id'=> $batch->id,
+                    'employee_id'=> $employee_id, 
+                    'shift_id'=> $ass_shift_id, 
+                    'work_type_id'=> $work_type_id, 
+                    'status_id'=> $status_id, 
+                    'leave_id'=> null, 
+                    'otHours'=> null, 
+                    'nowdate'=> $nowdate, 
+                    'changed_department_id'=> $change_department_id, 
+                    'changed_shift_id'=> $change_shift_id);
+                    $employeeRecords[] = $data;
+            }
+        }
+        AssignShift::insert($employeeRecords);
+        if(count($employeeRecords)==0){
+            $batch->delete();
+            return 'false';
+        }
+        return 'true';
+    }
+
     public function postCredentials(Request $request)
     {
         if(Auth::Check())
